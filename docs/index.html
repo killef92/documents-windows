@@ -548,6 +548,16 @@ section { padding: 96px 0 0; }
 }
 .feature h3 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
 .feature p { margin: 0; color: var(--text-secondary); font-size: 14px; }
+.feature kbd {
+  padding: 0 5px;
+  border: 1px solid var(--separator);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg-island);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
 
 .langs {
   display: flex;
@@ -975,8 +985,8 @@ footer a:hover { color: var(--text); }
         </div>
         <div class="feature">
           <div class="badge"><svg class="icon"><use href="#i-eye"/></svg></div>
-          <h3>Quick preview</h3>
-          <p>Select a file in File Explorer and press Space to glance at it.</p>
+          <h3>Press Space to peek</h3>
+          <p>Select a file in File Explorer and tap <kbd>Space</kbd> for a quick preview, on by default. Used to doing that on another computer? Your fingers will feel right at home.</p>
         </div>
         <div class="feature">
           <div class="badge"><svg class="icon"><use href="#i-shield-check"/></svg></div>
@@ -1005,7 +1015,7 @@ footer a:hover { color: var(--text); }
     <div class="wrap install">
       <div>
         <h2 class="section-title">Install in a minute.</h2>
-        <p class="section-lead">A single installer, about 10 MB. It also works on Windows Server.</p>
+        <p class="section-lead">A single installer, about 11 MB. It also works on Windows Server.</p>
         <ol class="steps">
           <li><b>Download <a class="inline-link" href="https://github.com/killef92/documents-windows/releases/download/derniere-version/Documents-setup.exe">Documents-setup.exe</a></b><span>Always the latest version, straight from GitHub.</span></li>
           <li><b>Run it</b><span>If Windows shows a blue “protected your PC” warning, click <em>More info</em>, then <em>Run anyway</em>: the installer isn't signed with a paid certificate yet.</span></li>
