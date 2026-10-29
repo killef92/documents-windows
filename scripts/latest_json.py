@@ -33,7 +33,7 @@ if not plateformes:
     sys.exit(0)
 
 fiche = {
-    "version": f"0.1.{numero}",
+    "version": f"0.2.{numero}",
     "notes": "Nouvelle version de Documents.",
     "pub_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     "platforms": plateformes,
