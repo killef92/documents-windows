@@ -4,14 +4,20 @@
 //! (rotation du PDF comprise, sans la rotation choisie dans l'appli), origine en haut à gauche.
 //! À l'enregistrement, chacune devient une vraie annotation PDF, avec son apparence dessinée
 //! ici : elle s'affiche pareil partout (Acrobat, Edge, Chrome…) et reste modifiable
-//! dans ces logiciels.
+//! dans ces logiciels. Elle garde aussi sa description complète (clé `DocumentsData`) : à la
+//! réouverture, l'appli la retrouve telle qu'elle était (voir `crate::import`).
 
+use std::collections::HashMap;
 use std::fmt::Write as _;
 
 use lopdf::{dictionary, Dictionary, Document, Object, ObjectId, Stream, StringFormat};
 use serde::{Deserialize, Serialize};
 
+use crate::import::Imported;
 use crate::Rotation;
+
+/// La clé où l'appli range la description d'une annotation qu'elle a écrite.
+pub(crate) const DATA_KEY: &[u8] = b"DocumentsData";
 
 /// Marge intérieure d'une zone de texte, en unités de page.
 pub const TEXT_PAD: f32 = 4.0;
@@ -140,6 +146,9 @@ pub enum Annotation {
     Text {
         rect: Rect,
         lines: Vec<String>,
+        /// Le texte tapé, avec ses retours à la ligne à lui (sans les coupures de `lines`).
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        text: Option<String>,
         #[serde(default)]
         font: Font,
         size: f32,
@@ -163,6 +172,32 @@ pub enum Annotation {
     Note { at: Point, text: String, color: Color },
     /// Image posée sur la page (signature à partir d'une photo) : PNG en base64.
     Image { rect: Rect, png: String },
+}
+
+/// Une annotation telle que l'interface l'envoie. `origin` : l'annotation du PDF d'origine dont
+/// elle vient (reprise à l'ouverture), pour la recopier telle quelle si elle n'a pas changé.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Placed {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub origin: Option<String>,
+    #[serde(flatten)]
+    pub annotation: Annotation,
+}
+
+impl From<Annotation> for Placed {
+    fn from(annotation: Annotation) -> Self {
+        Placed { origin: None, annotation }
+    }
+}
+
+/// « 12-0 » : le numéro de l'objet d'une annotation dans le PDF.
+pub(crate) fn origin_string((num, gen): ObjectId) -> String {
+    format!("{num}-{gen}")
+}
+
+fn parse_origin(s: &str) -> Option<ObjectId> {
+    let (a, b) = s.split_once('-')?;
+    Some((a.parse().ok()?, b.parse().ok()?))
 }
 
 /// Alignement des lignes d'une zone de texte.
@@ -242,11 +277,13 @@ pub fn arrow_head(width: f32) -> f32 {
 
 /// Les annotations d'une page du PDF enregistré.
 pub(crate) struct PageAnnotations<'a> {
-    pub annotations: &'a [Annotation],
+    pub annotations: &'a [Placed],
     /// Rotation choisie dans l'appli (déjà appliquée au PDF enregistré).
     pub rotation: Rotation,
     /// Largeur de la page en unités de page, avant cette rotation.
     pub unit_width: f32,
+    /// Le PDF d'où vient la page, et les annotations reprises de cette page à l'ouverture.
+    pub source: Option<(&'a Document, &'a [Imported])>,
 }
 
 /// Passage des unités de page à l'espace du PDF.
@@ -257,21 +294,53 @@ pub(crate) struct Frame {
     k: f32,
     /// Hauteur affichée, en points.
     height: f32,
+    /// Comment la page est tournée à l'affichage.
+    rotation: Rotation,
+    /// La zone visible de la page, dans l'espace du PDF.
+    bbox: [f32; 4],
 }
 
 impl Frame {
     /// `bbox` : la zone visible de la page ; `r` : comment elle est tournée à l'affichage.
-    pub(crate) fn new([x0, y0, x1, y1]: [f32; 4], r: Rotation, unit_width: f32) -> Frame {
+    pub(crate) fn new(bbox: [f32; 4], r: Rotation, unit_width: f32) -> Frame {
+        let [x0, y0, x1, y1] = bbox;
+        let dw = if r.is_sideways() { y1 - y0 } else { x1 - x0 };
+        let k = if dw > 0.0 && unit_width > 0.0 { unit_width / dw } else { 1.0 };
+        Frame::with_scale(bbox, r, k)
+    }
+
+    /// Comme [`Frame::new`], avec `k` unités de page par point.
+    pub(crate) fn with_scale(bbox: [f32; 4], r: Rotation, k: f32) -> Frame {
+        let [x0, y0, x1, y1] = bbox;
         let (bw, bh) = (x1 - x0, y1 - y0);
-        let (dw, dh) = if r.is_sideways() { (bh, bw) } else { (bw, bh) };
+        let dh = if r.is_sideways() { bw } else { bh };
         let matrix = match r {
             Rotation::R0 => [1.0, 0.0, 0.0, 1.0, x0, y0],
             Rotation::R90 => [0.0, 1.0, -1.0, 0.0, x1, y0],
             Rotation::R180 => [-1.0, 0.0, 0.0, -1.0, x1, y1],
             Rotation::R270 => [0.0, -1.0, 1.0, 0.0, x0, y1],
         };
-        let k = if dw > 0.0 && unit_width > 0.0 { unit_width / dw } else { 1.0 };
-        Frame { matrix, k, height: dh }
+        Frame { matrix, k: if k > 0.0 { k } else { 1.0 }, height: dh, rotation: r, bbox }
+    }
+
+    pub(crate) fn rotation(&self) -> Rotation {
+        self.rotation
+    }
+
+    pub(crate) fn bbox(&self) -> [f32; 4] {
+        self.bbox
+    }
+
+    /// Unités de page par point.
+    pub(crate) fn scale(&self) -> f32 {
+        self.k
+    }
+
+    /// Vrai si un dessin fait avec la matrice `m` (celle d'une apparence) apparaît droit,
+    /// pas tourné, sur la page affichée.
+    pub(crate) fn upright(&self, m: [f32; 4]) -> bool {
+        let norm = (m[0] * m[3] - m[1] * m[2]).abs().sqrt();
+        norm > 0.0 && m.iter().zip(&self.matrix).all(|(a, b)| (a / norm - b).abs() < 0.01)
     }
 
     /// Unités de page → points affichés (origine en bas à gauche).
@@ -281,6 +350,11 @@ impl Frame {
 
     fn len(&self, v: f32) -> f32 {
         v / self.k
+    }
+
+    /// Points → unités de page (l'inverse de `len`).
+    pub(crate) fn unit_len(&self, v: f32) -> f32 {
+        v * self.k
     }
 
     /// Points affichés → espace de la page PDF.
@@ -643,7 +717,7 @@ fn build(a: &Annotation, f: &Frame, doc: &mut Document) -> Option<Built> {
             };
             (dict, grow(bbox, w))
         }
-        Annotation::Text { rect, lines, font, size, color, fill, bold, italic, underline, align, widths } => {
+        Annotation::Text { rect, lines, text, font, size, color, fill, bold, italic, underline, align, widths } => {
             let outer = f.d_rect(*rect);
             if let Some(c) = fill {
                 let [r, g, b] = rgb(*c);
@@ -691,11 +765,17 @@ fn build(a: &Annotation, f: &Frame, doc: &mut Document) -> Option<Built> {
                 },
             );
             let da = format!("/Helv {} Tf {} {} {} rg", n(pts), n(r), n(g), n(b));
+            let contents = text.clone().filter(|t| !t.is_empty()).unwrap_or_else(|| lines.join("\n"));
             let mut dict = dictionary! {
                 "Subtype" => "FreeText",
-                "Contents" => text_string(&lines.join("\n")),
+                "Contents" => text_string(&contents),
                 "DA" => Object::string_literal(da),
                 "BS" => border(0.0),
+                "Q" => Object::Integer(match align {
+                    Align::Left => 0,
+                    Align::Center => 1,
+                    Align::Right => 2,
+                }),
             };
             if let Some(c) = fill {
                 dict.set("C", color_array(*c));
@@ -845,8 +925,21 @@ pub(crate) fn apply(bytes: Vec<u8>, pages: &[PageAnnotations]) -> Result<Vec<u8>
             },
             Err(_) => Vec::new(),
         };
-        for a in p.annotations {
-            let Some(built) = build(a, &frame, &mut doc) else { continue };
+        for placed in p.annotations {
+            // Reprise du PDF d'origine : si elle n'a pas changé, on la recopie telle quelle.
+            let original = placed.origin.as_deref().and_then(parse_origin).and_then(|id| {
+                let (src, list) = p.source?;
+                list.iter().find(|i| i.id == id).map(|i| (src, i))
+            });
+            if let Some((src, imported)) = original {
+                if same(&imported.annotation, &placed.annotation) {
+                    if let Some(ids) = copy_annotation(src, &mut doc, imported.id, page_id) {
+                        annots.extend(ids.into_iter().map(Object::Reference));
+                        continue;
+                    }
+                }
+            }
+            let Some(built) = build(&placed.annotation, &frame, &mut doc) else { continue };
             let bbox = built.bbox;
             let appearance = Stream::new(
                 dictionary! {
@@ -860,6 +953,7 @@ pub(crate) fn apply(bytes: Vec<u8>, pages: &[PageAnnotations]) -> Result<Vec<u8>
             );
             let appearance_id = doc.add_object(appearance);
             serial += 1;
+            let id = doc.new_object_id();
             let mut dict = built.dict;
             dict.set("Type", "Annot");
             dict.set("Rect", reals(&frame.user_box(bbox)));
@@ -867,7 +961,15 @@ pub(crate) fn apply(bytes: Vec<u8>, pages: &[PageAnnotations]) -> Result<Vec<u8>
             dict.set("F", Object::Integer(4)); // imprimable
             dict.set("NM", Object::string_literal(format!("documents-{index}-{serial}")));
             dict.set("AP", dictionary! { "N" => Object::Reference(appearance_id) });
-            annots.push(Object::Reference(doc.add_object(dict)));
+            if let Some((src, imported)) = original {
+                // Modifiée : on garde ce qui ne se voit pas (auteur, date, commentaire…).
+                if let Some(popup) = keep_details(src, &mut doc, imported.id, id, &mut dict, page_id) {
+                    annots.push(Object::Reference(popup));
+                }
+            }
+            dict.set(DATA_KEY, saved_data(&doc, &dict, &placed.annotation, &frame));
+            doc.objects.insert(id, Object::Dictionary(dict));
+            annots.push(Object::Reference(id));
         }
         let page = doc.get_dictionary_mut(page_id).map_err(|e| e.to_string())?;
         page.set("Annots", Object::Array(annots));
@@ -875,6 +977,232 @@ pub(crate) fn apply(bytes: Vec<u8>, pages: &[PageAnnotations]) -> Result<Vec<u8>
     let mut out = Vec::new();
     doc.save_to(&mut out).map_err(|e| e.to_string())?;
     Ok(out)
+}
+
+/// Ce que l'appli range dans une annotation qu'elle écrit : sa description, et de quoi vérifier
+/// qu'aucun autre logiciel ne l'a modifiée depuis (sinon la description n'est plus juste).
+#[derive(Debug, Serialize, Deserialize)]
+pub(crate) struct Saved {
+    pub check: Vec<f32>,
+    #[serde(default)]
+    pub contents: String,
+    /// Le repère de `annotation` : rotation de la page affichée et unités de page par point.
+    /// La page a pu être tournée depuis (dans l'appli, puis enregistrée).
+    pub rotation: i32,
+    pub scale: f32,
+    pub annotation: Annotation,
+}
+
+/// Ce qu'un autre logiciel change quand on modifie l'annotation : sa zone, ses couleurs, son
+/// trait et son texte.
+pub(crate) fn fingerprint(doc: &Document, dict: &Dictionary) -> (Vec<f32>, String) {
+    let list = |key: &[u8]| -> Vec<f32> {
+        match dict.get(key).ok().and_then(|o| doc.dereference(o).ok()) {
+            Some((_, Object::Array(a))) => a.iter().filter_map(|o| number(doc, o)).collect(),
+            _ => Vec::new(),
+        }
+    };
+    let mut check = list(b"Rect");
+    for key in [b"C".as_slice(), b"IC"] {
+        let values = list(key);
+        check.push(values.len() as f32);
+        check.extend(values);
+    }
+    let width = dict
+        .get(b"BS")
+        .ok()
+        .and_then(|o| doc.dereference(o).ok())
+        .and_then(|(_, o)| o.as_dict().ok())
+        .and_then(|bs| bs.get(b"W").ok())
+        .and_then(|w| number(doc, w));
+    check.push(width.unwrap_or(-1.0));
+    let contents = match dict.get(b"Contents").ok().and_then(|o| doc.dereference(o).ok()) {
+        Some((_, Object::String(bytes, _))) => crate::form::decode_text(bytes),
+        _ => String::new(),
+    };
+    (check, contents)
+}
+
+/// La description à ranger dans l'annotation (sans l'image d'une signature : elle est déjà
+/// dans l'apparence, on l'y reprend).
+fn saved_data(doc: &Document, dict: &Dictionary, a: &Annotation, frame: &Frame) -> Object {
+    let (check, contents) = fingerprint(doc, dict);
+    let mut annotation = a.clone();
+    if let Annotation::Image { png, .. } = &mut annotation {
+        png.clear();
+    }
+    let saved = Saved { check, contents, rotation: frame.rotation.degrees(), scale: frame.k, annotation };
+    let json = serde_json::to_vec(&saved).unwrap_or_default();
+    Object::String(json, StringFormat::Literal)
+}
+
+/// La même annotation dans le repère `to` (page tournée ou agrandie depuis). Aucune pour du
+/// texte ou une image qui ne seraient plus droits : l'appli ne sait pas les dessiner penchés.
+pub(crate) fn reframe(a: &Annotation, from: &Frame, to: &Frame) -> Option<Annotation> {
+    let turn = (to.rotation.degrees() - from.rotation.degrees()).rem_euclid(360);
+    let s = to.k / from.k;
+    let pt = |p: Point| to.units(from.user(from.d(p)));
+    let rect = |r: Rect| {
+        let (a, b) = (pt(Point { x: r.x, y: r.y }), pt(Point { x: r.x + r.w, y: r.y + r.h }));
+        Rect { x: a.x.min(b.x), y: a.y.min(b.y), w: (a.x - b.x).abs(), h: (a.y - b.y).abs() }
+    };
+    // Une forme garde sa taille et son centre, et tourne avec la page.
+    let turned = |r: Rect, angle: f32, symmetric: bool| {
+        let c = pt(Point { x: r.x + r.w / 2.0, y: r.y + r.h / 2.0 });
+        let (mut w, mut h, mut angle) = (r.w * s, r.h * s, angle);
+        if symmetric {
+            // Rectangle ou ovale : tourné d'un quart de tour, il suffit d'échanger les côtés.
+            if turn % 180 != 0 {
+                (w, h) = (h, w);
+            }
+        } else if turn != 0 {
+            angle = (angle + turn as f32 + 180.0).rem_euclid(360.0) - 180.0;
+        }
+        (Rect { x: c.x - w / 2.0, y: c.y - h / 2.0, w, h }, angle)
+    };
+    Some(match a.clone() {
+        Annotation::Highlight { rects, color } => Annotation::Highlight { rects: rects.into_iter().map(rect).collect(), color },
+        Annotation::Rect { rect: r, stroke, fill, width, angle, shape } => {
+            let (r, angle) = turned(r, angle, shape == Shape::Plain);
+            Annotation::Rect { rect: r, stroke, fill, width: width * s, angle, shape }
+        }
+        Annotation::Ellipse { rect: r, stroke, fill, width, angle } => {
+            let (r, angle) = turned(r, angle, true);
+            Annotation::Ellipse { rect: r, stroke, fill, width: width * s, angle }
+        }
+        Annotation::Line { from: a, to: b, color, width, arrow } => Annotation::Line { from: pt(a), to: pt(b), color, width: width * s, arrow },
+        Annotation::Ink { strokes, color, width } => {
+            Annotation::Ink { strokes: strokes.into_iter().map(|st| st.into_iter().map(pt).collect()).collect(), color, width: width * s }
+        }
+        Annotation::Note { at, text, color } => {
+            let c = pt(Point { x: at.x + NOTE_SIZE / 2.0, y: at.y + NOTE_SIZE / 2.0 });
+            Annotation::Note { at: Point { x: c.x - NOTE_SIZE / 2.0, y: c.y - NOTE_SIZE / 2.0 }, text, color }
+        }
+        Annotation::Text { .. } | Annotation::Image { .. } if turn != 0 => return None,
+        Annotation::Text { rect: r, lines, text, font, size, color, fill, bold, italic, underline, align, widths } => Annotation::Text {
+            rect: rect(r),
+            lines,
+            text,
+            font,
+            size: size * s,
+            color,
+            fill,
+            bold,
+            italic,
+            underline,
+            align,
+            widths: widths.into_iter().map(|w| w * s).collect(),
+        },
+        Annotation::Image { rect: r, png } => Annotation::Image { rect: rect(r), png },
+    })
+}
+
+/// Vrai si l'annotation n'a pas bougé depuis l'ouverture (à un centième d'unité près). Les
+/// lignes d'une zone de texte ne comptent pas : l'interface les recoupe elle-même.
+pub(crate) fn same(a: &Annotation, b: &Annotation) -> bool {
+    fn value(a: &Annotation) -> serde_json::Value {
+        let mut v = serde_json::to_value(a).unwrap_or_default();
+        if let Some(o) = v.as_object_mut() {
+            if o.get("text").is_some_and(|t| t.is_string()) {
+                o.remove("lines");
+                o.remove("widths");
+            }
+            if o.get("stroke").is_some_and(|s| s.is_null()) {
+                o.remove("width");
+            }
+        }
+        v
+    }
+    fn close(a: &serde_json::Value, b: &serde_json::Value) -> bool {
+        use serde_json::Value as V;
+        match (a, b) {
+            (V::Number(x), V::Number(y)) => (x.as_f64().unwrap_or(0.0) - y.as_f64().unwrap_or(0.0)).abs() < 0.01,
+            (V::Array(x), V::Array(y)) => x.len() == y.len() && x.iter().zip(y).all(|(x, y)| close(x, y)),
+            (V::Object(x), V::Object(y)) => x.len() == y.len() && x.iter().all(|(k, v)| y.get(k).is_some_and(|w| close(v, w))),
+            _ => a == b,
+        }
+    }
+    close(&value(a), &value(b))
+}
+
+/// Recopie un objet d'un PDF à l'autre, avec tout ce dont il dépend. Les renvois vers une page
+/// deviennent des renvois vers `page`.
+fn copy_object(src: &Document, dst: &mut Document, o: &Object, page: ObjectId, memo: &mut HashMap<ObjectId, ObjectId>) -> Object {
+    match o {
+        Object::Reference(id) => {
+            if let Some(new) = memo.get(id) {
+                return Object::Reference(*new);
+            }
+            let Ok(target) = src.get_object(*id) else { return Object::Null };
+            let is_page = target
+                .as_dict()
+                .ok()
+                .and_then(|d| d.get(b"Type").ok())
+                .and_then(|t| t.as_name().ok())
+                .is_some_and(|t| t == b"Page" || t == b"Pages");
+            if is_page {
+                return Object::Reference(page);
+            }
+            let new = dst.new_object_id();
+            memo.insert(*id, new);
+            let copied = copy_object(src, dst, target, page, memo);
+            dst.objects.insert(new, copied);
+            Object::Reference(new)
+        }
+        Object::Array(items) => Object::Array(items.iter().map(|i| copy_object(src, dst, i, page, memo)).collect()),
+        Object::Dictionary(d) => Object::Dictionary(copy_dict(src, dst, d, page, memo)),
+        Object::Stream(s) => {
+            let mut s = s.clone();
+            s.dict = copy_dict(src, dst, &s.dict, page, memo);
+            Object::Stream(s)
+        }
+        other => other.clone(),
+    }
+}
+
+fn copy_dict(src: &Document, dst: &mut Document, d: &Dictionary, page: ObjectId, memo: &mut HashMap<ObjectId, ObjectId>) -> Dictionary {
+    let mut out = Dictionary::new();
+    for (k, v) in d.iter() {
+        out.set(k.clone(), copy_object(src, dst, v, page, memo));
+    }
+    out
+}
+
+/// Recopie telle quelle une annotation du PDF d'origine (et sa bulle de commentaire) sur la
+/// page `page`. Renvoie ce qu'il faut ajouter à la liste des annotations de la page.
+fn copy_annotation(src: &Document, dst: &mut Document, id: ObjectId, page: ObjectId) -> Option<Vec<ObjectId>> {
+    src.get_dictionary(id).ok()?;
+    let mut memo = HashMap::new();
+    let Object::Reference(new) = copy_object(src, dst, &Object::Reference(id), page, &mut memo) else { return None };
+    let mut out = vec![new];
+    let popup = dst.get_dictionary(new).ok()?.get(b"Popup").and_then(Object::as_reference).ok();
+    out.extend(popup);
+    Some(out)
+}
+
+/// Annotation reprise puis modifiée : on garde son auteur, ses dates, son commentaire et sa
+/// bulle. Renvoie la bulle, à ajouter à la page.
+fn keep_details(src: &Document, dst: &mut Document, old: ObjectId, new: ObjectId, dict: &mut Dictionary, page: ObjectId) -> Option<ObjectId> {
+    let original = src.get_dictionary(old).ok()?;
+    let mut memo = HashMap::from([(old, new)]);
+    for key in [b"T".as_slice(), b"Subj", b"CreationDate", b"Contents"] {
+        if dict.has(key) {
+            continue;
+        }
+        if let Ok(v) = original.get(key) {
+            dict.set(key.to_vec(), copy_object(src, dst, v, page, &mut memo));
+        }
+    }
+    if let Ok(nm) = original.get(b"NM") {
+        let ours = matches!(nm, Object::String(s, _) if s.starts_with(b"documents-") || s.starts_with(b"apercu-"));
+        if !ours {
+            dict.set("NM", nm.clone());
+        }
+    }
+    let popup = original.get(b"Popup").ok()?;
+    let Object::Reference(popup) = copy_object(src, dst, popup, page, &mut memo) else { return None };
+    dict.set("Popup", Object::Reference(popup));
+    Some(popup)
 }
 
 #[cfg(test)]
@@ -957,6 +1285,72 @@ mod tests {
         // La pointe de la bulle descend jusqu'en bas, à gauche.
         let tail = outline(Shape::Bubble, r).into_iter().max_by(|a, b| a.y.total_cmp(&b.y)).unwrap();
         assert!(tail.x < 40.0);
+    }
+
+    #[test]
+    fn meme_annotation_a_un_centieme_pres() {
+        let rect = |x: f32| Annotation::Rect {
+            rect: Rect { x, y: 1.0, w: 2.0, h: 3.0 },
+            stroke: None,
+            fill: Some(Color(0, 0, 255)),
+            width: 2.0,
+            angle: 0.0,
+            shape: Shape::Plain,
+        };
+        assert!(same(&rect(10.0), &rect(10.004)));
+        assert!(!same(&rect(10.0), &rect(10.5)));
+        // Sans trait, l'épaisseur ne compte pas.
+        let Annotation::Rect { rect: r, .. } = rect(10.0) else { unreachable!() };
+        assert!(same(&rect(10.0), &Annotation::Rect { rect: r, stroke: None, fill: Some(Color(0, 0, 255)), width: 8.0, angle: 0.0, shape: Shape::Plain }));
+        // Zone de texte : les lignes recoupées par l'interface ne comptent pas, le texte si.
+        let text = |t: &str, lines: Vec<String>| Annotation::Text {
+            rect: Rect { x: 0.0, y: 0.0, w: 50.0, h: 20.0 },
+            lines,
+            text: Some(t.into()),
+            font: Font::Helvetica,
+            size: 12.0,
+            color: Color(0, 0, 0),
+            fill: None,
+            bold: false,
+            italic: false,
+            underline: false,
+            align: Align::Left,
+            widths: Vec::new(),
+        };
+        assert!(same(&text("a b", vec!["a b".into()]), &text("a b", vec!["a".into(), "b".into()])));
+        assert!(!same(&text("a b", vec![]), &text("a c", vec![])));
+        assert_eq!(parse_origin(&origin_string((12, 0))), Some((12, 0)));
+        assert_eq!(parse_origin("douze"), None);
+    }
+
+    #[test]
+    fn changer_de_repere() {
+        let bbox = [0.0, 0.0, 600.0, 800.0];
+        let k = 4.0 / 3.0;
+        let (droit, tourne) = (Frame::with_scale(bbox, Rotation::R0, k), Frame::with_scale(bbox, Rotation::R90, k));
+        let star = Annotation::Rect {
+            rect: Rect { x: 100.0, y: 200.0, w: 40.0, h: 20.0 },
+            stroke: None,
+            fill: Some(Color(0, 0, 255)),
+            width: 0.0,
+            angle: 0.0,
+            shape: Shape::Star,
+        };
+        let Some(Annotation::Rect { rect, angle, .. }) = reframe(&star, &droit, &tourne) else { panic!() };
+        // Centre (120 ; 210) → (H − 210 ; 120), H = 800 × 4/3 ; l'étoile tourne d'un quart de tour.
+        assert!((rect.x + 20.0 - (800.0 * k - 210.0)).abs() < 0.01 && (rect.y + 10.0 - 120.0).abs() < 0.01, "{rect:?}");
+        assert!((angle - 90.0).abs() < 1e-3 && rect.w == 40.0);
+        // Un rectangle simple échange ses côtés au lieu de tourner.
+        let plain = Annotation::Rect { rect: Rect { x: 100.0, y: 200.0, w: 40.0, h: 20.0 }, stroke: None, fill: None, width: 0.0, angle: 0.0, shape: Shape::Plain };
+        let Some(Annotation::Rect { rect, angle, .. }) = reframe(&plain, &droit, &tourne) else { panic!() };
+        assert!(angle == 0.0 && (rect.w - 20.0).abs() < 1e-3 && (rect.h - 40.0).abs() < 1e-3);
+        // Du texte penché : impossible.
+        let text = Annotation::Note { at: Point { x: 0.0, y: 0.0 }, text: String::new(), color: Color(0, 0, 0) };
+        assert!(reframe(&text, &droit, &tourne).is_some());
+        let image = Annotation::Image { rect: Rect { x: 0.0, y: 0.0, w: 1.0, h: 1.0 }, png: String::new() };
+        assert!(reframe(&image, &droit, &tourne).is_none());
+        assert!(reframe(&image, &droit, &Frame::with_scale(bbox, Rotation::R0, 2.0)).is_some());
+        assert!(droit.upright([2.0, 0.0, 0.0, 2.0]) && !droit.upright([0.0, 1.0, -1.0, 0.0]) && tourne.upright([0.0, 1.0, -1.0, 0.0]));
     }
 
     #[test]

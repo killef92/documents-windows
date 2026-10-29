@@ -137,6 +137,8 @@ export const setApercuRapide = (enabled: boolean) => invoke<void>("set_apercu_ra
 export const apercuRapidePath = () => invoke<string | null>("apercu_rapide_path");
 export const openInApp = (path: string) => invoke<void>("open_in_app", { path });
 export const formFields = (doc: number) => invoke<FormField[]>("form_fields", { doc });
+/** Les annotations déjà dans un PDF, page par page, reprises pour être modifiables. */
+export const pdfAnnotations = (doc: number) => invoke<unknown[][]>("pdf_annotations", { doc });
 
 export const savePdf = (pages: PageRef[], dest: string, fills: DocFill[] = []) =>
   invoke<void>("save_pdf", { pages, dest, fills });

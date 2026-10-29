@@ -150,6 +150,12 @@ async fn form_fields(worker: tauri::State<'_, Worker>, doc: DocId) -> Result<Vec
     wait(worker.form_fields(doc)).await
 }
 
+/// Les annotations reprises d'un PDF à son ouverture, page par page (modifiables).
+#[tauri::command]
+async fn pdf_annotations(worker: tauri::State<'_, Worker>, doc: DocId) -> Result<Vec<Vec<documents_core::annotate::Placed>>, String> {
+    wait(worker.annotations(doc)).await
+}
+
 /// Retouche d'une photo (recadrage, couleurs) : renvoie le nouveau document, en mémoire.
 #[tauri::command]
 async fn retouch_picture(worker: tauri::State<'_, Worker>, doc: DocId, retouch: Retouch) -> Result<DocInfo, String> {
@@ -556,7 +562,7 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             open_paths, close_docs, search, take_paths, folder_images, copy_files, choose_default_app, save_pdf, save_picture,
-            save_picture_pixels, page_text, doc_details, form_fields, signature_from_photo,
+            save_picture_pixels, page_text, doc_details, form_fields, pdf_annotations, signature_from_photo,
             retouch_picture, save_pdf_reduced, apercu_rapide_enabled, set_apercu_rapide, apercu_rapide_path, open_in_app,
             update_token
         ])

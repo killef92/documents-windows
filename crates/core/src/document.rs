@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
-use crate::annotate::Annotation;
+use crate::annotate::Placed;
 use crate::DocumentKind;
 
 /// Identifiant d'un document ouvert (unique pendant la vie de l'appli).
@@ -97,7 +97,7 @@ pub struct PageRef {
     pub rotation: i32,
     /// Annotations ajoutées sur la page (voir [`crate::annotate`]).
     #[serde(default)]
-    pub annotations: Vec<Annotation>,
+    pub annotations: Vec<Placed>,
 }
 
 impl PageRef {

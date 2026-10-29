@@ -6,6 +6,7 @@ use std::sync::OnceLock;
 use pdfium_render::prelude::*;
 
 use crate::document::{DocDetails, NormRect, PageSize, PageText, Rotation};
+use crate::import::{self, Imported};
 use crate::{Error, Result};
 
 /// 1 point PDF (1/72 de pouce) = 4/3 pixel d'écran (1/96 de pouce).
@@ -34,8 +35,11 @@ pub(crate) fn engine(dirs: &[PathBuf]) -> Result<&'static Pdfium> {
 
 pub(crate) struct PdfDoc {
     doc: PdfDocument<'static>,
-    /// Le fichier d'origine, pour l'enregistrer en ne changeant que l'ordre des pages.
+    /// Le fichier d'origine, pour l'enregistrer en ne changeant que l'ordre des pages
+    /// (sans les annotations reprises dans `imported`).
     pub bytes: Vec<u8>,
+    /// Les annotations reprises à l'ouverture, page par page (voir `crate::import`).
+    pub imported: Vec<Vec<Imported>>,
 }
 
 fn broken(e: PdfiumError) -> Error {
@@ -124,7 +128,22 @@ impl PdfDoc {
     /// Le fichier est lu en mémoire : l'original n'est jamais verrouillé ni modifié.
     pub fn open(pdfium: &'static Pdfium, bytes: Vec<u8>) -> Result<Self> {
         let doc = pdfium.load_pdf_from_byte_vec(bytes.clone(), None).map_err(broken)?;
-        Ok(Self { doc, bytes })
+        Ok(Self { doc, bytes, imported: Vec::new() })
+    }
+
+    /// Reprend les annotations que l'appli sait modifier : elles ne sont plus dessinées dans
+    /// les pages rendues, c'est l'interface qui les affiche. Si quelque chose cloche, le PDF
+    /// reste tel qu'il a été ouvert.
+    pub fn import_annotations(&mut self, pdfium: &'static Pdfium) {
+        let widths: Vec<f32> = self.page_sizes().iter().map(|s| s.width).collect();
+        let Some(reading) = import::read(&self.bytes, &widths) else { return };
+        let Ok(doc) = pdfium.load_pdf_from_byte_vec(reading.bytes.clone(), None) else { return };
+        if doc.pages().len() as usize != widths.len() {
+            return;
+        }
+        self.doc = doc;
+        self.bytes = reading.bytes;
+        self.imported = reading.pages;
     }
 
     fn page(&self, index: usize) -> Result<PdfPage<'_>> {

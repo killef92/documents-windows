@@ -7,6 +7,7 @@ mod document;
 mod exif;
 pub mod folder;
 pub mod form;
+mod import;
 pub mod reduce;
 pub mod signature;
 mod kind;

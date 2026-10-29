@@ -254,7 +254,7 @@ function shortName(name: string, max = 18): string {
 
 // ---------- Création des pages ----------
 
-function makePage(doc: DocInfo, index: number): Page {
+function makePage(doc: DocInfo, index: number, annots: Annotation[] = []): Page {
   const el = document.createElement("div");
   el.className = "page" + (doc.kind === "pdf" ? "" : " picture");
   const hlLayer = document.createElement("div");
@@ -272,7 +272,7 @@ function makePage(doc: DocInfo, index: number): Page {
 
   const { hlSvg, annotSvg } = annot.createLayers();
   const p: Page = {
-    doc, index, rotation: 0, el, hlLayer, annots: [], hlSvg, annotSvg, thumb, thumbBox, label,
+    doc, index, rotation: 0, el, hlLayer, annots, hlSvg, annotSvg, thumb, thumbBox, label,
     visible: false, thumbVisible: false, shownWidth: 0, wantedWidth: 0, thumbKey: "",
   };
   annot.attach(p);
@@ -442,6 +442,7 @@ function buildSheet() {
     const page = item.firstElementChild as HTMLElement;
     page.style.width = `${Math.round(b.w * k)}px`;
     page.style.height = `${Math.round(b.h * k)}px`;
+    annot.overlay(p, page);
     item.querySelector("img")!.dataset.src = api.pageUrl(p.doc.id, p.index, bucket(SHEET_W * devicePixelRatio), p.rotation);
     item.querySelector(".sheet-label")!.textContent = p.doc.kind === "pdf" ? String(i + 1) : shortName(p.doc.name);
     item.addEventListener("click", (e) => clickThumb(p, e));
@@ -791,7 +792,9 @@ async function openFiles(paths: string[], insertAt?: number, asOpened = false) {
     // Les formulaires d'abord : leurs pages s'affichent sans les champs, remplis ici.
     const withForms = await Promise.all(result.docs.map(forms.load));
     if (withForms.some(Boolean)) toast(t("hasForm"));
-    const fresh = result.docs.flatMap((doc) => doc.pages.map((_, i) => makePage(doc, i)));
+    // Les annotations déjà dans les PDF : modifiables comme celles qu'on ajoute.
+    const found = await Promise.all(result.docs.map((d) => (d.kind === "pdf" ? api.pdfAnnotations(d.id).catch(() => []) : [])));
+    const fresh = result.docs.flatMap((doc, k) => doc.pages.map((_, i) => makePage(doc, i, annot.imported(found[k][i]))));
     if (insertAt === undefined || !state.pages.length) {
       if (state.docs.length) {
         api.closeDocs(state.docs.map((d) => d.id));

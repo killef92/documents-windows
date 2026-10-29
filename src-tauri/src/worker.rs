@@ -8,6 +8,7 @@ use std::path::PathBuf;
 use std::sync::mpsc::{self, Receiver, Sender};
 use std::thread;
 
+use documents_core::annotate::Placed;
 use documents_core::form::{DocFill, FormField};
 use documents_core::reduce::Level;
 use documents_core::{DocDetails, DocId, DocInfo, Library, PageRef, PageText, RenderedImage, Retouch, Rotation, SearchHit};
@@ -46,6 +47,7 @@ enum Job {
     SavePdf(Vec<PageRef>, Vec<DocFill>, PathBuf, Sender<Result<(), String>>),
     SavePdfReduced(Vec<PageRef>, Vec<DocFill>, Level, PathBuf, Sender<Result<(u64, u64), String>>),
     FormFields(DocId, Sender<Result<Vec<FormField>, String>>),
+    Annotations(DocId, Sender<Result<Vec<Vec<Placed>>, String>>),
     SavePicture(DocId, i32, PathBuf, Sender<Result<(), String>>),
     SavePicturePixels(DocId, Vec<u8>, PathBuf, Sender<Result<(), String>>),
     PageText(DocId, usize, Sender<Result<PageText, String>>),
@@ -99,6 +101,12 @@ impl Worker {
     pub fn form_fields(&self, doc: DocId) -> Receiver<Result<Vec<FormField>, String>> {
         let (tx, rx) = mpsc::channel();
         let _ = self.tx.send(Job::FormFields(doc, tx));
+        rx
+    }
+
+    pub fn annotations(&self, doc: DocId) -> Receiver<Result<Vec<Vec<Placed>>, String>> {
+        let (tx, rx) = mpsc::channel();
+        let _ = self.tx.send(Job::Annotations(doc, tx));
         rx
     }
 
@@ -181,6 +189,9 @@ fn run(mut library: Library, rx: Receiver<Job>) {
             }
             Job::FormFields(doc, reply) => {
                 let _ = reply.send(library.form_fields(doc).map_err(|e| i18n::error(&e)));
+            }
+            Job::Annotations(doc, reply) => {
+                let _ = reply.send(library.annotations(doc).map_err(|e| i18n::error(&e)));
             }
             Job::SavePicture(doc, rotation, dest, reply) => {
                 let _ = reply.send(library.save_picture(doc, rotation, &dest).map_err(|e| i18n::error(&e)));

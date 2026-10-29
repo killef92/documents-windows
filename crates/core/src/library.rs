@@ -10,7 +10,7 @@ use image::codecs::png::{CompressionType, FilterType, PngEncoder};
 use image::codecs::gif::{GifDecoder, GifEncoder, Repeat};
 use image::{imageops, AnimationDecoder, DynamicImage, Frame};
 
-use crate::annotate::{self, PageAnnotations};
+use crate::annotate::{self, PageAnnotations, Placed};
 use crate::document::{DocDetails, DocId, DocInfo, PageRef, PageText, RenderedImage, Rotation, SearchHit};
 use crate::pdf::{self, PdfDoc, Source};
 use crate::picture::{Picture, Retouch};
@@ -46,14 +46,29 @@ impl Library {
         Self { pdfium_dirs, docs: BTreeMap::new(), next_id: 1 }
     }
 
-    /// Ouvre un fichier. L'original est seulement lu, jamais modifié.
+    /// Ouvre un fichier. L'original est seulement lu, jamais modifié. Les annotations d'un PDF
+    /// redeviennent modifiables (voir [`Library::annotations`]).
     pub fn open(&mut self, path: &Path) -> Result<DocInfo> {
+        self.open_with(path, true)
+    }
+
+    /// Ouvre un fichier en laissant ses annotations dessinées dans les pages, comme les
+    /// montrent les autres logiciels.
+    pub fn open_flat(&mut self, path: &Path) -> Result<DocInfo> {
+        self.open_with(path, false)
+    }
+
+    fn open_with(&mut self, path: &Path, import: bool) -> Result<DocInfo> {
         let bytes = std::fs::read(path)?;
         let kind = DocumentKind::from_bytes(&bytes).ok_or(Error::UnsupportedFormat)?;
         let (content, pages) = match kind {
             DocumentKind::Heic => return Err(Error::HeicNotYetSupported),
             DocumentKind::Pdf => {
-                let doc = PdfDoc::open(pdf::engine(&self.pdfium_dirs)?, bytes)?;
+                let pdfium = pdf::engine(&self.pdfium_dirs)?;
+                let mut doc = PdfDoc::open(pdfium, bytes)?;
+                if import {
+                    doc.import_annotations(pdfium);
+                }
                 let pages = doc.page_sizes();
                 (Content::Pdf(doc), pages)
             }
@@ -257,18 +272,49 @@ impl Library {
         self.annotate(bytes, pages)
     }
 
+    /// Les annotations reprises d'un PDF à l'ouverture, page par page, pour l'interface.
+    pub fn annotations(&self, id: DocId) -> Result<Vec<Vec<Placed>>> {
+        Ok(match &self.doc(id)?.content {
+            Content::Pdf(pdf) => pdf
+                .imported
+                .iter()
+                .map(|page| {
+                    page.iter()
+                        .map(|i| Placed { origin: Some(annotate::origin_string(i.id)), annotation: i.annotation.clone() })
+                        .collect()
+                })
+                .collect(),
+            Content::Picture(_) => Vec::new(),
+        })
+    }
+
     /// Ajoute aux pages du PDF fabriqué les annotations de chaque page.
     fn annotate(&self, bytes: Vec<u8>, pages: &[PageRef]) -> Result<Vec<u8>> {
+        // Les PDF d'où viennent des annotations reprises : pour recopier celles restées intactes.
+        let mut sources: BTreeMap<DocId, lopdf::Document> = BTreeMap::new();
+        for p in pages.iter().filter(|p| p.annotations.iter().any(|a| a.origin.is_some())) {
+            if let (Content::Pdf(pdf), false) = (&self.doc(p.doc)?.content, sources.contains_key(&p.doc)) {
+                if let Ok(doc) = lopdf::Document::load_mem(&pdf.bytes) {
+                    sources.insert(p.doc, doc);
+                }
+            }
+        }
         let mut list = Vec::with_capacity(pages.len());
         for p in pages {
-            let unit_width = match &self.doc(p.doc)?.content {
+            let content = &self.doc(p.doc)?.content;
+            let unit_width = match content {
                 Content::Pdf(pdf) => pdf.page_width(p.page)?,
                 Content::Picture(picture) => picture.size().width,
+            };
+            let source = match (content, sources.get(&p.doc)) {
+                (Content::Pdf(pdf), Some(doc)) => pdf.imported.get(p.page).map(|list| (doc, list.as_slice())),
+                _ => None,
             };
             list.push(PageAnnotations {
                 annotations: &p.annotations,
                 rotation: Rotation::from_degrees(p.rotation),
                 unit_width,
+                source,
             });
         }
         annotate::apply(bytes, &list).map_err(Error::SaveFailed)

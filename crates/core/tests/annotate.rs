@@ -40,7 +40,7 @@ fn blue_box(w: f32, h: f32) -> Annotation {
 
 /// La couleur d'un point (en proportions) de la page rendue, vue comme dans l'interface.
 fn pixel(lib: &mut Library, path: &Path, page: usize, view_rotation: i32, x: f32, y: f32) -> [u8; 3] {
-    let id = lib.open(path).unwrap().id;
+    let id = lib.open_flat(path).unwrap().id;
     let img = lib.render(id, page, 400, documents_core::Rotation::from_degrees(view_rotation)).unwrap();
     lib.close(id);
     let img = image::load_from_memory(&img.bytes).unwrap().into_rgb8();
@@ -60,7 +60,7 @@ fn check_box(file: &str, user_rotation: i32) {
     let info = lib.open(&fixture(file)).unwrap();
     let size = info.pages[0];
     let mut page = PageRef::new(info.id, 0, user_rotation);
-    page.annotations.push(blue_box(size.width, size.height));
+    page.annotations.push(blue_box(size.width, size.height).into());
     let dest = dir.join("annote.pdf");
     lib.save_pdf(&[page], &dest).unwrap();
     // On regarde le résultat sans la rotation de l'appli : comme quand l'annotation a été posée.
@@ -95,7 +95,7 @@ fn rectangle_au_bon_endroit_sur_une_photo_fusionnee() {
     let photo = lib.open(&fixture("photo-pivotee.jpg")).unwrap();
     let size = photo.pages[0];
     let mut page = PageRef::new(photo.id, 0, 90);
-    page.annotations.push(blue_box(size.width, size.height));
+    page.annotations.push(blue_box(size.width, size.height).into());
     let dest = dir.join("fusion.pdf");
     lib.save_pdf(&[PageRef::new(pdf, 0, 0), page], &dest).unwrap();
     assert!(is_blue(pixel(&mut lib, &dest, 1, -90, 0.2, 0.15)));
@@ -117,7 +117,7 @@ fn forme_tournee_au_bon_endroit() {
         width: 0.0,
         angle: 90.0,
         shape: Shape::Plain,
-    });
+    }.into());
     let dest = dir.join("tournee.pdf");
     lib.save_pdf(&[page], &dest).unwrap();
     assert!(is_blue(pixel(&mut lib, &dest, 0, 0, 0.5, 0.5)));
@@ -140,7 +140,7 @@ fn etoile_dessinee_dans_sa_zone() {
         width: 0.0,
         angle: 0.0,
         shape: Shape::Star,
-    });
+    }.into());
     let dest = dir.join("etoile.pdf");
     lib.save_pdf(&[page], &dest).unwrap();
     assert!(is_blue(pixel(&mut lib, &dest, 0, 0, 0.5, 0.5)));
@@ -160,6 +160,7 @@ fn texte_aligne_a_droite_et_souligne() {
     page.annotations.push(Annotation::Text {
         rect: Rect { x: 0.0, y: 100.0, w, h: 80.0 },
         lines: vec!["MMMMM".into()],
+        text: None,
         font: Font::Helvetica,
         size: 60.0,
         color: BLUE,
@@ -169,7 +170,7 @@ fn texte_aligne_a_droite_et_souligne() {
         underline: true,
         align: Align::Right,
         widths: vec![0.3 * w],
-    });
+    }.into());
     let dest = dir.join("aligne.pdf");
     lib.save_pdf(&[page], &dest).unwrap();
     let h = info.pages[0].height;
@@ -195,6 +196,7 @@ fn toutes_les_sortes_d_annotations_sont_ecrites() {
         Annotation::Text {
             rect: Rect { x: 300.0, y: 400.0, w: 200.0, h: 50.0 },
             lines: vec!["Vu le « devis » (été)".into(), "ligne 2 \\ fin".into()],
+            text: None,
             font: Font::Times,
             size: 14.0,
             color: Color(0, 0, 0),
@@ -206,7 +208,10 @@ fn toutes_les_sortes_d_annotations_sont_ecrites() {
             widths: vec![120.0, 70.0],
         },
         Annotation::Note { at: p(500.0, 100.0), text: "À vérifier avec Kilian".into(), color: Color(255, 214, 10) },
-    ];
+    ]
+    .into_iter()
+    .map(Into::into)
+    .collect();
     let dest = dir.join("toutes.pdf");
     lib.save_pdf(&[page], &dest).unwrap();
 
@@ -316,7 +321,7 @@ fn image_de_signature_posee_sur_la_page() {
     page.annotations.push(Annotation::Image {
         rect: Rect { x: 0.1 * size.width, y: 0.1 * size.height, w: 0.4 * size.width, h: 0.1 * size.height },
         png: format!("data:image/png;base64,{}", base64(&png)),
-    });
+    }.into());
     let dest = dir.join("signe.pdf");
     lib.save_pdf(&[page], &dest).unwrap();
     assert!(is_blue(pixel(&mut lib, &dest, 0, 0, 0.2, 0.15)), "partie opaque de l'image");

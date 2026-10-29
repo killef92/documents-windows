@@ -155,7 +155,7 @@ fn on_state(doc: &Document, widget: &Dictionary) -> String {
 }
 
 /// Ce que dit /DA (« /Helv 10 Tf 0 g ») : police, taille et couleur.
-fn parse_da(da: &str) -> (String, f32, String) {
+pub(crate) fn parse_da(da: &str) -> (String, f32, String) {
     let parts: Vec<&str> = da.split_whitespace().collect();
     let mut font = String::new();
     let mut size = 0.0;
@@ -167,11 +167,11 @@ fn parse_da(da: &str) -> (String, f32, String) {
                 size = parts[i - 1].parse().unwrap_or(0.0);
             }
             "g" if i >= 1 => {
-                let g = (parts[i - 1].parse::<f32>().unwrap_or(0.0) * 255.0) as u8;
+                let g = (parts[i - 1].parse::<f32>().unwrap_or(0.0).clamp(0.0, 1.0) * 255.0).round() as u8;
                 color = format!("#{g:02x}{g:02x}{g:02x}");
             }
             "rg" if i >= 3 => {
-                let c = |k: usize| (parts[i - k].parse::<f32>().unwrap_or(0.0).clamp(0.0, 1.0) * 255.0) as u8;
+                let c = |k: usize| (parts[i - k].parse::<f32>().unwrap_or(0.0).clamp(0.0, 1.0) * 255.0).round() as u8;
                 color = format!("#{:02x}{:02x}{:02x}", c(3), c(2), c(1));
             }
             _ => {}

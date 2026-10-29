@@ -36,14 +36,17 @@ export interface TextStyle {
 /** Formes dessinées dans un rectangle (sans rien : un rectangle simple). */
 export type Shape = "rounded" | "bubble" | "star" | "hexagon";
 
-export type Annotation =
+/** `origin` : l'annotation du PDF d'où elle vient (reprise à l'ouverture). Le cœur la recopie
+ * telle quelle à l'enregistrement si elle n'a pas changé. */
+export type Annotation = { origin?: string } & (
   | { kind: "highlight"; rects: Box[]; color: Color }
   | { kind: "rect" | "ellipse"; rect: Box; stroke: Color | null; fill: Color | null; width: number; angle?: number; shape?: Shape }
   | { kind: "line"; from: Pt; to: Pt; color: Color; width: number; arrow: boolean }
   | { kind: "ink"; strokes: Pt[][]; color: Color; width: number }
   | ({ kind: "text"; rect: Box; text: string; lines: string[]; color: Color; fill: Color | null; widths?: number[] } & TextStyle)
   | { kind: "note"; at: Pt; text: string; color: Color }
-  | { kind: "image"; rect: Box; png: string };
+  | { kind: "image"; rect: Box; png: string }
+);
 
 // Les mêmes valeurs que dans le cœur (annotate.rs).
 const TEXT_PAD = 4;
@@ -357,6 +360,22 @@ function withText(a: Extract<Annotation, { kind: "text" }>, changes: Partial<Ext
   return t;
 }
 
+/** Les annotations reprises d'un PDF : le texte d'une zone venue d'un autre logiciel est
+ * recoupé ici, à la largeur de sa zone (sans changer la zone). */
+export function imported(list: unknown[] | undefined): Annotation[] {
+  return ((list ?? []) as Annotation[]).map((a) => {
+    // Le cœur écrit « plain » pour un rectangle simple ; ici, c'est une forme absente.
+    if (a.kind === "rect" && (a.shape as string) === "plain") {
+      const { shape: _, ...plain } = a;
+      return plain;
+    }
+    if (a.kind !== "text" || a.widths?.length) return a;
+    const text = a.text ?? a.lines.join("\n");
+    const lines = wrap(text, a, a.rect.w);
+    return { ...a, text, lines, widths: lines.map((l) => lineWidth(l, a)) };
+  });
+}
+
 // ---------- Dessin ----------
 
 function drawAnnot(a: Annotation, scale: number): { hl?: SVGElement; main?: SVGElement } {
@@ -516,20 +535,26 @@ export function render(p: AnnotPage) {
 
 /** Les annotations aussi sur la miniature. */
 function renderThumb(p: AnnotPage) {
-  let t = p.thumbBox.querySelector<SVGSVGElement>(":scope > svg.thumb-annots");
+  overlay(p, p.thumbBox);
+}
+
+/** Dessine les annotations de la page par-dessus une petite image de la page (miniature,
+ * planche contact), dont `box` a la taille. */
+export function overlay(p: AnnotPage, box: HTMLElement) {
+  let t = box.querySelector<SVGSVGElement>(":scope > svg.thumb-annots");
   if (!p.annots.length) {
     t?.remove();
     return;
   }
   if (!t) {
     t = svg("svg", { class: "thumb-annots", preserveAspectRatio: "none" });
-    p.thumbBox.append(t);
+    box.append(t);
   }
   const { width, height } = sizeOf(p);
   t.setAttribute("viewBox", `0 0 ${width} ${height}`);
   const side = p.rotation % 180 !== 0;
-  const bw = parseFloat(p.thumbBox.style.width) || 0;
-  const bh = parseFloat(p.thumbBox.style.height) || 0;
+  const bw = parseFloat(box.style.width) || 0;
+  const bh = parseFloat(box.style.height) || 0;
   t.style.width = `${side ? bh : bw}px`;
   t.style.height = `${side ? bw : bh}px`;
   t.style.transform = `translate(-50%, -50%) rotate(${p.rotation}deg)`;
