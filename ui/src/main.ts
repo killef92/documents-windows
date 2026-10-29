@@ -1,4 +1,5 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getVersion } from "@tauri-apps/api/app";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { listen } from "@tauri-apps/api/event";
 import "@fontsource-variable/geist";
@@ -1329,6 +1330,8 @@ function banner(message: string, action: string, run: () => Promise<void>) {
 
 /** L'option est-elle cochée ? null : elle n'existe pas sur cet ordinateur. */
 let apercuRapideOption: boolean | null = null;
+/** Numéro de version de l'appli, rappelé en bas du menu du titre. */
+let appVersion = "";
 
 async function toggleApercuRapide() {
   const on = !apercuRapideOption;
@@ -1385,7 +1388,7 @@ function fileMenuItems(): MenuItem[] {
   const none = !state.pages.length;
   const n = selectedPages().length;
   const picture = !!state.pages[state.current] && state.pages[state.current].doc.kind !== "pdf";
-  return [
+  const items: MenuItem[] = [
     { label: "Ouvrir…", shortcut: "Ctrl+O", action: () => chooseFiles() },
     { label: "Insérer un fichier…", disabled: none, action: () => chooseFiles(state.current + 1) },
     "-",
@@ -1415,7 +1418,11 @@ function fileMenuItems(): MenuItem[] {
           { label: "Aperçu rapide avec Espace (Explorateur)", checked: apercuRapideOption, action: () => toggleApercuRapide() },
           { label: "Utiliser Documents par défaut…", action: () => chooseDefaultApp() },
         ] as MenuItem[])),
+    "-",
+    ...(appVersion ? [{ label: `Documents ${appVersion}`, disabled: true, action: () => {} }] : []),
   ];
+  // Pas deux séparateurs de suite (sections vides), ni en fin de menu.
+  return items.filter((it, i) => it !== "-" || (i + 1 < items.length && items[i + 1] !== "-"));
 }
 
 function thumbMenu(p: Page, e: MouseEvent) {
@@ -1883,6 +1890,7 @@ if (api.inTauri) {
     listen("paths-pending", takePaths);
     takePaths();
     api.apercuRapideEnabled().then((on) => (apercuRapideOption = on)).catch(() => {});
+    getVersion().then((v) => (appVersion = v)).catch(() => {});
     if (!import.meta.env.DEV && win.label === "main") setTimeout(() => checkForUpdate(banner), 3000);
   });
 }
