@@ -39,6 +39,13 @@ the only obligation, if we changed *their* files, would be to publish those chan
   Japanese text uses the fonts that come with Windows.
   The Inter font is only used to draw the letters of the file icons; it does not ship.
 
+## Website
+
+The presentation website (`docs/index.html`, published with GitHub Pages) uses only
+the same free resources: Geist and Geist Mono (SIL OFL 1.1, text in `docs/assets/fonts/OFL.txt`),
+Lucide icons (ISC, text in `docs/assets/LUCIDE-LICENSE.txt`) and the app icon (MIT). The window
+shown on the page is drawn in HTML; the sample document is made up.
+
 ## Things to watch
 
 - **App name**: "Documents" since version 0.1.29. The former name only remains in invisible

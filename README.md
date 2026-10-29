@@ -2,6 +2,8 @@
 
 A free PDF and image viewer and light editor for Windows 10/11 and Windows Server.
 
+**Website: [killef92.github.io/documents-windows](https://killef92.github.io/documents-windows/)**
+
 > **Heads-up: this software is entirely vibe-coded.** All of the code was written by an AI
 > (Claude), guided and tested by a human who isn't a developer. It is used every day, but
 > treat it accordingly: keep copies of important documents.
