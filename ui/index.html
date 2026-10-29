@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Documents</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./src/main.ts"></script>
+  </head>
+  <body>
+    <script>
+      // Aperçu rapide : décidé avant le premier affichage, pour ne pas voir la colonne des
+      // miniatures apparaître puis se refermer (la valeur vient de la fenêtre, côté Rust).
+      if (window.__APERCU_RAPIDE__) document.body.className = "apercu-rapide no-sidebar";
+      // Fenêtre ouverte avec des fichiers : leur genre est connu avant le premier affichage, pour
+      // ne pas montrer les outils PDF devant des photos (et inversement) le temps de les ouvrir.
+      else if (window.__APERCU_GENRE__) {
+        const g = window.__APERCU_GENRE__;
+        document.body.classList.add(...g.split(" ").filter(Boolean));
+      }
+    </script>
+    <div class="app" id="app">
+      <!-- Barre de la fenêtre : le titre au centre, Réduire / Agrandir / Fermer à droite -->
+      <header class="titlebar" data-tauri-drag-region>
+        <div class="title" data-tauri-drag-region>
+          <div class="title-row" id="title-row">
+            <div class="title-name" id="title-name">Documents</div>
+            <button class="title-chevron" id="file-menu" title="Ouvrir, enregistrer, exporter…"><i data-lucide="chevron-down"></i></button>
+          </div>
+          <div class="title-sub" id="title-sub" data-tauri-drag-region></div>
+        </div>
+
+        <div class="window-controls">
+          <button class="wc" id="wc-min" title="Réduire"><i data-lucide="minus"></i></button>
+          <button class="wc" id="wc-max" title="Agrandir"><i data-lucide="square"></i></button>
+          <button class="wc wc-close" id="wc-close" title="Fermer"><i data-lucide="x"></i></button>
+        </div>
+      </header>
+
+      <!-- Barre d'outils, sous la barre de la fenêtre : miniatures · outils au centre · recherche -->
+      <div class="toolbar" data-tauri-drag-region>
+        <div class="toolbar-side" data-tauri-drag-region>
+          <div class="pill">
+            <button class="btn" id="toggle-sidebar" title="Afficher / masquer les miniatures"><i data-lucide="panel-left"></i></button>
+            <button class="btn btn-narrow" id="view-menu" title="Présentation : miniatures, planche contact"><i data-lucide="chevron-down" class="chevron"></i></button>
+          </div>
+        </div>
+
+        <div class="tools" data-tauri-drag-region>
+          <div class="pill">
+            <button class="btn needs-doc" id="zoom-out" title="Zoom arrière (Ctrl+-)"><i data-lucide="zoom-out"></i></button>
+            <span class="sep"></span>
+            <button class="btn needs-doc" id="zoom-toggle" title="Taille réelle (Ctrl+1) / Ajuster à la fenêtre (Ctrl+0)"><i data-lucide="search"></i></button>
+            <span class="sep"></span>
+            <button class="btn needs-doc" id="zoom-in" title="Zoom avant (Ctrl++)"><i data-lucide="zoom-in"></i></button>
+          </div>
+
+          <div class="pill">
+            <button class="btn needs-doc highlight-btn" id="highlight" title="Surligner le texte sélectionné"><i data-lucide="highlighter"></i><span class="swatch-highlight" id="swatch-highlight"></span></button>
+            <span class="sep"></span>
+            <button class="btn btn-narrow needs-doc" id="highlight-menu" title="Couleur du surlignage"><i data-lucide="chevron-down" class="chevron"></i></button>
+          </div>
+
+          <div class="pill">
+            <button class="btn needs-doc" id="crop" title="Recadrer la photo (Ctrl+K)"><i data-lucide="crop"></i></button>
+            <button class="btn needs-doc wide-only" id="rotate-left" title="Pivoter à gauche (Ctrl+L) — à droite : Ctrl+R"><i data-lucide="rotate-ccw-square"></i></button>
+            <button class="btn needs-doc wide-only" id="form-fill" title="Remplir le formulaire"><i data-lucide="rectangle-ellipsis"></i></button>
+          </div>
+
+          <button class="btn btn-round wide-only" id="toggle-markup" title="Annoter" aria-pressed="false">
+            <i data-lucide="pen-tool"></i>
+          </button>
+
+          <div class="pill wide-only">
+            <button class="btn needs-doc" id="show-info" title="Informations (Ctrl+I)"><i data-lucide="info"></i></button>
+            <button class="btn later" title="Partager (bientôt)"><i data-lucide="share"></i></button>
+          </div>
+
+          <!-- Petite fenêtre : les boutons qui n'ont plus la place sont dans ce menu -->
+          <button class="btn btn-round narrow-only" id="more-tools" title="Autres outils"><i data-lucide="chevrons-right"></i></button>
+        </div>
+
+        <div class="toolbar-side end" data-tauri-drag-region>
+          <button class="btn btn-text quick-only" id="quick-open" title="Ouvrir dans une fenêtre Documents pour modifier">Ouvrir avec Documents</button>
+          <label class="search needs-doc">
+            <i data-lucide="search"></i>
+            <input type="search" id="search" placeholder="Rechercher" spellcheck="false" autocomplete="off" />
+            <span class="kbd-hint">Ctrl F</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Barre d'annotation : visible seulement quand le bouton « Annoter » est actif -->
+      <div class="markup" id="markup" aria-hidden="true">
+        <div class="markup-inner needs-doc-group">
+          <button class="btn" id="tool-select" title="Sélectionner du texte (Échap)"><i data-lucide="text-cursor"></i></button>
+          <button class="btn" id="tool-crop" title="Sélection rectangulaire (pour recadrer une photo)"><i data-lucide="square-dashed"></i></button>
+          <button class="btn" id="tool-ink" title="Dessiner à main levée"><i data-lucide="pencil"></i></button>
+          <span class="vsep"></span>
+          <button class="btn btn-menu" id="tool-shapes" title="Formes : rectangle, ovale, ligne, flèche"><i data-lucide="shapes"></i><i data-lucide="chevron-down" class="chevron"></i></button>
+          <button class="btn" id="tool-text" title="Zone de texte"><i data-lucide="text-cursor-input"></i></button>
+          <button class="btn btn-menu" id="tool-sign" title="Signer"><i data-lucide="signature"></i><i data-lucide="chevron-down" class="chevron"></i></button>
+          <button class="btn" id="tool-note" title="Note"><i data-lucide="sticky-note"></i></button>
+          <span class="vsep"></span>
+          <button class="btn btn-menu" id="style-width" title="Épaisseur du trait"><i data-lucide="menu"></i><i data-lucide="chevron-down" class="chevron"></i></button>
+          <button class="btn btn-menu" id="style-stroke" title="Couleur du trait et du texte"><span class="swatch swatch-stroke" id="swatch-stroke"></span><i data-lucide="chevron-down" class="chevron"></i></button>
+          <button class="btn btn-menu" id="style-fill" title="Couleur de remplissage"><span class="swatch swatch-fill" id="swatch-fill"></span><i data-lucide="chevron-down" class="chevron"></i></button>
+          <button class="btn btn-menu btn-text" id="style-font" title="Police et taille du texte"><span>Aa</span><i data-lucide="chevron-down" class="chevron"></i></button>
+          <span class="vsep"></span>
+          <button class="btn" id="tool-adjust" title="Ajuster la couleur d'une photo"><i data-lucide="sliders-horizontal"></i></button>
+        </div>
+      </div>
+
+      <!-- Recherche en cours : tri des résultats, nombre de pages, précédent / suivant -->
+      <div class="find-bar" id="find-bar" hidden>
+        <span class="find-label">Trier par :</span>
+        <div class="segmented">
+          <button class="seg" id="sort-rank">Nombre de résultats</button>
+          <button class="seg on" id="sort-pages">Ordre des pages</button>
+        </div>
+        <span class="find-count" id="find-count"></span>
+        <div class="segmented">
+          <button class="seg" id="find-prev" title="Résultat précédent (Maj+Entrée)"><i data-lucide="chevron-left"></i></button>
+          <button class="seg" id="find-next" title="Résultat suivant (Entrée)"><i data-lucide="chevron-right"></i></button>
+        </div>
+        <button class="modal-button" id="find-done">Terminé</button>
+      </div>
+
+      <div class="body">
+        <aside class="sidebar" id="sidebar">
+          <div class="thumbs" id="thumbs"></div>
+          <div class="results" id="results" hidden></div>
+          <div class="sidebar-foot">
+            <button class="btn btn-small" id="add-docs" title="Ajouter un document"><i data-lucide="circle-plus"></i></button>
+          </div>
+        </aside>
+
+        <div class="stage">
+          <main class="viewer" id="viewer" tabindex="-1">
+            <div class="pages" id="pages"></div>
+            <div class="empty" id="empty">
+              <i data-lucide="file-image" class="empty-icon"></i>
+              <p class="empty-title">Aucun document ouvert</p>
+              <p class="empty-hint">Glissez des PDF ou des photos ici</p>
+              <button class="empty-button" id="open-docs">Ouvrir… <span class="kbd">Ctrl+O</span></button>
+            </div>
+          </main>
+          <!-- Planche contact : toutes les pages en grille -->
+          <div class="sheet" id="sheet" tabindex="-1"></div>
+          <!-- Plusieurs photos : passer de la photo à la planche de vignettes, et retour -->
+          <button class="view-switch" id="view-switch" title="Vue en vignettes / photo seule" hidden>
+            <i data-lucide="layout-grid" class="when-viewer"></i><i data-lucide="image" class="when-sheet"></i>
+          </button>
+          <!-- Une image ouverte seule : les autres images de son dossier -->
+          <div class="filmstrip" id="filmstrip" hidden>
+            <div class="film-track" id="film-track"></div>
+          </div>
+          <!-- Recadrage en cours : à la place de la bande, sous la photo -->
+          <div class="crop-bar" id="crop-bar" hidden>
+            <span>Ajustez le cadre avec les poignées</span>
+            <button class="modal-button" id="crop-cancel">Annuler</button>
+            <button class="modal-button primary" id="crop-ok">Recadrer</button>
+          </div>
+        </div>
+
+        <!-- Inspecteur (Ctrl+I) : informations du document et liste des annotations -->
+        <aside class="inspector" id="inspector">
+          <div class="segmented inspector-tabs">
+            <button class="seg on" id="tab-infos" title="Informations"><i data-lucide="file-text"></i></button>
+            <button class="seg" id="tab-annots" title="Annotations"><i data-lucide="pen-line"></i></button>
+          </div>
+          <div class="inspector-body" id="inspector-body"></div>
+        </aside>
+      </div>
+      <div class="drop-veil" id="drop-veil"><div class="drop-frame">Déposez pour ouvrir</div></div>
+      <div class="toasts" id="toasts"></div>
+    </div>
+  </body>
+</html>

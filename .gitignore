@@ -1,0 +1,8 @@
+/target
+**/target
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
+src-tauri/gen/
+vendor/

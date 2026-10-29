@@ -1,0 +1,17 @@
+[package]
+name = "documents-core"
+description = "Logique de l'appli : ouvrir, rendre, réorganiser les documents (sans Tauri)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp", "gif", "rayon"] }
+lopdf = { version = "0.46", default-features = false }
+pdfium-render = "0.9"
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+
+[dev-dependencies]
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+lopdf = { version = "0.46", default-features = false }

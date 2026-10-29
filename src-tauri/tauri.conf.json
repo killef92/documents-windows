@@ -1,0 +1,131 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Documents",
+  "version": "0.1.0",
+  "identifier": "fr.marouteau.apercu",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "create": false,
+        "title": "Documents",
+        "width": 1280,
+        "height": 860,
+        "minWidth": 708,
+        "minHeight": 224,
+        "decorations": false,
+        "shadow": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: page: vignette: http://page.localhost http://vignette.localhost; font-src 'self' data:; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'",
+      "devCsp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: page: vignette: http://page.localhost http://vignette.localhost; font-src 'self' data:; connect-src ipc: http://ipc.localhost ws://localhost:1420; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "publisher": "Kilian Lefèvre",
+    "shortDescription": "Visionneuse de PDF et d'images",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
+      "nsis": {
+        "installMode": "both",
+        "installerHooks": "windows/hooks.nsh",
+        "languages": [
+          "French"
+        ],
+        "displayLanguageSelector": false
+      }
+    },
+    "resources": {
+      "../LICENSE": "LICENSE.txt",
+      "../LICENCES-TIERS.txt": "LICENCES-TIERS.txt",
+      "icons/types/pdf.ico": "types/pdf.ico",
+      "icons/types/jpg.ico": "types/jpg.ico",
+      "icons/types/png.ico": "types/png.ico",
+      "icons/types/webp.ico": "types/webp.ico",
+      "icons/types/gif.ico": "types/gif.ico",
+      "icons/types/image.ico": "types/image.ico"
+    },
+    "copyright": "© 2026 Kilian Lefèvre — MIT. Licences tierces : LICENCES-TIERS.txt",
+    "license": "MIT",
+    "fileAssociations": [
+      {
+        "ext": [
+          "pdf"
+        ],
+        "name": "Document PDF",
+        "description": "Document PDF",
+        "role": "Viewer",
+        "mimeType": "application/pdf"
+      },
+      {
+        "ext": [
+          "jpg",
+          "jpeg"
+        ],
+        "name": "Image JPEG",
+        "description": "Image JPEG",
+        "role": "Viewer",
+        "mimeType": "image/jpeg"
+      },
+      {
+        "ext": [
+          "png"
+        ],
+        "name": "Image PNG",
+        "description": "Image PNG",
+        "role": "Viewer",
+        "mimeType": "image/png"
+      },
+      {
+        "ext": [
+          "webp"
+        ],
+        "name": "Image WebP",
+        "description": "Image WebP",
+        "role": "Viewer",
+        "mimeType": "image/webp"
+      },
+      {
+        "ext": [
+          "gif"
+        ],
+        "name": "Image GIF",
+        "description": "Image GIF",
+        "role": "Viewer",
+        "mimeType": "image/gif"
+      }
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ1RDA1NjczODc4RkE0QjQKUldTMHBJK0hjMWJRMWR6aFZsSk0wRGkzUVNhWXQxVzdldTcvNnhsTGpjZ2NCWGJ2TEN4emJkZ2sK",
+      "endpoints": [
+        "https://raw.githubusercontent.com/killef92/documents-windows/versions/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

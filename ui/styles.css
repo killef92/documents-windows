@@ -1,0 +1,2567 @@
+/* Couleurs : docs/charte-visuelle.md. Le thème suit le réglage clair / sombre de Windows. */
+/* Style « Ardoise » : gris-bleu, une touche menthe, police Geist. */
+:root {
+  --bg-titlebar: #0f1115;
+  --bg-toolbar: #14161b;
+  --bg-markup: #181b21;
+  --bg-sidebar: #14161b;
+  --bg-viewer: #0d0f13;
+  --bg-island: #1d2027;
+  --island-border: rgba(255, 255, 255, 0.06);
+  --bg-thumb-selected: transparent;
+  --text: #e6e8ec;
+  --text-icon: #b4b9c3;
+  --text-secondary: #7a818e;
+  --text-thumb-selected: var(--accent);
+  --btn-active: #3a3f4a;
+  --btn-active-text: #ffffff;
+  --accent: #5fd8a8;
+  --on-accent: #0d1a14;
+  --accent-soft: rgba(95, 216, 168, 0.14);
+  --separator: rgba(255, 255, 255, 0.07);
+  --pill: rgba(255, 255, 255, 0.06);
+  --hover: rgba(255, 255, 255, 0.07);
+  --pressed: rgba(255, 255, 255, 0.12);
+  --search-bg: var(--bg-island);
+  --page-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 18px 48px rgba(0, 0, 0, 0.55);
+  --thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --thumb-dim: 0.6;
+  --close-hover: #c42b1c;
+
+  --font: "Geist Variable", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", Consolas, monospace;
+  --titlebar-h: 38px;
+  --toolbar-h: 56px;
+  --markup-h: 40px;
+  --sidebar-w: 168px;
+  --inspector-w: 272px;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-titlebar: #ebedf1;
+    --bg-toolbar: #f5f6f8;
+    --bg-markup: #f0f2f5;
+    --bg-sidebar: #f5f6f8;
+    --bg-viewer: #e9ecf0;
+    --bg-island: #ffffff;
+    --island-border: rgba(20, 28, 40, 0.09);
+    --text: #1a1d23;
+    --text-icon: #4a505b;
+    --text-secondary: #737a86;
+    --btn-active: #d9dde4;
+    --btn-active-text: #1a1d23;
+    --accent: #139a6b;
+    --on-accent: #ffffff;
+    --accent-soft: rgba(19, 154, 107, 0.12);
+    --separator: rgba(20, 28, 40, 0.08);
+    --pill: rgba(20, 28, 40, 0.05);
+    --hover: rgba(20, 28, 40, 0.06);
+    --pressed: rgba(20, 28, 40, 0.11);
+    --page-shadow: 0 0 0 1px rgba(20, 28, 40, 0.05), 0 14px 40px rgba(20, 28, 40, 0.14);
+    --thumb-shadow: 0 0 0 1px rgba(20, 28, 40, 0.08), 0 1px 3px rgba(20, 28, 40, 0.12);
+    --thumb-dim: 0.55;
+    color-scheme: light;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-viewer);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  cursor: default;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: default;
+}
+
+svg.lucide {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ---------- Barre de la fenêtre (titre centré) ---------- */
+
+.titlebar {
+  height: var(--titlebar-h);
+  flex: none;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  position: relative;
+  background: var(--bg-titlebar);
+}
+
+/* ---------- Barre d'outils : miniatures · outils au centre · recherche ---------- */
+
+.toolbar {
+  height: var(--toolbar-h);
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  background: var(--bg-toolbar);
+  border-top: 1px solid var(--separator);
+  border-bottom: 1px solid var(--separator);
+  position: relative;
+  z-index: 2;
+}
+
+.toolbar-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.toolbar-side.end {
+  justify-content: flex-end;
+}
+
+/* Les groupes de boutons n'ont pas de fond propre : ils sont posés dans l'îlot des outils. */
+.pill {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 2px;
+  flex: none;
+  position: relative;
+}
+
+.btn {
+  height: 30px;
+  min-width: 34px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 8px;
+  color: var(--text-icon);
+  transition: background-color 150ms var(--ease);
+}
+
+.btn:hover {
+  background: var(--hover);
+}
+
+.btn:active {
+  background: var(--pressed);
+}
+
+.btn-narrow {
+  min-width: 26px;
+  padding: 0 4px;
+}
+
+.btn .chevron {
+  width: 12px;
+  height: 12px;
+  opacity: 0.85;
+}
+
+.btn-menu {
+  padding: 0 5px 0 7px;
+}
+
+.sep {
+  display: none;
+}
+
+/* Nom du document et page, sur une ligne, au centre de la fenêtre */
+.title {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  max-width: calc(100% - 2 * 150px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.title-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: top;
+  cursor: default;
+}
+
+.title-chevron {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.title-row:hover .title-chevron,
+.title-chevron:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.title-chevron svg.lucide {
+  width: 13px;
+  height: 13px;
+}
+
+.title-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  padding-left: 12px;
+  border-left: 1px solid var(--separator);
+}
+
+.title-sub:empty {
+  display: none;
+}
+
+/* L'îlot : tous les outils dans une seule barre arrondie, groupes séparés par un filet */
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 42px;
+  padding: 0 4px;
+  flex: none;
+  border-radius: 12px;
+  background: var(--bg-island);
+  border: 1px solid var(--island-border);
+}
+
+.tools > .pill + .pill::before,
+.tools > .btn-round + .pill::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 1px;
+  background: var(--separator);
+}
+
+.tools > .pill {
+  padding: 0 4px;
+}
+
+/* « Annoter » : carré arrondi teinté menthe ; plein quand la barre d'annotation est ouverte */
+.btn-round {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  margin: 0 4px;
+  padding: 0;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.btn-round:hover {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.btn-round[aria-pressed="true"],
+.btn-round[aria-pressed="true"]:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.search {
+  flex: 0 1 250px;
+  min-width: 120px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: var(--search-bg);
+  border: 1px solid var(--island-border);
+  color: var(--text-secondary);
+  cursor: text;
+}
+
+/* Rappel du raccourci, masqué dès qu'on tape */
+.kbd-hint {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 16px;
+  padding: 0 6px;
+  border-radius: 5px;
+  border: 1px solid var(--island-border);
+  color: var(--text-secondary);
+}
+
+.search:focus-within .kbd-hint,
+.search.filled .kbd-hint {
+  display: none;
+}
+
+.search svg.lucide {
+  width: 16px;
+  height: 16px;
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.search input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search:focus-within {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* Réduire / Agrandir / Fermer, à droite comme sous Windows */
+.window-controls {
+  display: flex;
+  align-self: stretch;
+  flex: none;
+  color: var(--text-icon);
+}
+
+.wc {
+  width: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms var(--ease);
+}
+
+.wc svg.lucide {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.25;
+}
+
+.wc:hover {
+  background: var(--hover);
+}
+
+.wc-close:hover {
+  background: var(--close-hover);
+  color: #fff;
+}
+
+/* ---------- Barre d'annotation ---------- */
+
+.markup {
+  flex: none;
+  height: 0;
+  overflow: hidden;
+  background: var(--bg-toolbar);
+  transition: height 180ms var(--ease);
+}
+
+.markup-open .markup {
+  height: var(--markup-h);
+  border-bottom: 1px solid var(--separator);
+}
+
+.markup-open .toolbar {
+  border-bottom-color: transparent;
+}
+
+/* Les outils sont centrés sur le document, pas sur toute la fenêtre. */
+.markup-inner {
+  padding-left: var(--sidebar-w);
+  transition: transform 180ms var(--ease), opacity 180ms var(--ease), padding 180ms var(--ease);
+  height: var(--markup-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transform: translateY(-8px);
+  opacity: 0;
+}
+
+.no-sidebar .markup-inner,
+.single-image .markup-inner {
+  padding-left: 0;
+}
+
+.markup-open .markup-inner {
+  transform: none;
+  opacity: 1;
+}
+
+.markup .btn {
+  height: 28px;
+  min-width: 30px;
+  padding: 0 5px;
+}
+
+.markup .btn-menu {
+  padding: 0 3px 0 5px;
+}
+
+.vsep {
+  width: 1px;
+  height: 18px;
+  margin: 0 8px;
+  background: var(--separator);
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.swatch-stroke {
+  border: 2.5px solid #ff3b30;
+}
+
+.swatch-fill {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--separator), 0 0 0 1px rgba(128, 128, 128, 0.35);
+}
+
+/* « Aucune couleur » : une barre en travers. */
+.swatch.none {
+  border-color: rgba(128, 128, 128, 0.6) !important;
+  background: linear-gradient(to top right, transparent 44%, #ff3b30 44%, #ff3b30 56%, transparent 56%) !important;
+}
+
+.swatch-stroke.none {
+  border-width: 1px;
+}
+
+/* Outil choisi */
+.btn.active {
+  background: var(--btn-active);
+  color: var(--btn-active-text);
+}
+
+.highlight-btn {
+  position: relative;
+}
+
+.swatch-highlight {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 4px;
+  height: 3px;
+  border-radius: 2px;
+  background: #ffe14d;
+}
+
+.btn-text span {
+  font-size: 14px;
+}
+
+/* ---------- Corps : miniatures + document ---------- */
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--separator);
+  transition: margin-left 180ms var(--ease);
+}
+
+.no-sidebar .sidebar {
+  margin-left: calc(-1 * var(--sidebar-w));
+}
+
+.thumbs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 4px 10px 10px;
+  scrollbar-gutter: stable;
+  /* La marge du haut (et du bas) reste quand la colonne défile vers une miniature. */
+  scroll-padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-radius: 8px;
+}
+
+/* Sélection : une barre menthe à gauche, la miniature pleine ; les autres un peu estompées */
+.thumb {
+  position: relative;
+}
+
+.thumb.selected {
+  background: var(--bg-thumb-selected);
+}
+
+.thumb.selected::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 6px;
+  bottom: 22px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+
+.thumb:not(.selected) .thumb-page {
+  opacity: var(--thumb-dim);
+  transition: opacity 150ms var(--ease);
+}
+
+.thumb:not(.selected):hover .thumb-page {
+  opacity: 1;
+}
+
+.thumb.selected .thumb-page {
+  box-shadow: var(--thumb-shadow), 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+.thumb-page {
+  position: relative;
+  width: 128px;
+  height: 181px;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: var(--thumb-shadow);
+}
+
+.thumb-page.picture {
+  background: var(--hover);
+}
+
+.thumb-group {
+  padding: 4px 4px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thumb-label {
+  max-width: 100%;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+/* Numéros de page (01, 02…) en chasse fixe */
+.thumb:has(.thumb-page:not(.picture)) .thumb-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.thumb.selected .thumb-label {
+  color: var(--text-thumb-selected);
+}
+
+.sidebar-foot {
+  flex: none;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-top: 1px solid var(--separator);
+}
+
+.btn-small {
+  height: 26px;
+  min-width: 26px;
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+.btn-small svg.lucide {
+  width: 16px;
+  height: 16px;
+}
+
+.viewer {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: auto;
+  background: var(--bg-viewer);
+  outline: none;
+}
+
+.pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  width: max-content;
+  min-width: 100%;
+}
+
+.page {
+  position: relative;
+  flex: none;
+  background: #fff;
+  box-shadow: var(--page-shadow);
+  overflow: hidden;
+}
+
+.page.picture {
+  background: transparent;
+  box-shadow: none;
+}
+
+.page > img,
+.thumb-page > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hl-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Annotations : deux calques SVG posés sur la page (tournés avec elle). */
+.annot-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  overflow: visible;
+  transform-origin: center;
+}
+
+/* Champs de formulaire, posés sur la page (mis à l'échelle avec elle) */
+.form-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.field {
+  position: absolute;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  background: rgba(10, 132, 255, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.28);
+  pointer-events: auto;
+  font-weight: 400;
+  line-height: normal;
+  color-scheme: light;
+}
+
+.field:hover {
+  background: rgba(10, 132, 255, 0.14);
+}
+
+.field:focus,
+.field:focus-visible {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 1.5px #0a84ff;
+}
+
+textarea.field {
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+select.field {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.field-checkbox,
+.field-radio {
+  padding: 0;
+  cursor: pointer;
+}
+
+.field-radio {
+  border-radius: 50%;
+}
+
+.field-radio.checked::after {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: #1d1d1f;
+}
+
+.field-checkbox svg {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.field-checkbox.checked svg {
+  display: block;
+}
+
+
+.field.read-only {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+}
+
+.thumb-annots {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+}
+
+.hl-svg {
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+.main-svg {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.main-svg > * {
+  pointer-events: auto;
+}
+
+.main-svg .annot,
+.hl-svg .annot {
+  cursor: move;
+}
+
+.main-svg .handle {
+  cursor: grab;
+}
+
+.main-svg .handle-n,
+.main-svg .handle-s {
+  cursor: ns-resize;
+}
+
+.main-svg .handle-e,
+.main-svg .handle-w {
+  cursor: ew-resize;
+}
+
+.main-svg .handle-nw,
+.main-svg .handle-se {
+  cursor: nwse-resize;
+}
+
+.main-svg .handle-ne,
+.main-svg .handle-sw {
+  cursor: nesw-resize;
+}
+
+.page {
+  cursor: default;
+}
+
+body[data-tool="select"] .page:not(.picture),
+body[data-tool="highlight"] .page:not(.picture) {
+  cursor: text;
+}
+
+body[data-tool="ink"] .page,
+body[data-tool="rect"] .page,
+body[data-tool="ellipse"] .page,
+body[data-tool="line"] .page,
+body[data-tool="arrow"] .page,
+body[data-tool="rounded"] .page,
+body[data-tool="bubble"] .page,
+body[data-tool="star"] .page,
+body[data-tool="hexagon"] .page,
+body[data-tool="note"] .page,
+body[data-tool="signature"] .page,
+body[data-tool="crop"] .page {
+  cursor: crosshair;
+}
+
+body[data-tool="text"] .page {
+  cursor: text;
+}
+
+body:not([data-tool="select"]) .main-svg .annot {
+  pointer-events: none;
+}
+
+.annot-edit {
+  display: block;
+  margin: 0;
+  border: none;
+  outline: 1px dashed #0a84ff;
+  outline-offset: 0;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+
+/* Fenêtre d'une note (post-it) */
+.note-box {
+  position: fixed;
+  z-index: 25;
+  width: 240px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #fff4a8;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12), 0 10px 28px rgba(0, 0, 0, 0.35);
+  animation: pop 120ms var(--ease);
+}
+
+.note-box textarea {
+  width: 100%;
+  height: 120px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: #1d1d1f;
+  font: inherit;
+  font-size: 13px;
+}
+
+/* Menu des formes : une grille d'icônes */
+.shape-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 36px);
+  gap: 4px;
+}
+
+.shape-pick {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shape-pick:hover {
+  background: var(--hover);
+}
+
+.shape-pick.current {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Palette de couleurs */
+.menu.panel {
+  min-width: 0;
+  padding: 8px;
+}
+
+.palette-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 228px;
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.palette-box.palette-few {
+  width: auto;
+}
+
+.palette-dots {
+  display: flex;
+  gap: 10px;
+  padding: 4px 6px;
+}
+
+.palette-dot {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.palette-dot:hover,
+.palette-dot.current {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15), 0 0 0 2px var(--bg-markup), 0 0 0 4px var(--accent);
+}
+
+/* Le nuancier : une case « aucune », 11 gris, puis 9 lignes de 12 nuances, sans espace */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.palette-color {
+  height: 17px;
+  padding: 0;
+  border-radius: 0;
+  position: relative;
+}
+
+.palette .palette-color {
+  height: 19px;
+}
+
+.palette-color:hover,
+.palette-color.current {
+  z-index: 1;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px rgba(0, 0, 0, 0.5);
+}
+
+/* « Aucune couleur » : blanc barré de rouge */
+.palette-none {
+  background: linear-gradient(to top right, #fff 44%, #ff3b30 44%, #ff3b30 56%, #fff 56%);
+}
+
+.palette-more {
+  height: 24px;
+  border-radius: 6px;
+  background: var(--pill);
+  font-size: 12px;
+}
+
+.palette-more:hover {
+  background: var(--hover);
+}
+
+.color-input {
+  position: fixed;
+  left: 50%;
+  top: 30%;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Panneau « Aa » : style du texte */
+.text-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 236px;
+}
+
+.text-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.text-font,
+.text-size {
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--pill);
+  color: var(--text);
+  font: inherit;
+  padding: 0 8px;
+  outline: none;
+}
+
+.text-font {
+  flex: 1;
+}
+
+.text-font option {
+  background: var(--bg-markup);
+  color: var(--text);
+}
+
+.text-size {
+  width: 60px;
+}
+
+.text-font:focus,
+.text-size:focus {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.text-unit {
+  color: var(--text-secondary);
+  margin-right: auto;
+}
+
+.text-color {
+  width: 34px;
+  height: 22px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.5);
+}
+
+.segmented {
+  display: flex;
+  height: 26px;
+  padding: 2px;
+  gap: 2px;
+  border-radius: 7px;
+  background: var(--pill);
+}
+
+.segmented.wide {
+  flex: 1;
+}
+
+.seg {
+  min-width: 28px;
+  flex: 1;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.seg:hover {
+  background: var(--hover);
+}
+
+.seg.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.seg-bold {
+  font-weight: 700;
+}
+
+.seg-italic {
+  font-style: italic;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.seg-underline {
+  text-decoration: underline;
+}
+
+.checks .menu-item.checked > span:first-child::before {
+  content: "✓";
+  display: inline-block;
+  width: 16px;
+  margin-left: -4px;
+}
+
+.checks .menu-item:not(.checked) > span:first-child {
+  padding-left: 12px;
+}
+
+.hl {
+  position: absolute;
+  border-radius: 3px;
+  background: rgba(255, 214, 10, 0.4);
+  mix-blend-mode: multiply;
+}
+
+.hl.active {
+  background: rgba(255, 196, 0, 0.75);
+  box-shadow: 0 0 0 2px rgba(255, 159, 10, 0.9);
+}
+
+/* Écran d'accueil, quand aucun document n'est ouvert */
+.empty {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.no-doc .empty {
+  display: flex;
+}
+
+.empty-icon {
+  width: 56px !important;
+  height: 56px !important;
+  stroke-width: 1 !important;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty-hint {
+  margin: 0 0 14px;
+}
+
+.empty-button {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.empty-button:hover {
+  filter: brightness(1.1);
+}
+
+.kbd {
+  font-weight: 400;
+  opacity: 0.75;
+  font-size: 12px;
+}
+
+/* Boutons pas encore actifs (étapes suivantes) ou sans document ouvert */
+.later,
+.later-group .btn,
+.no-doc .needs-doc-group .btn,
+.no-doc .needs-doc {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.no-doc .sidebar-foot .btn {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.busy,
+.busy * {
+  cursor: progress !important;
+}
+
+/* Glisser-déposer */
+.drop-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  padding: calc(var(--titlebar-h) + var(--toolbar-h) + 12px) 12px 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms var(--ease);
+}
+
+.drop-veil.shown {
+  opacity: 1;
+}
+
+.drop-frame {
+  flex: 1;
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Inspecteur (Ctrl+I) : une colonne à droite */
+.inspector {
+  width: var(--inspector-w);
+  flex: none;
+  margin-right: calc(-1 * var(--inspector-w));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-sidebar);
+  border-left: 1px solid var(--separator);
+  transition: margin-right 180ms var(--ease);
+  overflow: hidden;
+}
+
+.inspector-open .inspector {
+  margin-right: 0;
+}
+
+.inspector-tabs {
+  flex: none;
+  height: 30px;
+}
+
+.inspector-tabs .seg.on {
+  background: var(--pressed);
+  color: var(--text);
+}
+
+.inspector-tabs svg.lucide {
+  width: 16px;
+  height: 16px;
+}
+
+.inspector-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  user-select: text;
+}
+
+.inspector-card {
+  padding: 2px 10px;
+  border-radius: 9px;
+  background: var(--pill);
+}
+
+.inspector-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 12px;
+}
+
+.inspector-row + .inspector-row {
+  border-top: 1px solid var(--separator);
+}
+
+.inspector-key {
+  flex: none;
+  font-weight: 600;
+}
+
+.inspector-value {
+  min-width: 0;
+  color: var(--text-secondary);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Valeur longue (emplacement, logiciel) : sur sa propre ligne */
+.inspector-row.long {
+  flex-direction: column;
+  gap: 3px;
+}
+
+.inspector-row.long .inspector-value {
+  text-align: right;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.annot-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: left;
+}
+
+button.annot-row:hover {
+  background: var(--hover);
+}
+
+.annot-head {
+  min-height: 24px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--separator);
+  border-radius: 0;
+}
+
+.annot-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.annot-type span,
+.annot-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.annot-content {
+  color: var(--text-secondary);
+}
+
+.annot-color {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.5);
+}
+
+.inspector-empty {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Bouton d'un panneau ouvert (inspecteur) : plein, couleur d'accent */
+.btn.toggled,
+.btn.toggled:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.inspector-open .markup-inner {
+  padding-right: var(--inspector-w);
+}
+
+/* Messages d'erreur */
+.toasts {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.toast {
+  max-width: 520px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--bg-markup);
+  box-shadow: 0 0 0 1px var(--separator), 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: opacity 300ms var(--ease);
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-button {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 7px;
+  background: var(--pill);
+  white-space: nowrap;
+}
+
+.toast-button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.toast-button:disabled {
+  opacity: 0.5;
+}
+
+.toast.leaving {
+  opacity: 0;
+}
+
+/* Résultats de recherche (à la place des miniatures) */
+.results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.results[hidden],
+.thumbs[hidden] {
+  display: none;
+}
+
+.results-head {
+  padding: 6px 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.result {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.result:hover {
+  background: var(--hover);
+}
+
+.result.selected {
+  background: var(--bg-thumb-selected);
+}
+
+.result-thumb {
+  flex: none;
+  width: 34px;
+  height: 46px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--thumb-shadow);
+}
+
+.result-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.result-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.result-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.result-page {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-count {
+  flex: none;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--pill);
+  text-align: center;
+}
+
+.result-page {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.result-text {
+  font-size: 12px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-text mark {
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+}
+
+/* Barre de recherche : sous la barre du haut, sur toute la largeur */
+.find-bar {
+  flex: none;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 0 12px;
+  background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--separator);
+  font-size: 12px;
+}
+
+.find-bar[hidden] {
+  display: none;
+}
+
+.find-label {
+  color: var(--text-secondary);
+}
+
+.find-bar .segmented {
+  height: 24px;
+}
+
+.find-bar .seg {
+  flex: none;
+  white-space: nowrap;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.find-bar .seg svg.lucide {
+  width: 15px;
+  height: 15px;
+}
+
+.find-count {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
+
+.find-bar .modal-button {
+  height: 24px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Barres de défilement fines et discrètes */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pill);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--hover);
+}
+
+.thumbs:not(:hover)::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Menus (clic droit, menu du titre) */
+.menu {
+  position: fixed;
+  z-index: 30;
+  min-width: 220px;
+  padding: 5px;
+  border-radius: 9px;
+  background: var(--bg-markup);
+  box-shadow: 0 0 0 1px var(--separator), 0 12px 32px rgba(0, 0, 0, 0.35);
+  animation: pop 120ms var(--ease);
+}
+
+.menu-item {
+  width: 100%;
+  height: 28px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.menu-item:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.menu-item:hover:not(:disabled) .menu-shortcut {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.menu-item:disabled {
+  opacity: 0.4;
+}
+
+.menu-shortcut {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.menu-sep {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--separator);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+/* Fenêtre de question (enregistrer avant de fermer…) */
+.modal-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 140px;
+  background: rgba(0, 0, 0, 0.25);
+  animation: fade 150ms var(--ease);
+}
+
+.modal {
+  width: 380px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-markup);
+  box-shadow: 0 0 0 1px var(--separator), 0 20px 48px rgba(0, 0, 0, 0.4);
+}
+
+.modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.modal-text {
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal-button {
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 7px;
+  background: var(--pill);
+  box-shadow: inset 0 0 0 1px var(--separator);
+}
+
+.modal-button:hover {
+  background: var(--hover);
+}
+
+.modal-button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: none;
+}
+
+.modal-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Question (enregistrer ?…) : petit panneau arrondi, boutons empilés sur toute la largeur */
+.modal.alert {
+  width: 300px;
+  padding: 18px 16px 16px;
+  border-radius: 16px;
+}
+
+.modal.alert .modal-title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.modal.alert .modal-text {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text);
+  opacity: 0.85;
+  margin-bottom: 14px;
+}
+
+.modal-buttons.stacked {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-buttons.stacked .modal-button {
+  width: 100%;
+  height: 30px;
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Déplacer des miniatures */
+.thumbs {
+  position: relative;
+}
+
+.drop-line {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.drag-ghost {
+  position: fixed;
+  z-index: 50;
+  width: 64px !important;
+  height: auto !important;
+  aspect-ratio: auto;
+  pointer-events: none;
+  opacity: 0.85;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.drag-ghost > img {
+  position: static;
+  width: 100%;
+  height: auto;
+}
+
+.drag-ghost[data-count]::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dragging-pages,
+.dragging-pages * {
+  cursor: grabbing !important;
+}
+
+/* Signatures : menu du bouton « Signer » et fenêtre de création */
+.sign-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 240px;
+}
+
+.sign-empty {
+  padding: 6px 10px;
+  color: var(--text-secondary);
+}
+
+.sign-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sign-pick {
+  flex: 1;
+  height: 56px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-pick:hover {
+  background: var(--hover);
+}
+
+.sign-pick svg,
+.sign-pick img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.sign-pick img {
+  /* L'encre d'une photo garde sa couleur : un fond clair pour la voir en thème sombre. */
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.sign-pick svg path {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sign-delete {
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.sign-delete:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.sign-create {
+  border-top: 1px solid var(--separator);
+  border-radius: 0 0 6px 6px;
+  padding-top: 4px;
+}
+
+.modal.sign-dialog {
+  width: 480px;
+}
+
+.sign-tabs {
+  display: flex;
+  gap: 2px;
+  margin: 10px 0 12px;
+  padding: 2px;
+  border-radius: 7px;
+  background: var(--pill);
+}
+
+.sign-tab {
+  flex: 1;
+  height: 24px;
+  border-radius: 5px;
+  color: var(--text-secondary);
+}
+
+.sign-tab.active {
+  background: var(--bg-markup);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--separator);
+}
+
+.sign-canvas,
+.sign-photo {
+  display: block;
+  width: 440px;
+  height: 180px;
+  border-radius: 8px;
+  background: var(--pill);
+  box-shadow: inset 0 0 0 1px var(--separator);
+  color: var(--text);
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.sign-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  cursor: default;
+  /* Damier clair : on voit que le papier est devenu transparent. */
+  background: repeating-conic-gradient(#ffffff 0 25%, #ececec 0 50%) 0 0 / 16px 16px;
+}
+
+.sign-photo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.sign-hint {
+  min-height: 18px;
+  margin: 8px 0 14px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.sign-spacer {
+  flex: 1;
+}
+
+.modal-button:disabled {
+  opacity: 0.45;
+}
+
+/* Retouche : aperçu des réglages pendant qu'on bouge les curseurs */
+.page > img,
+.thumb-page > img {
+  filter: var(--retouch, none);
+}
+
+.retouch-panel {
+  box-sizing: border-box;
+  width: 330px;
+  padding: 14px 16px;
+}
+
+.retouch-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.retouch-row {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+.retouch-row input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.retouch-panel .modal-buttons {
+  margin-top: 14px;
+}
+
+/* Aperçu rapide (Espace dans l'Explorateur) : le document seul, sans outils */
+.quick-only {
+  display: none;
+}
+
+body.apercu-rapide .quick-only {
+  display: inline-flex;
+  padding: 0 12px;
+  border-radius: 7px;
+  background: var(--pill);
+}
+
+body.apercu-rapide .toolbar-side > .pill,
+body.apercu-rapide #file-menu,
+body.apercu-rapide .tools > :not(:first-child),
+body.apercu-rapide .search,
+body.apercu-rapide .markup {
+  display: none;
+}
+
+/* Poignée de rotation d'une forme (en bas à droite) */
+.main-svg .handle-rotate {
+  cursor: alias;
+}
+
+/* Cadre de recadrage : poignées et barre « Annuler / Recadrer » */
+.main-svg .crop-move {
+  cursor: move;
+}
+
+.main-svg .crop-n,
+.main-svg .crop-s {
+  cursor: ns-resize;
+}
+
+.main-svg .crop-e,
+.main-svg .crop-w {
+  cursor: ew-resize;
+}
+
+.main-svg .crop-nw,
+.main-svg .crop-se {
+  cursor: nwse-resize;
+}
+
+.main-svg .crop-ne,
+.main-svg .crop-sw {
+  cursor: nesw-resize;
+}
+
+.crop-bar {
+  flex: none;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg-sidebar);
+  border-top: 1px solid var(--separator);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.crop-bar span {
+  margin-right: 8px;
+}
+
+.crop-bar[hidden],
+body.cropping .filmstrip {
+  display: none;
+}
+
+.crop-bar .modal-button {
+  min-width: 0;
+}
+
+/* Une image seule : la colonne des miniatures laisse la place à la bande du dossier */
+.stage {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Bouton flottant en bas à droite : photo seule ⇄ planche de vignettes */
+.view-switch {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg-markup) 88%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 0 1px var(--separator), 0 4px 14px rgba(0, 0, 0, 0.28);
+  transition: transform 120ms var(--ease);
+}
+
+.view-switch:hover {
+  transform: scale(1.06);
+}
+
+/* Plusieurs photos annoncées avant leur ouverture : le bouton est là dès le premier affichage */
+body.many-pictures .view-switch[hidden] {
+  display: inline-flex;
+}
+
+.view-switch[hidden],
+.view-switch .when-sheet,
+body.sheet-mode .view-switch .when-viewer {
+  display: none;
+}
+
+body.sheet-mode .view-switch .when-sheet {
+  display: inline;
+}
+
+/* Outils selon le genre de document (rien de masqué tant qu'aucun document n'est ouvert) */
+body.only-pictures #form-fill,
+body.only-pictures .pill:has(> #highlight),
+body.only-pictures .toolbar .search,
+body.only-pdf #crop,
+body.only-pdf #tool-crop,
+body.only-pdf #tool-adjust {
+  display: none;
+}
+
+.stage .viewer {
+  min-height: 0;
+}
+
+body.single-image .sidebar {
+  margin-left: calc(-1 * var(--sidebar-w));
+}
+
+/* La barre de défilement (8 px) a sa place sous les vignettes : le contour bleu de
+ * l'image affichée n'est jamais recouvert. */
+.filmstrip {
+  flex: none;
+  height: 96px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--bg-sidebar);
+  border-top: 1px solid var(--separator);
+}
+
+.filmstrip::-webkit-scrollbar {
+  height: 8px;
+}
+
+.filmstrip::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 0 10px;
+}
+
+/* Fine et grise, plus visible quand la souris est sur la bande */
+.filmstrip::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text) 16%, transparent);
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background-clip: padding-box;
+}
+
+.filmstrip:hover::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--text) 30%, transparent);
+}
+
+.filmstrip::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+.filmstrip[hidden],
+body.no-filmstrip .filmstrip,
+body.apercu-rapide .filmstrip {
+  display: none;
+}
+
+.film-track {
+  position: relative;
+  height: 100%;
+}
+
+.film-item {
+  position: absolute;
+  top: 12px;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--hover);
+  box-shadow: var(--thumb-shadow);
+}
+
+.film-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 150ms var(--ease);
+}
+
+.film-item img.loaded {
+  opacity: 1;
+}
+
+.film-item.current {
+  outline: 2.5px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.film-item.selected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.film-item.selected::before {
+  content: "✓";
+  position: absolute;
+  z-index: 1;
+  right: 4px;
+  bottom: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* Planche contact : toutes les pages en grille, à la place du document */
+.sheet {
+  display: none;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 20px 24px;
+  background: var(--bg-viewer);
+  outline: none;
+}
+
+body.sheet-mode .sheet {
+  display: block;
+}
+
+body.sheet-mode .viewer,
+body.sheet-mode .filmstrip {
+  display: none;
+}
+
+body.sheet-mode .sidebar {
+  margin-left: calc(-1 * var(--sidebar-w));
+}
+
+body.sheet-mode .markup-inner {
+  padding-left: 0;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sheet-head svg {
+  color: var(--text-secondary);
+  transition: transform 150ms var(--ease);
+}
+
+.sheet-head.folded svg {
+  transform: rotate(-90deg);
+}
+
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 18px 8px;
+  padding: 8px 0 16px;
+}
+
+.sheet-grid.folded {
+  display: none;
+}
+
+.sheet-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 0 8px;
+  border-radius: 10px;
+}
+
+.sheet-page {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: var(--thumb-shadow);
+}
+
+.sheet-page.picture {
+  background: var(--hover);
+}
+
+.sheet-page img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sheet-label {
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sheet-item.selected {
+  background: var(--hover);
+}
+
+.sheet-item.selected .sheet-label {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* ---------- Petites fenêtres (la barre se replie) ---------- */
+.narrow-only {
+  display: none;
+}
+
+body.narrow .wide-only {
+  display: none;
+}
+
+body.narrow .narrow-only {
+  display: inline-flex;
+}
+
+body.apercu-rapide .narrow-only {
+  display: none;
+}
+
+body.compact .search {
+  flex: 0 0 34px;
+  min-width: 34px;
+  padding: 0 9px;
+  transition: flex-basis 180ms var(--ease);
+  cursor: default;
+}
+
+body.compact .search:focus-within,
+body.compact .search.filled {
+  flex-basis: 200px;
+  cursor: text;
+}
+
+body.compact .search:not(:focus-within):not(.filled) input {
+  width: 0;
+  flex: 0 0 0;
+}
+
+body.compact .search .kbd-hint {
+  display: none;
+}
+
+/* La barre d'annotation se coupe à droite plutôt que des deux côtés */
+.markup-inner {
+  justify-content: safe center;
+  overflow: hidden;
+}
+
+body.narrow .markup-inner {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Fenêtre « Dimensions de l'image » */
+.modal.alert.form {
+  width: 340px;
+}
+
+.resize-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 16px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--pill);
+  font-size: 12px;
+}
+
+.resize-row {
+  display: grid;
+  grid-template-columns: 78px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.resize-row span {
+  text-align: right;
+}
+
+.resize-row em {
+  font-style: normal;
+  color: var(--text-secondary);
+}
+
+.resize-row input,
+.resize-row select {
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 8px;
+  background: var(--bg-viewer);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+.resize-row select {
+  grid-column: 2 / 4;
+}
+
+.resize-row input:focus,
+.resize-row select:focus {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.resize-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 86px;
+}
+
+.resize-check input {
+  accent-color: var(--accent);
+}
+
+.resize-result {
+  margin-top: 4px;
+  color: var(--text-secondary);
+}
+
+.modal.form .modal-buttons {
+  justify-content: flex-end;
+}
+
+/* Impression : seulement les pages, une par feuille */
+.print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+    background: #fff;
+  }
+
+  body > :not(.print-root) {
+    display: none !important;
+  }
+
+  .print-root {
+    display: block;
+  }
+
+  .print-page {
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    break-after: page;
+  }
+
+  .print-page:last-child {
+    break-after: auto;
+  }
+
+  .print-page > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .print-page > svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    overflow: visible;
+  }
+}
+
+/* Document attrapé à la souris pour le déplacer */
+body.panning,
+body.panning * {
+  cursor: grabbing !important;
+  user-select: none;
+}
