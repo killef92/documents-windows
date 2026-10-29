@@ -1,0 +1,11 @@
+{
+  "version": "0.2.5",
+  "notes": "New version of Documents.",
+  "pub_date": "2026-10-29T18:25:34Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTMHBJK0hjMWJRMWNiU1RySFM4WUF0UXR6SVJ2ZFQwQ0EwNFB5eFhZd2pFZEUydkowZVZkQnp5Szg0Q2xjdGJBaTNIajMxK0Fpdmljcnh2ZUJjcmpGd1MvQTE0VFNHaUE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzMjk4Mjc1CWZpbGU6RG9jdW1lbnRzXzAuMi41X3g2NC1zZXR1cC5leGUJdmVyc2lvbjowLjIuNQpVZzZwV0VHRk16L3ZTSCt3aFVoWWpUUC81Zmp3NlF5WS9PMDZpMFNkZ0tiRXFmUWhyZ0FCUnJYU2swMCs0eTN1aGlDckczTDNjWXo1RDZDTzc0a1RBUT09Cg==",
+      "url": "https://github.com/killef92/documents-windows/releases/download/derniere-version/Documents-setup.exe"
+    }
+  }
+}
