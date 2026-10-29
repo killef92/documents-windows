@@ -40,3 +40,10 @@ npm run tauri dev
 - `LICENCES.md` — ce qui est livré et sous quelle licence (tout est libre de redistribution).
 - `CONFIDENTIALITE.md` — ce que l'appli garde et envoie (rien sur vous ni vos fichiers).
 - `SECURITY.md` — signaler une faille de sécurité.
+
+## Code signing policy
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org) (demande en cours).
+
+- Auteur, relecteur et approbateur : [killef92](https://github.com/killef92) (Kilian Lefèvre).
+- Chaque installateur est construit par GitHub Actions à partir de ce dépôt, puis sa signature est approuvée à la main.
+- Confidentialité : l'appli n'envoie aucune information sur un autre système, sauf la recherche de mises à jour sur GitHub. Voir [CONFIDENTIALITE.md](CONFIDENTIALITE.md).
