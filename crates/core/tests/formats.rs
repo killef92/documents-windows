@@ -96,11 +96,12 @@ fn photo_brute_dng_montre_son_plus_grand_apercu_redresse() {
 
 #[test]
 fn photo_heic() {
+    // La bibliothèque d'abord : c'est elle qui dit où chercher libheif.
+    let mut lib = library();
     if !documents_core::heic_available() {
         eprintln!("libheif absente : test HEIC sauté");
         return;
     }
-    let mut lib = library();
     let info = lib.open(&fixture("photo.heic")).unwrap();
     assert_eq!(info.kind, DocumentKind::Heic);
     assert_eq!((info.pages[0].width, info.pages[0].height), (40.0, 30.0));
