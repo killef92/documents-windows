@@ -467,6 +467,50 @@ h1 em {
   transform: rotate(-3deg);
 }
 
+/* Deuxième exemple : plusieurs photos ouvertes, avec leur nom sous la miniature */
+.shot-caption {
+  margin: 56px 0 20px;
+  text-align: center;
+}
+.shot-caption h2 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 28px);
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+.shot-caption p { margin: 4px 0 0; color: var(--text-secondary); }
+.thumb .pic {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 4px;
+  box-shadow: var(--thumb-shadow);
+  opacity: 0.6;
+}
+.thumb.sel .pic { opacity: 1; }
+.thumb .name {
+  display: block;
+  margin-top: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10.5px;
+  color: var(--text-secondary);
+}
+.thumb.sel .name { color: var(--accent); }
+.w-side.photos .thumb.sel::before { height: 88px; }
+.w-view.photo {
+  align-items: center;
+  padding: 28px;
+}
+.w-view.photo .pic {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 4 / 3;
+  box-shadow: var(--page-shadow);
+}
+.island .soft { background: var(--accent-soft); color: var(--accent); }
+
 /* Sections */
 section { padding: 96px 0 0; }
 .section-title {
@@ -612,12 +656,33 @@ footer a:hover { color: var(--text); }
   .shot { padding: 0 16px; margin-top: 40px; }
   .nav .label { display: none; }
   .hero { padding-top: 48px; }
-  .w-side, .island .opt, .w-left .chev, .w-title .chev, .w-title .sep, .w-title .page,
+  .island .opt, .w-left .chev, .w-title .chev, .w-title .sep, .w-title .page,
   .w-controls span:not(:last-child) { display: none; }
   .w-body { height: 380px; }
-  .w-view { padding: 16px 16px 0; }
-  .paper { padding: 24px; }
+  /* Sur téléphone, la colonne des miniatures reste, en plus étroit */
+  .w-side { width: 76px; padding: 12px 0; }
+  .thumb { width: 50px; margin-bottom: 12px; }
+  .thumb .mini { height: 65px; padding: 6px 5px; }
+  .thumb .mini i { height: 2px; margin-bottom: 3px; }
+  .thumb .mini i.t { height: 3px; }
+  .thumb .mini i.p { height: 16px; }
+  .thumb .n, .thumb .name { font-size: 9.5px; margin-top: 3px; }
+  .thumb.sel::before { left: -13px; top: -4px; height: 84px; }
+  .w-side.photos .thumb.sel::before { height: 58px; }
+  .w-view { padding: 14px 14px 0; }
+  .w-view.photo { padding: 14px; }
+  .paper { padding: 16px 16px; font-size: 8.5px; line-height: 1.5; }
+  .paper .head { font-size: 7.5px; }
+  .paper .head strong { font-size: 8.5px; }
   .paper .head div:last-child { display: none; }
+  .paper h3 { margin-top: 16px; font-size: 15px; }
+  .paper .sub { font-size: 8.5px; }
+  .paper h4 { margin: 12px 0 4px; font-size: 7.5px; }
+  .paper table { font-size: 7.5px; }
+  .paper td { padding: 3px 0; }
+  .paper .note { font-size: 8px; }
+  .shot-caption { margin-top: 40px; }
+  .w-body.photos-body { height: 292px; }
   section { padding-top: 72px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -629,6 +694,44 @@ footer a:hover { color: var(--text); }
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <!-- Icônes Lucide, https://lucide.dev — ISC License, Copyright (c) 2026 Lucide Icons and Contributors (texte : assets/LUCIDE-LICENSE.txt) -->
+<!-- Photos d'exemple dessinées pour ce site (MIT, comme le reste) -->
+<defs>
+  <linearGradient id="g-dawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4f7a"/><stop offset=".55" stop-color="#e59a7e"/><stop offset="1" stop-color="#f6d3a1"/></linearGradient>
+  <linearGradient id="g-lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8b89a"/><stop offset="1" stop-color="#34466b"/></linearGradient>
+  <linearGradient id="g-forest" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe0e3"/><stop offset="1" stop-color="#9fbfb7"/></linearGradient>
+  <linearGradient id="g-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8cc7e8"/><stop offset="1" stop-color="#d9eef7"/></linearGradient>
+  <linearGradient id="g-night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1430"/><stop offset="1" stop-color="#3a2f5c"/></linearGradient>
+</defs>
+<symbol id="ph-dawn" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="url(#g-dawn)"/>
+  <circle cx="268" cy="150" r="26" fill="#fff1d6" opacity=".9"/>
+  <path d="M0 175 70 110 120 150 185 85 250 160 300 120 400 180V200H0z" fill="#5d6a93"/>
+  <path d="M0 190 60 150 110 175 170 135 240 185 320 150 400 190V205H0z" fill="#46527a"/>
+  <rect y="200" width="400" height="100" fill="url(#g-lake)"/>
+  <path d="M0 200 60 232 110 214 170 246 240 210 320 236 400 206V200z" fill="#46527a" opacity=".55"/>
+  <ellipse cx="268" cy="236" rx="40" ry="3" fill="#fff1d6" opacity=".55"/>
+  <ellipse cx="262" cy="252" rx="24" ry="2" fill="#fff1d6" opacity=".35"/>
+</symbol>
+<symbol id="ph-forest" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="url(#g-forest)"/>
+  <path d="M0 170Q100 120 200 160T400 140V300H0z" fill="#7fa596"/>
+  <path d="M0 210Q120 170 230 205T400 195V300H0z" fill="#4f7d68"/>
+  <g fill="#2f5a48"><path d="M40 260 70 160 100 260z"/><path d="M90 270 125 150 160 270z"/><path d="M250 265 280 170 310 265z"/><path d="M300 275 340 145 380 275z"/></g>
+  <rect y="255" width="400" height="45" fill="#2a4a3c"/>
+</symbol>
+<symbol id="ph-beach" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="url(#g-sea)"/>
+  <circle cx="90" cy="70" r="22" fill="#fff8e0"/>
+  <rect y="160" width="400" height="60" fill="#3f8fbf"/>
+  <path d="M0 200Q200 185 400 205V300H0z" fill="#e9d6ad"/>
+  <path d="M250 205h70v-40l-35-25-35 25z" fill="#f2f2ee"/><path d="M243 168l42-32 42 32" fill="none" stroke="#c4553f" stroke-width="8"/><rect x="278" y="182" width="14" height="23" fill="#7b5a43"/>
+</symbol>
+<symbol id="ph-city" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="url(#g-night)"/>
+  <circle cx="320" cy="60" r="16" fill="#f1ecd8"/>
+  <g fill="#161a2e"><rect x="10" y="150" width="60" height="150"/><rect x="80" y="110" width="50" height="190"/><rect x="140" y="170" width="70" height="130"/><rect x="220" y="90" width="45" height="210"/><rect x="275" y="140" width="60" height="160"/><rect x="345" y="180" width="50" height="120"/></g>
+  <g fill="#f5c96a" opacity=".85"><rect x="22" y="170" width="8" height="8"/><rect x="45" y="200" width="8" height="8"/><rect x="92" y="130" width="8" height="8"/><rect x="110" y="170" width="8" height="8"/><rect x="155" y="190" width="8" height="8"/><rect x="185" y="220" width="8" height="8"/><rect x="232" y="110" width="8" height="8"/><rect x="246" y="150" width="8" height="8"/><rect x="290" y="160" width="8" height="8"/><rect x="312" y="200" width="8" height="8"/><rect x="360" y="200" width="8" height="8"/></g>
+</symbol>
 <symbol id="i-panel-left" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></symbol>
   <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-zoom-out" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="8" x2="14" y1="11" y2="11"/></symbol>
@@ -745,6 +848,51 @@ footer a:hover { color: var(--text); }
             </table>
             <span class="note">Checked ✓</span>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="shot-caption">
+      <h2>Your photos too.</h2>
+      <p>Open a whole folder of pictures, then crop, adjust colors, resize or annotate them.</p>
+    </div>
+    <div class="window">
+      <div class="w-title">
+        <b>Lake-at-dawn.jpg</b><svg class="icon chev"><use href="#i-chevron-down"/></svg>
+        <span class="sep"></span><span class="page">4032 × 3024 pixels</span>
+        <div class="w-controls">
+          <span><svg class="icon"><use href="#i-minus"/></svg></span>
+          <span><svg class="icon"><use href="#i-square"/></svg></span>
+          <span><svg class="icon"><use href="#i-x"/></svg></span>
+        </div>
+      </div>
+      <div class="w-toolbar">
+        <div class="w-left">
+          <svg class="icon"><use href="#i-panel-left"/></svg><svg class="icon chev"><use href="#i-chevron-down"/></svg>
+        </div>
+        <div class="island">
+          <span><svg class="icon"><use href="#i-zoom-out"/></svg></span>
+          <span class="opt"><svg class="icon"><use href="#i-search"/></svg></span>
+          <span><svg class="icon"><use href="#i-zoom-in"/></svg></span>
+          <i class="vsep"></i>
+          <span><svg class="icon"><use href="#i-crop"/></svg></span>
+          <span><svg class="icon"><use href="#i-rotate-cw-square"/></svg></span>
+          <span class="opt"><svg class="icon"><use href="#i-sliders-horizontal"/></svg></span>
+          <span class="soft"><svg class="icon"><use href="#i-pen-tool"/></svg></span>
+          <i class="vsep"></i>
+          <span><svg class="icon"><use href="#i-info"/></svg></span>
+          <span class="opt"><svg class="icon"><use href="#i-share"/></svg></span>
+        </div>
+        <div class="w-search"><svg class="icon"><use href="#i-search"/></svg>Search<kbd>Ctrl F</kbd></div>
+      </div>
+      <div class="w-body photos-body">
+        <div class="w-side photos">
+          <div class="thumb sel"><svg class="pic"><use href="#ph-dawn"/></svg><span class="name">Lake-at-dawn.jpg</span></div>
+          <div class="thumb"><svg class="pic"><use href="#ph-forest"/></svg><span class="name">Pine-forest.jpg</span></div>
+          <div class="thumb"><svg class="pic"><use href="#ph-beach"/></svg><span class="name">IMG_0412.jpg</span></div>
+          <div class="thumb"><svg class="pic"><use href="#ph-city"/></svg><span class="name">City-night.png</span></div>
+        </div>
+        <div class="w-view photo">
+          <svg class="pic"><use href="#ph-dawn"/></svg>
         </div>
       </div>
     </div>
