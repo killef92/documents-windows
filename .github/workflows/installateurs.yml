@@ -48,6 +48,15 @@ jobs:
         shell: bash
         run: scripts/pdfium.sh win-x64
 
+      # libheif + libde265 (HEIC photos, LGPL-3.0): built once by the "libheif" workflow.
+      - name: Download libheif
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force vendor\heif\win-x64 | Out-Null
+          Invoke-WebRequest "https://github.com/${{ github.repository }}/releases/download/libheif/heif-win-x64.zip" -OutFile heif.zip
+          Expand-Archive heif.zip -DestinationPath vendor\heif\win-x64 -Force
+          Get-ChildItem vendor\heif\win-x64
+
       - name: Update the license list
         run: python scripts/licences.py
 

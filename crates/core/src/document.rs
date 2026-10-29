@@ -25,6 +25,11 @@ pub struct DocInfo {
     pub pages: Vec<PageSize>,
     /// Photo retouchée (recadrée, couleurs…) : son fichier d'origine ne correspond plus.
     pub edited: bool,
+    /// Se feuillette page par page comme un PDF (PDF, dessin .ai, TIFF de plusieurs pages).
+    pub paged: bool,
+    /// « Enregistrer » peut réécrire le fichier d'origine ; sinon on enregistre une copie
+    /// (voir [`crate::Library::save_path`]).
+    pub writable: bool,
 }
 
 /// Ce que montre l'inspecteur (Ctrl+I) : le fichier, et pour un PDF ses informations.

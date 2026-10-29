@@ -1,11 +1,19 @@
-//! Lecture des photos et images (JPEG, PNG, WebP, GIF).
+//! Lecture des photos et images (JPEG, PNG, WebP, GIF, BMP, TIFF, HEIC, JPEG 2000…).
 
-use image::{DynamicImage, ImageDecoder, ImageReader};
+use image::{DynamicImage, ImageDecoder, ImageReader, Rgb32FImage, Rgba32FImage};
 use serde::Deserialize;
 use std::io::Cursor;
+use std::sync::Once;
 
 use crate::document::{PageSize, Rotation};
-use crate::{Error, Result};
+use crate::tiffdir::{self, Tiff};
+use crate::{heif, raw, DocumentKind, Error, Result};
+
+/// Au-delà (2 Go une fois décodée, ou 250 millions de pixels), une image est refusée.
+const MAX_DECODED_BYTES: u64 = 2 << 30;
+const MAX_PIXELS: u64 = 250_000_000;
+/// Le JPEG 2000 se décode lentement : limite plus basse, pour ne pas bloquer longtemps.
+const MAX_JP2_PIXELS: u64 = 80_000_000;
 
 pub(crate) struct Picture {
     image: DynamicImage,
@@ -23,10 +31,74 @@ impl Picture {
             .with_guessed_format()?
             .into_decoder()
             .map_err(broken)?;
+        // Taille annoncée absurde (fichier abîmé ou piégé) : refusée avant de réserver la mémoire.
+        let (w, h) = decoder.dimensions();
+        if decoder.total_bytes() > MAX_DECODED_BYTES || u64::from(w) * u64::from(h) > MAX_PIXELS {
+            return Err(Error::BrokenImage("image too large".into()));
+        }
         let orientation = decoder.orientation().map_err(broken)?;
         let mut image = DynamicImage::from_decoder(decoder).map_err(broken)?;
         image.apply_orientation(orientation);
         Ok(Self { image, bytes: bytes.to_vec(), orientation: orientation.to_exif() as u16 })
+    }
+
+    /// Lit une image de n'importe quel type connu (la première page pour un TIFF).
+    pub fn load(kind: DocumentKind, bytes: &[u8]) -> Result<Self> {
+        match kind {
+            DocumentKind::Heic => Ok(Self { image: heif::decode(bytes)?, bytes: bytes.to_vec(), orientation: 1 }),
+            DocumentKind::Raw => {
+                let preview = raw::preview(bytes).ok_or(Error::RawWithoutPreview)?;
+                let mut picture = Self::open(preview.jpeg)?;
+                let orientation = image::metadata::Orientation::from_exif(preview.orientation as u8)
+                    .unwrap_or(image::metadata::Orientation::NoTransforms);
+                picture.image.apply_orientation(orientation);
+                picture.bytes = bytes.to_vec();
+                Ok(picture)
+            }
+            DocumentKind::Tiff => {
+                let mut picture = Self::open(bytes)?;
+                if let Some(tiff) = Tiff::new(bytes) {
+                    if let Some(dir) = tiff.main_dirs().first() {
+                        picture.image = square_pixels(std::mem::take(&mut picture.image), dir, picture.orientation);
+                    }
+                }
+                Ok(picture)
+            }
+            DocumentKind::Jp2 => {
+                static HOOK: Once = Once::new();
+                HOOK.call_once(|| {
+                    hayro_jpeg2000::integration::register_decoding_hook();
+                });
+                let header = hayro_jpeg2000::Image::new(bytes, &hayro_jpeg2000::DecodeSettings::default())
+                    .map_err(|e| Error::BrokenImage(format!("{e:?}")))?;
+                if u64::from(header.width()) * u64::from(header.height()) > MAX_JP2_PIXELS {
+                    return Err(Error::BrokenImage("image too large".into()));
+                }
+                Self::open(bytes)
+            }
+            DocumentKind::Hdr | DocumentKind::Exr => {
+                let mut picture = Self::open(bytes)?;
+                picture.image = tone_map(std::mem::take(&mut picture.image));
+                Ok(picture)
+            }
+            _ => Self::open(bytes),
+        }
+    }
+
+    /// Les pages d'un TIFF qui en a plusieurs (scan, fax), dans l'ordre ; une seule page : vide.
+    pub fn tiff_pages(bytes: &[u8]) -> Result<Vec<DynamicImage>> {
+        let Some(tiff) = Tiff::new(bytes) else { return Ok(Vec::new()) };
+        // Les images « réduites » (vignettes) ne sont pas des pages.
+        let dirs: Vec<_> = tiff.main_dirs().into_iter().filter(|d| d.first(tiffdir::NEW_SUBFILE_TYPE).unwrap_or(0) & 1 == 0).collect();
+        if dirs.len() < 2 {
+            return Ok(Vec::new());
+        }
+        dirs.iter()
+            .map(|dir| {
+                let picture = Self::open(&tiff.with_first_dir(dir.offset))?;
+                Ok(square_pixels(picture.image, dir, picture.orientation))
+            })
+            .collect()
     }
 
     /// Une copie retouchée : recadrée, puis luminosité, contraste et saturation.
@@ -94,6 +166,76 @@ impl Picture {
             Rotation::R180 => small.rotate180(),
             Rotation::R270 => small.rotate270(),
         }
+    }
+}
+
+/// Un fax « normal » a des pixels deux fois plus hauts que larges (204 × 98 points par pouce) :
+/// on étire l'image pour qu'elle ne paraisse pas écrasée.
+fn square_pixels(image: DynamicImage, dir: &tiffdir::Dir, orientation: u16) -> DynamicImage {
+    let (Some(x), Some(y)) = (dir.first(tiffdir::X_RESOLUTION), dir.first(tiffdir::Y_RESOLUTION)) else { return image };
+    if x == 0 || y == 0 || (x as f32 / y as f32 - 1.0).abs() < 0.1 {
+        return image;
+    }
+    // Résolutions données avant redressement : couchée, l'image a ses axes échangés.
+    let (x, y) = if orientation >= 5 { (y, x) } else { (x, y) };
+    let (w, h) = (image.width(), image.height());
+    let (nw, nh) = if x > y {
+        (w, ((h as f64) * x as f64 / y as f64).round() as u32)
+    } else {
+        (((w as f64) * y as f64 / x as f64).round() as u32, h)
+    };
+    if nw.max(nh) > 30_000 {
+        return image;
+    }
+    image.resize_exact(nw, nh, image::imageops::FilterType::Triangle)
+}
+
+/// Une image « haute dynamique » (HDR, OpenEXR) contient plus de lumière qu'un écran n'en
+/// montre : on compresse les hautes lumières (Reinhard étendu) puis on passe en sRGB.
+fn tone_map(image: DynamicImage) -> DynamicImage {
+    let has_alpha = image.color().has_alpha();
+    let mut rgba: Rgba32FImage = match image {
+        DynamicImage::ImageRgb32F(_) | DynamicImage::ImageRgba32F(_) => image.into_rgba32f(),
+        // Déjà en 8 ou 16 bits : rien à faire.
+        other => return other,
+    };
+    let lum = |p: &image::Rgba<f32>| (0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2]).max(0.0);
+    let mut sorted: Vec<f32> = rgba.pixels().map(lum).filter(|l| l.is_finite()).collect();
+    let white = if sorted.is_empty() {
+        1.0
+    } else {
+        let k = (sorted.len() as f64 * 0.995) as usize;
+        let k = k.min(sorted.len() - 1);
+        *sorted.select_nth_unstable_by(k, f32::total_cmp).1
+    };
+    let srgb = |v: f32| {
+        let v = v.clamp(0.0, 1.0);
+        if v <= 0.003_130_8 { v * 12.92 } else { 1.055 * v.powf(1.0 / 2.4) - 0.055 }
+    };
+    if white > 1.0 {
+        let w2 = white * white;
+        for p in rgba.pixels_mut() {
+            let l = lum(p);
+            if l > 0.0 && l.is_finite() {
+                let k = (1.0 + l / w2) / (1.0 + l);
+                for c in 0..3 {
+                    p[c] *= k;
+                }
+            }
+        }
+    }
+    for p in rgba.pixels_mut() {
+        for c in 0..3 {
+            p[c] = if p[c].is_finite() { srgb(p[c]) } else { 1.0 };
+        }
+        p[3] = if p[3].is_finite() { p[3].clamp(0.0, 1.0) } else { 1.0 };
+    }
+    let image = DynamicImage::ImageRgba32F(rgba);
+    if has_alpha {
+        DynamicImage::ImageRgba8(image.to_rgba8())
+    } else {
+        let rgb: Rgb32FImage = image.into_rgb32f();
+        DynamicImage::ImageRgb8(DynamicImage::ImageRgb32F(rgb).to_rgb8())
     }
 }
 

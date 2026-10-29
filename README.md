@@ -9,7 +9,13 @@ A free PDF and image viewer and light editor for Windows 10/11 and Windows Serve
 > treat it accordingly: keep copies of important documents.
 
 ## What it does
-- Open PDFs and photos (JPG, PNG, WebP, GIF) and flip through pages with thumbnails.
+- Open PDFs and images in the same window and flip through pages with thumbnails:
+  - documents: PDF, AI (with PDF content);
+  - photos: JPEG, HEIC/HEIF, PNG, WebP, GIF (animated too);
+  - scans and faxes: TIFF (multi-page), FAX (TIFF G3/G4);
+  - camera RAW: CR2, DNG (the preview stored in the file);
+  - other images: BMP, ICO, JPEG 2000, OpenEXR, HDR, PPM/PGM/PBM.
+  Formats that can't be rewritten (HEIC, RAW, JPEG 2000…) are saved as a copy next to the original.
 - Zoom, rotate, search the text of a PDF.
 - Annotate: highlight, shapes, arrows, text, notes, freehand drawing.
 - Fill in PDF forms and sign them.

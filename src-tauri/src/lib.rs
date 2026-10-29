@@ -162,6 +162,13 @@ async fn retouch_picture(worker: tauri::State<'_, Worker>, doc: DocId, retouch: 
     wait(worker.retouch(doc, retouch)).await
 }
 
+/// Où « Enregistrer » écrit une image : son fichier, ou une copie à côté si son format ne se
+/// réécrit pas (HEIC, photo RAW, JPEG 2000…).
+#[tauri::command]
+async fn save_path(worker: tauri::State<'_, Worker>, doc: DocId) -> Result<PathBuf, String> {
+    wait(worker.save_path(doc)).await
+}
+
 #[tauri::command]
 async fn save_picture(worker: tauri::State<'_, Worker>, doc: DocId, rotation: i32, dest: PathBuf) -> Result<(), String> {
     wait(worker.save_picture(doc, rotation, dest)).await
@@ -285,13 +292,13 @@ fn next_label() -> String {
 /// Le genre des fichiers qu'une fenêtre va ouvrir, donné à la page avant son premier affichage
 /// (classes du corps de page) : les bons outils sont là tout de suite, sans étape intermédiaire.
 fn genre_script(paths: &[PathBuf]) -> String {
-    let ext = |p: &PathBuf| p.extension().map(|e| e.to_string_lossy().to_lowercase()).unwrap_or_default();
-    let picture = |p: &PathBuf| matches!(ext(p).as_str(), "jpg" | "jpeg" | "png" | "webp" | "gif" | "heic");
+    let picture = |p: &PathBuf| documents_core::is_picture_name(p);
+    let paged = |p: &PathBuf| documents_core::is_openable_name(p) && !picture(p);
     let mut classes = Vec::new();
     if !paths.is_empty() && paths.iter().all(picture) {
         classes.push("only-pictures");
         classes.push(if paths.len() == 1 { "single-image" } else { "many-pictures" });
-    } else if !paths.is_empty() && paths.iter().all(|p| ext(p) == "pdf") {
+    } else if !paths.is_empty() && paths.iter().all(paged) {
         classes.push("only-pdf");
     }
     format!("window.__APERCU_GENRE__ = {:?};", classes.join(" "))
@@ -408,19 +415,23 @@ fn open_from_launch(app: &tauri::AppHandle, paths: Vec<PathBuf>) {
     }
 }
 
-/// Où chercher PDFium : à côté de l'appli installée, puis dans vendor/ pendant le développement.
-fn pdfium_dirs(app: &tauri::App) -> Vec<PathBuf> {
+/// Où chercher PDFium et libheif (photos HEIC) : à côté de l'appli installée, puis dans
+/// vendor/ pendant le développement.
+fn lib_dirs(app: &tauri::App) -> Vec<PathBuf> {
     let mut dirs = Vec::new();
     if let Ok(res) = app.path().resource_dir() {
         dirs.push(res.join("pdfium"));
+        dirs.push(res.join("heif"));
         dirs.push(res);
     }
     if let Some(exe_dir) = std::env::current_exe().ok().and_then(|p| p.parent().map(PathBuf::from)) {
         dirs.push(exe_dir);
     }
     if cfg!(debug_assertions) {
-        if let Ok(entries) = std::fs::read_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/../vendor/pdfium")) {
-            dirs.extend(entries.flatten().map(|e| e.path()));
+        for vendor in [concat!(env!("CARGO_MANIFEST_DIR"), "/../vendor/pdfium"), concat!(env!("CARGO_MANIFEST_DIR"), "/../vendor/heif")] {
+            if let Ok(entries) = std::fs::read_dir(vendor) {
+                dirs.extend(entries.flatten().map(|e| e.path()));
+            }
         }
     }
     dirs
@@ -491,7 +502,7 @@ pub fn run() {
                         .build()?;
                 }
             }
-            app.manage(Worker::start(pdfium_dirs(app)));
+            app.manage(Worker::start(lib_dirs(app)));
             app.manage(Thumbs::start());
             #[cfg(windows)]
             if background {
@@ -561,7 +572,7 @@ pub fn run() {
             });
         })
         .invoke_handler(tauri::generate_handler![
-            open_paths, close_docs, search, take_paths, folder_images, copy_files, choose_default_app, save_pdf, save_picture,
+            open_paths, close_docs, search, take_paths, folder_images, copy_files, choose_default_app, save_pdf, save_path, save_picture,
             save_picture_pixels, page_text, doc_details, form_fields, pdf_annotations, signature_from_photo,
             retouch_picture, save_pdf_reduced, apercu_rapide_enabled, set_apercu_rapide, apercu_rapide_path, open_in_app,
             update_token

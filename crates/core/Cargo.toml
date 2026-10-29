@@ -6,7 +6,11 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp", "gif", "rayon"] }
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp", "gif", "bmp", "ico", "pnm", "tiff", "hdr", "exr", "rayon"] }
+# JPEG 2000 (100 % Rust).
+hayro-jpeg2000 = "0.4"
+# Chargement de libheif (photos HEIC), livrée à part.
+libloading = "0.8"
 lopdf = { version = "0.46", default-features = false }
 pdfium-render = "0.9"
 serde = { version = "1", features = ["derive"] }

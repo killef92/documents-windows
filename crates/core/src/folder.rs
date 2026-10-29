@@ -12,15 +12,11 @@ use image::ImageFormat;
 
 use crate::document::Rotation;
 use crate::picture::Picture;
-use crate::Result;
+use crate::{DocumentKind, Result};
 
-/// Les extensions montrées dans la bande (celles qu'on sait ouvrir).
-const IMAGE_EXTENSIONS: &[&str] = &["jpg", "jpeg", "png", "webp", "gif"];
-
+/// Une image montrée dans la bande (un type qu'on sait ouvrir).
 pub fn is_image_name(path: &Path) -> bool {
-    path.extension()
-        .and_then(|e| e.to_str())
-        .is_some_and(|e| IMAGE_EXTENSIONS.iter().any(|x| x.eq_ignore_ascii_case(e)))
+    crate::is_picture_name(path)
 }
 
 /// Les images du dossier, dans l'ordre de l'Explorateur (« photo 2 » avant « photo 10 »).
@@ -79,7 +75,8 @@ pub fn natural_cmp(a: &str, b: &str) -> Ordering {
 /// elle a de la transparence.
 pub fn thumbnail(path: &Path, max: u32) -> Result<(Vec<u8>, &'static str)> {
     let bytes = std::fs::read(path)?;
-    let picture = Picture::open(&bytes)?;
+    let kind = DocumentKind::from_bytes(&bytes).ok_or(crate::Error::UnsupportedFormat)?.refine(path, &bytes);
+    let picture = Picture::load(kind, &bytes)?;
     let size = picture.size();
     let width = if size.width >= size.height {
         max

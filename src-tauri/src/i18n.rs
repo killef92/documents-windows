@@ -114,6 +114,16 @@ pub enum Text {
     KindPng,
     KindWebp,
     KindGif,
+    KindHeic,
+    KindTiff,
+    KindBmp,
+    KindRaw,
+    KindAi,
+    KindJp2,
+    KindHdr,
+    KindExr,
+    KindIco,
+    KindPnm,
     KindImage,
     SettingsFailed,
 }
@@ -168,6 +178,24 @@ fn tr_in(l: Lang, text: Text) -> &'static str {
         Text::KindPng => ["PNG image", "Image PNG", "Imagen PNG", "Immagine PNG", "Imagem PNG", "PNG 图像", "PNG 画像"],
         Text::KindWebp => ["WebP image", "Image WebP", "Imagen WebP", "Immagine WebP", "Imagem WebP", "WebP 图像", "WebP 画像"],
         Text::KindGif => ["GIF image", "Image GIF", "Imagen GIF", "Immagine GIF", "Imagem GIF", "GIF 图像", "GIF 画像"],
+        Text::KindHeic => ["HEIC photo", "Photo HEIC", "Foto HEIC", "Foto HEIC", "Fotografia HEIC", "HEIC 照片", "HEIC 写真"],
+        Text::KindTiff => ["TIFF image", "Image TIFF", "Imagen TIFF", "Immagine TIFF", "Imagem TIFF", "TIFF 图像", "TIFF 画像"],
+        Text::KindBmp => ["BMP image", "Image BMP", "Imagen BMP", "Immagine BMP", "Imagem BMP", "BMP 图像", "BMP 画像"],
+        Text::KindRaw => ["RAW photo", "Photo RAW", "Foto RAW", "Foto RAW", "Fotografia RAW", "RAW 照片", "RAW 写真"],
+        Text::KindAi => [
+            "Vector drawing (AI)",
+            "Dessin vectoriel (AI)",
+            "Dibujo vectorial (AI)",
+            "Disegno vettoriale (AI)",
+            "Desenho vetorial (AI)",
+            "矢量图 (AI)",
+            "ベクター画像 (AI)",
+        ],
+        Text::KindJp2 => ["JPEG 2000 image", "Image JPEG 2000", "Imagen JPEG 2000", "Immagine JPEG 2000", "Imagem JPEG 2000", "JPEG 2000 图像", "JPEG 2000 画像"],
+        Text::KindHdr => ["HDR image", "Image HDR", "Imagen HDR", "Immagine HDR", "Imagem HDR", "HDR 图像", "HDR 画像"],
+        Text::KindExr => ["OpenEXR image", "Image OpenEXR", "Imagen OpenEXR", "Immagine OpenEXR", "Imagem OpenEXR", "OpenEXR 图像", "OpenEXR 画像"],
+        Text::KindIco => ["Icon", "Icône", "Icono", "Icona", "Ícone", "图标", "アイコン"],
+        Text::KindPnm => ["PPM image", "Image PPM", "Imagen PPM", "Immagine PPM", "Imagem PPM", "PPM 图像", "PPM 画像"],
         Text::KindImage => ["Image", "Image", "Imagen", "Immagine", "Imagem", "图像", "画像"],
         Text::SettingsFailed => [
             "Couldn't open Windows Settings",
@@ -213,15 +241,27 @@ fn error_in(l: Lang, e: &Error) -> String {
             ],
             String::new(),
         ),
-        Error::HeicNotYetSupported => (
+        Error::HeicUnavailable(d) => (
             [
-                "HEIC photos aren't supported yet.",
-                "Les photos HEIC ne sont pas encore prises en charge.",
-                "Las fotos HEIC aún no son compatibles.",
-                "Le foto HEIC non sono ancora supportate.",
-                "As fotografias HEIC ainda não são suportadas.",
-                "暂不支持 HEIC 照片。",
-                "HEIC 形式の写真にはまだ対応していません。",
+                "HEIC photos can't be opened: the HEIC decoder is missing ({0}).",
+                "Impossible d'ouvrir les photos HEIC : le décodeur HEIC est absent ({0}).",
+                "No se pueden abrir las fotos HEIC: falta el decodificador HEIC ({0}).",
+                "Impossibile aprire le foto HEIC: manca il decodificatore HEIC ({0}).",
+                "Não é possível abrir fotografias HEIC: falta o descodificador HEIC ({0}).",
+                "无法打开 HEIC 照片：缺少 HEIC 解码器（{0}）。",
+                "HEIC 写真を開けません：HEIC デコーダーがありません（{0}）。",
+            ],
+            d.clone(),
+        ),
+        Error::RawWithoutPreview => (
+            [
+                "This RAW photo has no preview that can be shown.",
+                "Cette photo RAW ne contient pas d'aperçu affichable.",
+                "Esta foto RAW no contiene ninguna vista previa que se pueda mostrar.",
+                "Questa foto RAW non contiene un'anteprima visualizzabile.",
+                "Esta fotografia RAW não contém nenhuma pré-visualização que possa ser mostrada.",
+                "此 RAW 照片没有可显示的预览图。",
+                "この RAW 写真には表示できるプレビューがありません。",
             ],
             String::new(),
         ),
@@ -383,7 +423,9 @@ mod tests {
         for l in [Lang::En, Lang::Fr, Lang::Es, Lang::It, Lang::Pt, Lang::Zh, Lang::Ja] {
             for t in [
                 Text::QuickInfo, Text::QuickOff, Text::Quit, Text::QuickTooltip, Text::AppDescription, Text::KindPdf, Text::KindJpeg,
-                Text::KindPng, Text::KindWebp, Text::KindGif, Text::KindImage, Text::SettingsFailed,
+                Text::KindPng, Text::KindWebp, Text::KindGif, Text::KindHeic, Text::KindTiff, Text::KindBmp, Text::KindRaw,
+                Text::KindAi, Text::KindJp2, Text::KindHdr, Text::KindExr, Text::KindIco, Text::KindPnm, Text::KindImage,
+                Text::SettingsFailed,
             ] {
                 assert!(!tr_in(l, t).is_empty());
             }

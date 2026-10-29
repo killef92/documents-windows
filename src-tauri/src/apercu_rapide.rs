@@ -33,7 +33,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 
 /// Fichiers qu'on sait montrer.
-const EXTENSIONS: &[&str] = &["pdf", "jpg", "jpeg", "png", "webp", "gif"];
+use documents_core::EXTENSIONS;
 
 const RUN_KEY: PCWSTR = w!("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
 const RUN_VALUE: PCWSTR = w!("Documents - apercu rapide");

@@ -564,6 +564,46 @@ section { padding: 96px 0 0; }
   font-size: 13px;
 }
 
+.formats {
+  margin-top: 28px;
+  padding: 20px 22px;
+  border-radius: 14px;
+  background: var(--bg-island);
+  border: 1px solid var(--island-border);
+}
+.formats h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+.formats dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px 28px;
+  margin: 0;
+}
+.formats dt {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.formats dd {
+  margin: 2px 0 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.formats small {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.formats p {
+  margin: 14px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
 /* Installation */
 .install {
   display: grid;
@@ -906,7 +946,7 @@ footer a:hover { color: var(--text); }
         <div class="feature">
           <div class="badge"><svg class="icon"><use href="#i-file-text"/></svg></div>
           <h3>Open PDFs and photos</h3>
-          <p>PDF, JPG, PNG, WebP and GIF in the same window, with page thumbnails to flip through.</p>
+          <p>PDFs, phone photos (HEIC), scans and some 15 image formats in the same window, with page thumbnails to flip through.</p>
         </div>
         <div class="feature">
           <div class="badge"><svg class="icon"><use href="#i-scan-search"/></svg></div>
@@ -943,6 +983,17 @@ footer a:hover { color: var(--text); }
           <h3>Private by design</h3>
           <p>Nothing about you or your files is sent anywhere. Your originals are only changed when you save.</p>
         </div>
+      </div>
+      <div class="formats" id="formats">
+        <h3>Files it opens</h3>
+        <dl>
+          <div><dt>Documents</dt><dd>PDF, AI <small>(with PDF content)</small></dd></div>
+          <div><dt>Photos</dt><dd>JPEG, HEIC / HEIF, PNG, WebP, GIF <small>(animated too)</small></dd></div>
+          <div><dt>Scans and faxes</dt><dd>TIFF <small>(multi-page)</small>, FAX <small>(TIFF G3 / G4)</small></dd></div>
+          <div><dt>Camera RAW</dt><dd>CR2, DNG <small>(the preview stored in the file)</small></dd></div>
+          <div><dt>Other images</dt><dd>BMP, ICO, JPEG 2000, OpenEXR, HDR, PPM / PGM / PBM</dd></div>
+        </dl>
+        <p>Formats that can't be rewritten (HEIC, RAW, JPEG 2000…) are saved as a copy next to the original, which is never changed.</p>
       </div>
       <div class="langs" aria-label="Languages">
         <span>English</span><span>Français</span><span>Español</span><span>Italiano</span><span>Português</span><span>简体中文</span><span>日本語</span>

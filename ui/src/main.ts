@@ -39,7 +39,11 @@ const THUMB_W = 128;
 const ZOOM_STEP = 1.25;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 8;
-const FILE_TYPES = ["pdf", "jpg", "jpeg", "png", "webp", "gif", "heic"];
+/** Les extensions qu'on sait ouvrir (même liste que EXTENSIONS dans crates/core/src/kind.rs). */
+const FILE_TYPES = [
+  "pdf", "ai", "jpg", "jpeg", "jpe", "jfif", "png", "webp", "gif", "heic", "heif", "bmp", "dib", "ico", "ppm", "pgm",
+  "pbm", "pnm", "pam", "tif", "tiff", "hdr", "exr", "jp2", "j2k", "j2c", "jpf", "jpx", "cr2", "dng",
+];
 
 interface Page {
   doc: DocInfo;
@@ -115,7 +119,7 @@ function scaleOf(p: Page): number {
 }
 
 function defaultZoom(): Zoom {
-  return { mode: state.docs.some((d) => d.kind === "pdf") ? "width" : "fit" };
+  return { mode: state.docs.some((d) => d.paged) ? "width" : "fit" };
 }
 
 /** Garde la même partie de la page courante à l'écran pendant un changement de taille. */
@@ -256,7 +260,7 @@ function shortName(name: string, max = 18): string {
 
 function makePage(doc: DocInfo, index: number, annots: Annotation[] = []): Page {
   const el = document.createElement("div");
-  el.className = "page" + (doc.kind === "pdf" ? "" : " picture");
+  el.className = "page" + (doc.paged ? "" : " picture");
   const hlLayer = document.createElement("div");
   hlLayer.className = "hl-layer";
   el.append(hlLayer);
@@ -264,11 +268,11 @@ function makePage(doc: DocInfo, index: number, annots: Annotation[] = []): Page 
   const thumb = document.createElement("button");
   thumb.className = "thumb";
   const thumbBox = document.createElement("div");
-  thumbBox.className = "thumb-page" + (doc.kind === "pdf" ? "" : " picture");
+  thumbBox.className = "thumb-page" + (doc.paged ? "" : " picture");
   const label = document.createElement("div");
   label.className = "thumb-label";
   thumb.append(thumbBox, label);
-  thumb.title = doc.kind === "pdf" ? t("thumbTitle", { name: doc.name, n: index + 1 }) : doc.name;
+  thumb.title = doc.paged ? t("thumbTitle", { name: doc.name, n: index + 1 }) : doc.name;
 
   const { hlSvg, annotSvg } = annot.createLayers();
   const p: Page = {
@@ -307,7 +311,7 @@ function refresh() {
     thumbsEl.append(p.thumb);
     pageObserver.observe(p.el);
     thumbObserver.observe(p.thumb);
-    p.label.textContent = p.doc.kind === "pdf" ? String(i + 1).padStart(2, "0") : shortName(p.doc.name);
+    p.label.textContent = p.doc.paged ? String(i + 1).padStart(2, "0") : shortName(p.doc.name);
   });
   for (const p of [...state.selection]) if (!state.pages.includes(p)) state.selection.delete(p);
   document.body.classList.toggle("no-doc", state.pages.length === 0);
@@ -325,7 +329,7 @@ function refresh() {
 
 /** Une seule photo à l'écran (pas d'aperçu rapide) : la bande du dossier remplace la colonne. */
 const singleImage = () =>
-  state.pages.length === 1 && state.pages[0].doc.kind !== "pdf" && !document.body.classList.contains("apercu-rapide");
+  state.pages.length === 1 && !state.pages[0].doc.paged && !document.body.classList.contains("apercu-rapide");
 
 /** Avant même d'ouvrir les fichiers : outils et colonnes selon leur genre (d'après le nom).
  * La première image est déjà juste grâce à `window.__APERCU_GENRE__` (voir index.html). */
@@ -340,8 +344,8 @@ function presetLayout(paths: string[]) {
 
 /** Les outils suivent le genre des documents ouverts : sans PDF, pas de formulaire, de
  * surlignage ni de recherche ; sans photo, pas de recadrage ni de réglage de couleur. */
-const onlyPictures = () => state.pages.length > 0 && state.pages.every((p) => p.doc.kind !== "pdf");
-const onlyPdf = () => state.pages.length > 0 && state.pages.every((p) => p.doc.kind === "pdf");
+const onlyPictures = () => state.pages.length > 0 && state.pages.every((p) => !p.doc.paged);
+const onlyPdf = () => state.pages.length > 0 && state.pages.every((p) => p.doc.paged);
 
 function updateFilmstrip() {
   const single = singleImage();
@@ -365,7 +369,10 @@ function openNeighbor(delta: number): boolean {
 
 // ---------- Copier des fichiers (à coller dans l'Explorateur, un mail…) ----------
 
-const isImageName = (p: string) => /\.(jpe?g|png|webp|gif|heic)$/i.test(p);
+const isImageName = (p: string) => {
+  const ext = p.split(".").pop()!.toLowerCase();
+  return p.includes(".") && FILE_TYPES.includes(ext) && ext !== "pdf" && ext !== "ai";
+};
 
 /**
  * Ctrl+C : les images choisies (bande du dossier ou colonne des miniatures).
@@ -422,11 +429,11 @@ function buildSheet() {
   let lastDoc: DocInfo | null = null;
   state.pages.forEach((p, i) => {
     // Un titre par document (fusionnés : plusieurs titres), qu'on peut replier.
-    if (p.doc !== lastDoc && (p.doc.kind === "pdf" || !lastDoc)) {
+    if (p.doc !== lastDoc && (p.doc.paged || !lastDoc)) {
       const head = document.createElement("button");
       head.className = "sheet-head";
       head.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg><span></span>`;
-      head.querySelector("span")!.textContent = p.doc.kind === "pdf" ? p.doc.name : t("imagesGroup");
+      head.querySelector("span")!.textContent = p.doc.paged ? p.doc.name : t("imagesGroup");
       grid = document.createElement("div");
       grid.className = "sheet-grid";
       const g = grid;
@@ -438,13 +445,13 @@ function buildSheet() {
     const k = Math.min(SHEET_W / b.w, (SHEET_W * 1.42) / b.h);
     const item = document.createElement("button");
     item.className = "sheet-item";
-    item.innerHTML = `<div class="sheet-page${p.doc.kind === "pdf" ? "" : " picture"}"><img alt="" draggable="false" /></div><span class="sheet-label"></span>`;
+    item.innerHTML = `<div class="sheet-page${p.doc.paged ? "" : " picture"}"><img alt="" draggable="false" /></div><span class="sheet-label"></span>`;
     const page = item.firstElementChild as HTMLElement;
     page.style.width = `${Math.round(b.w * k)}px`;
     page.style.height = `${Math.round(b.h * k)}px`;
     annot.overlay(p, page);
     item.querySelector("img")!.dataset.src = api.pageUrl(p.doc.id, p.index, bucket(SHEET_W * devicePixelRatio), p.rotation);
-    item.querySelector(".sheet-label")!.textContent = p.doc.kind === "pdf" ? String(i + 1) : shortName(p.doc.name);
+    item.querySelector(".sheet-label")!.textContent = p.doc.paged ? String(i + 1) : shortName(p.doc.name);
     item.addEventListener("click", (e) => clickThumb(p, e));
     item.addEventListener("dblclick", () => setSheet(false, i));
     item.addEventListener("contextmenu", (e) => thumbMenu(p, e));
@@ -592,7 +599,7 @@ function updateTitle() {
   let text: string;
   if (docsShown > 1) {
     text = t("titleDocs", { docs: docsShown, pages: total });
-  } else if (p.doc.kind === "pdf") {
+  } else if (p.doc.paged) {
     text = t("titlePage", { n: state.current + 1, total });
   } else {
     const s = baseSize(p);
@@ -793,7 +800,7 @@ async function openFiles(paths: string[], insertAt?: number, asOpened = false) {
     const withForms = await Promise.all(result.docs.map(forms.load));
     if (withForms.some(Boolean)) toast(t("hasForm"));
     // Les annotations déjà dans les PDF : modifiables comme celles qu'on ajoute.
-    const found = await Promise.all(result.docs.map((d) => (d.kind === "pdf" ? api.pdfAnnotations(d.id).catch(() => []) : [])));
+    const found = await Promise.all(result.docs.map((d) => (d.paged ? api.pdfAnnotations(d.id).catch(() => []) : [])));
     const fresh = result.docs.flatMap((doc, k) => doc.pages.map((_, i) => makePage(doc, i, annot.imported(found[k][i]))));
     if (insertAt === undefined || !state.pages.length) {
       if (state.docs.length) {
@@ -888,20 +895,33 @@ async function withBusy(work: () => Promise<void>) {
  * « Enregistrer » : si la fenêtre ne contient que des photos, on enregistre leur rotation
  * dans chaque fichier ; sinon tout part dans le PDF d'origine (ou celui choisi avant).
  */
+/** Copies déjà faites pour les images dont le format ne se réécrit pas : fichier d'origine → copie. */
+const copyPaths = new Map<string, string>();
+
 async function save(): Promise<boolean> {
   if (!state.pages.length) return true;
-  const onlyPictures = state.pages.every((p) => p.doc.kind !== "pdf");
-  const target = state.saveTarget ?? (state.pages[0].doc.kind === "pdf" ? state.pages[0].doc.path : null);
+  const onlyPictures = state.pages.every((p) => !p.doc.paged);
+  const first = state.pages[0].doc;
+  const target = state.saveTarget ?? (first.paged && first.writable ? first.path : null);
   if (onlyPictures && !state.saveTarget) {
+    const copies: string[] = [];
     await withBusy(async () => {
       for (const p of state.pages) {
+        if (!p.annots.length && !p.rotation && !p.doc.edited) continue;
+        // Format qu'on ne sait pas réécrire (HEIC, RAW…) : une copie à côté, toujours la même ensuite.
+        let dest = p.doc.path;
+        if (!p.doc.writable) {
+          dest = copyPaths.get(p.doc.path) ?? (await api.savePath(p.doc.id));
+          copyPaths.set(p.doc.path, dest);
+          copies.push(dest.split(/[\\/]/).pop()!);
+        }
         // Annotée : l'image finale est dessinée ici, puis réenregistrée dans son format.
-        if (p.annots.length) await api.savePicturePixels(p.doc.id, await annot.flatten(p), p.doc.path);
-        else if (p.rotation || p.doc.edited) await api.savePicture(p.doc.id, p.rotation, p.doc.path);
+        if (p.annots.length) await api.savePicturePixels(p.doc.id, await annot.flatten(p), dest);
+        else await api.savePicture(p.doc.id, p.rotation, dest);
       }
     });
     markSaved();
-    toast(t("photosSaved"));
+    toast(copies.length === 1 ? t("savedCopy", { name: copies[0] }) : copies.length ? tn("savedCopies", copies.length) : t("photosSaved"));
     return true;
   }
   if (!target) return saveAs();
@@ -928,7 +948,7 @@ async function exportSelection() {
   if (!pages.length) return;
   const first = pages[0];
   const name =
-    pages.length === 1 && first.doc.kind === "pdf"
+    pages.length === 1 && first.doc.paged
       ? t("fileNamePage", { name: stem(first.doc.name), n: state.pages.indexOf(first) + 1 })
       : `${stem(first.doc.name)}.pdf`;
   const dest = await askPdfPath(name);
@@ -1171,6 +1191,15 @@ const kindNames: Record<string, Key> = {
   webp: "kindWebp",
   gif: "kindGif",
   heic: "kindHeic",
+  bmp: "kindBmp",
+  ico: "kindIco",
+  pnm: "kindPnm",
+  tiff: "kindTiff",
+  hdr: "kindHdr",
+  exr: "kindExr",
+  jp2: "kindJp2",
+  raw: "kindRaw",
+  ai: "kindAi",
 };
 
 const ANNOT_NAMES: Record<string, Key> = {
@@ -1223,8 +1252,8 @@ async function renderInspector() {
   const s = p.doc.pages[p.index];
   const groups: [string, string | null | undefined][][] = [
     [[t("infoFileName"), p.doc.name], [t("infoKind"), kindNames[p.doc.kind] ? t(kindNames[p.doc.kind]) : p.doc.kind]],
-    p.doc.kind === "pdf"
-      ? [[t("infoPdfVersion"), info?.version], [t("infoPageCount"), num(p.doc.pages.length)], [t("infoPaper"), `${cm(s.width)} × ${cm(s.height)} cm`]]
+    p.doc.paged
+      ? [[t("infoPdfVersion"), p.doc.kind === "tiff" ? null : info?.version], [t("infoPageCount"), num(p.doc.pages.length)], [t("infoPaper"), `${cm(s.width)} × ${cm(s.height)} cm`]]
       : [[t("infoDimensions"), t("titlePixels", { w: Math.round(s.width), h: Math.round(s.height) })]],
     [
       [t("infoSize"), info ? sizeText(info.file_size) : null],
@@ -1389,7 +1418,7 @@ async function chooseDefaultApp() {
 function fileMenuItems(): MenuItem[] {
   const none = !state.pages.length;
   const n = selectedPages().length;
-  const picture = !!state.pages[state.current] && state.pages[state.current].doc.kind !== "pdf";
+  const picture = !!state.pages[state.current] && !state.pages[state.current].doc.paged;
   const items: MenuItem[] = [
     { label: t("open"), shortcut: "Ctrl+O", action: () => chooseFiles() },
     { label: t("insertFile"), disabled: none, action: () => chooseFiles(state.current + 1) },
@@ -1476,7 +1505,7 @@ function cropCurrent() {
   const sel = annot.cropSelection();
   if (sel) {
     const p = sel.page as Page;
-    if (p.doc.kind === "pdf") {
+    if (p.doc.paged) {
       annot.clearCrop();
       return toast(t("cropPhotosOnly"));
     }
@@ -1486,7 +1515,7 @@ function cropCurrent() {
     return retouchPage(p, { crop: { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.w), h: Math.round(r.h) } });
   }
   const p = state.pages[state.current];
-  if (!p || p.doc.kind === "pdf") return toast(t("cropOpenImage"));
+  if (!p || p.doc.paged) return toast(t("cropOpenImage"));
   annot.startCropFrame(p);
 }
 
@@ -1494,14 +1523,14 @@ function cropCurrent() {
 function showCropBar() {
   const bar = $("crop-bar");
   const sel = annot.cropSelection();
-  bar.hidden = !sel || (sel.page as Page).doc.kind === "pdf";
+  bar.hidden = !sel || (sel.page as Page).doc.paged;
   document.body.classList.toggle("cropping", !bar.hidden);
 }
 
 /** La photo affichée, sans annotation (on ne sait pas les retourner ni les agrandir avec elle). */
 function plainPicture(): Page | null {
   const p = state.pages[state.current];
-  if (!p || p.doc.kind === "pdf") {
+  if (!p || p.doc.paged) {
     toast(t("toolPhotosOnly"));
     return null;
   }
@@ -1625,7 +1654,7 @@ async function printDoc() {
 
 function adjustColor() {
   const p = state.pages[state.current];
-  if (!p || p.doc.kind === "pdf") return toast(t("colorPhotosOnly"));
+  if (!p || p.doc.paged) return toast(t("colorPhotosOnly"));
   retouch.open($("tool-adjust"), p, (r) => retouchPage(p, r));
 }
 

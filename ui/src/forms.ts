@@ -36,7 +36,7 @@ const initial = (f: FormField): Value => (f.kind === "checkbox" ? f.value !== ""
 
 /** Charge les champs d'un PDF qui vient d'être ouvert. */
 export async function load(doc: DocInfo): Promise<boolean> {
-  if (doc.kind !== "pdf") return false;
+  if (!doc.paged) return false;
   const fields = await api.formFields(doc.id).catch(() => [] as FormField[]);
   if (!fields.length) return false;
   const values = new Map<string, Value>();

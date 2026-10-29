@@ -72,13 +72,23 @@
     WriteRegDWORD HKLM "${ACTIVE_SETUP_KEY}" "IsInstalled" 1
   ${EndIf}
 
-  ; Une icône par type de fichier dans l'Explorateur (feuille marquée PDF, JPG, PNG, WEBP, GIF),
+  ; Une icône par type de fichier dans l'Explorateur (feuille marquée PDF, JPG, PNG, HEIC…),
   ; pour les types déclarés par l'installateur (noms tirés de tauri.conf.json).
   WriteRegStr SHCTX "Software\Classes\Document PDF\DefaultIcon" "" "$INSTDIR\types\pdf.ico"
   WriteRegStr SHCTX "Software\Classes\Image JPEG\DefaultIcon" "" "$INSTDIR\types\jpg.ico"
   WriteRegStr SHCTX "Software\Classes\Image PNG\DefaultIcon" "" "$INSTDIR\types\png.ico"
   WriteRegStr SHCTX "Software\Classes\Image WebP\DefaultIcon" "" "$INSTDIR\types\webp.ico"
   WriteRegStr SHCTX "Software\Classes\Image GIF\DefaultIcon" "" "$INSTDIR\types\gif.ico"
+  WriteRegStr SHCTX "Software\Classes\Image HEIC\DefaultIcon" "" "$INSTDIR\types\heic.ico"
+  WriteRegStr SHCTX "Software\Classes\Image TIFF\DefaultIcon" "" "$INSTDIR\types\tif.ico"
+  WriteRegStr SHCTX "Software\Classes\Image BMP\DefaultIcon" "" "$INSTDIR\types\bmp.ico"
+  WriteRegStr SHCTX "Software\Classes\Photo RAW\DefaultIcon" "" "$INSTDIR\types\raw.ico"
+  WriteRegStr SHCTX "Software\Classes\Dessin AI\DefaultIcon" "" "$INSTDIR\types\ai.ico"
+  WriteRegStr SHCTX "Software\Classes\Image JPEG 2000\DefaultIcon" "" "$INSTDIR\types\jp2.ico"
+  WriteRegStr SHCTX "Software\Classes\Image HDR\DefaultIcon" "" "$INSTDIR\types\hdr.ico"
+  WriteRegStr SHCTX "Software\Classes\Image OpenEXR\DefaultIcon" "" "$INSTDIR\types\exr.ico"
+  WriteRegStr SHCTX "Software\Classes\Image ICO\DefaultIcon" "" "$INSTDIR\types\ico.ico"
+  WriteRegStr SHCTX "Software\Classes\Image PPM\DefaultIcon" "" "$INSTDIR\types\ppm.ico"
   System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
 !macroend
 

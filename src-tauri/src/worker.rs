@@ -48,6 +48,7 @@ enum Job {
     SavePdfReduced(Vec<PageRef>, Vec<DocFill>, Level, PathBuf, Sender<Result<(u64, u64), String>>),
     FormFields(DocId, Sender<Result<Vec<FormField>, String>>),
     Annotations(DocId, Sender<Result<Vec<Vec<Placed>>, String>>),
+    SavePath(DocId, Sender<Result<PathBuf, String>>),
     SavePicture(DocId, i32, PathBuf, Sender<Result<(), String>>),
     SavePicturePixels(DocId, Vec<u8>, PathBuf, Sender<Result<(), String>>),
     PageText(DocId, usize, Sender<Result<PageText, String>>),
@@ -61,11 +62,11 @@ pub struct Worker {
 }
 
 impl Worker {
-    pub fn start(pdfium_dirs: Vec<PathBuf>) -> Self {
+    pub fn start(lib_dirs: Vec<PathBuf>) -> Self {
         let (tx, rx) = mpsc::channel();
         thread::Builder::new()
             .name("documents".into())
-            .spawn(move || run(Library::new(pdfium_dirs), rx))
+            .spawn(move || run(Library::new(lib_dirs), rx))
             .expect("impossible de démarrer le fil des documents");
         Self { tx }
     }
@@ -113,6 +114,12 @@ impl Worker {
     pub fn retouch(&self, doc: DocId, retouch: Retouch) -> Receiver<Result<DocInfo, String>> {
         let (tx, rx) = mpsc::channel();
         let _ = self.tx.send(Job::Retouch(doc, retouch, tx));
+        rx
+    }
+
+    pub fn save_path(&self, doc: DocId) -> Receiver<Result<PathBuf, String>> {
+        let (tx, rx) = mpsc::channel();
+        let _ = self.tx.send(Job::SavePath(doc, tx));
         rx
     }
 
@@ -192,6 +199,9 @@ fn run(mut library: Library, rx: Receiver<Job>) {
             }
             Job::Annotations(doc, reply) => {
                 let _ = reply.send(library.annotations(doc).map_err(|e| i18n::error(&e)));
+            }
+            Job::SavePath(doc, reply) => {
+                let _ = reply.send(library.save_path(doc).map_err(|e| i18n::error(&e)));
             }
             Job::SavePicture(doc, rotation, dest, reply) => {
                 let _ = reply.send(library.save_picture(doc, rotation, &dest).map_err(|e| i18n::error(&e)));

@@ -59,6 +59,22 @@ for f in sorted(glob.glob(os.path.join(RACINE, "vendor", "pdfium", "*", "LICENSE
                    open(g, encoding="utf-8", errors="replace").read().strip(), ""]
     break
 
+# libheif et libde265 (photos HEIC), livrées en DLL séparées (voir .github/workflows/libheif.yml).
+dossier_heif = os.path.join(RACINE, "vendor", "heif", "win-x64")
+versions = os.path.join(dossier_heif, "VERSIONS.txt")
+sortie += ["-" * 60, "libheif and libde265 (HEIC photos) — LGPL-3.0", "-" * 60,
+           "Shipped as separate libraries (heif.dll, libde265.dll in the \"heif\" folder of the app), loaded at",
+           "run time: they can be replaced by another compatible build. The full texts of the LGPL-3.0 and of",
+           "the GPL-3.0 it refers to are at the end of this document.",
+           "Source code: https://github.com/strukturag/libheif and https://github.com/strukturag/libde265",
+           "Build recipe: vcpkg ports libheif and libde265 (https://github.com/microsoft/vcpkg/tree/master/ports),",
+           "with .github/workflows/libheif.yml in https://github.com/killef92/documents-windows"]
+if os.path.isfile(versions):
+    sortie += ["Versions:", open(versions, encoding="utf-8-sig", errors="replace").read().strip()]
+for f in sorted(glob.glob(os.path.join(dossier_heif, "COPYING-*.txt"))):
+    sortie += ["", open(f, encoding="utf-8", errors="replace").read().strip()]
+sortie.append("")
+
 sortie += ["=" * 60, "Standard texts", "=" * 60, ""]
 for f in sorted(glob.glob(os.path.join(RACINE, "scripts", "licences-standard", "*.txt"))):
     sortie += ["-" * 60, os.path.basename(f)[:-4], "-" * 60, open(f, encoding="utf-8").read().strip(), ""]

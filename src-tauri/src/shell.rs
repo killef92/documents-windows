@@ -40,7 +40,41 @@ fn set(path: &str, name: Option<&str>, value: &str) -> Result<(), String> {
     }
 }
 
-/// Déclare l'appli à Windows : un type de fichier par extension (PDF, JPEG, PNG, WebP, GIF), chacun
+/// Chaque extension que l'appli sait ouvrir, avec son type de fichier.
+const EXTENSIONS: &[(&str, &str)] = &[
+    (".pdf", "Apercu.PDF"),
+    (".jpg", "Apercu.JPEG"),
+    (".jpeg", "Apercu.JPEG"),
+    (".jpe", "Apercu.JPEG"),
+    (".jfif", "Apercu.JPEG"),
+    (".png", "Apercu.PNG"),
+    (".webp", "Apercu.WEBP"),
+    (".gif", "Apercu.GIF"),
+    (".heic", "Apercu.HEIC"),
+    (".heif", "Apercu.HEIC"),
+    (".tif", "Apercu.TIFF"),
+    (".tiff", "Apercu.TIFF"),
+    (".bmp", "Apercu.BMP"),
+    (".dib", "Apercu.BMP"),
+    (".cr2", "Apercu.RAW"),
+    (".dng", "Apercu.RAW"),
+    (".ai", "Apercu.AI"),
+    (".jp2", "Apercu.JP2"),
+    (".j2k", "Apercu.JP2"),
+    (".j2c", "Apercu.JP2"),
+    (".jpf", "Apercu.JP2"),
+    (".jpx", "Apercu.JP2"),
+    (".hdr", "Apercu.HDR"),
+    (".exr", "Apercu.EXR"),
+    (".ico", "Apercu.ICO"),
+    (".ppm", "Apercu.PNM"),
+    (".pgm", "Apercu.PNM"),
+    (".pbm", "Apercu.PNM"),
+    (".pnm", "Apercu.PNM"),
+    (".pam", "Apercu.PNM"),
+];
+
+/// Déclare l'appli à Windows : un type de fichier par sorte de document (PDF, JPEG, HEIC…), chacun
 /// avec son icône dans l'Explorateur, et la liste de ce qu'elle sait ouvrir. Rien n'est imposé :
 /// l'utilisateur choisit dans les réglages de Windows. Refait à chaque lancement, pour suivre le
 /// chemin de l'appli.
@@ -58,6 +92,16 @@ pub fn register_app() {
         ("Apercu.PNG", tr(Text::KindPng), "png.ico"),
         ("Apercu.WEBP", tr(Text::KindWebp), "webp.ico"),
         ("Apercu.GIF", tr(Text::KindGif), "gif.ico"),
+        ("Apercu.HEIC", tr(Text::KindHeic), "heic.ico"),
+        ("Apercu.TIFF", tr(Text::KindTiff), "tif.ico"),
+        ("Apercu.BMP", tr(Text::KindBmp), "bmp.ico"),
+        ("Apercu.RAW", tr(Text::KindRaw), "raw.ico"),
+        ("Apercu.AI", tr(Text::KindAi), "ai.ico"),
+        ("Apercu.JP2", tr(Text::KindJp2), "jp2.ico"),
+        ("Apercu.HDR", tr(Text::KindHdr), "hdr.ico"),
+        ("Apercu.EXR", tr(Text::KindExr), "exr.ico"),
+        ("Apercu.ICO", tr(Text::KindIco), "ico.ico"),
+        ("Apercu.PNM", tr(Text::KindPnm), "ppm.ico"),
         ("Apercu.Image", tr(Text::KindImage), "image.ico"),
     ];
     let mut ok = true;
@@ -71,7 +115,7 @@ pub fn register_app() {
     }
     ok &= set(CAPABILITIES, Some("ApplicationName"), APP_NAME).is_ok();
     ok &= set(CAPABILITIES, Some("ApplicationDescription"), tr(Text::AppDescription)).is_ok();
-    for (ext, prog_id) in [(".pdf", "Apercu.PDF"), (".jpg", "Apercu.JPEG"), (".jpeg", "Apercu.JPEG"), (".png", "Apercu.PNG"), (".webp", "Apercu.WEBP"), (".gif", "Apercu.GIF")] {
+    for &(ext, prog_id) in EXTENSIONS {
         ok &= set(&format!(r"{CAPABILITIES}\FileAssociations"), Some(ext), prog_id).is_ok();
         ok &= set(&format!(r"Software\Classes\{ext}\OpenWithProgids"), Some(prog_id), "").is_ok();
         // Sans quoi « Ouvrir avec » proposerait l'appli deux fois.

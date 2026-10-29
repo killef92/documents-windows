@@ -138,7 +138,7 @@ const sizeOf = (p: AnnotPage) => p.doc.pages[p.index];
 /** Échelle des traits et du texte : une photo de 4000 pixels demande des traits plus épais qu'une page A4. */
 function factorOf(p: AnnotPage): number {
   const { width, height } = sizeOf(p);
-  return p.doc.kind === "pdf" ? 1 : Math.max(1, Math.max(width, height) / 1100);
+  return p.doc.paged ? 1 : Math.max(1, Math.max(width, height) / 1100);
 }
 
 // ---------- Calques et coordonnées ----------
@@ -668,7 +668,7 @@ function pageText(p: AnnotPage): Promise<PageText> {
   const key = `${p.doc.id}/${p.index}`;
   let t = texts.get(key);
   if (!t) {
-    t = p.doc.kind === "pdf" ? api.pageText(p.doc.id, p.index).catch(() => ({ chars: [], rects: [] })) : Promise.resolve({ chars: [], rects: [] });
+    t = p.doc.paged ? api.pageText(p.doc.id, p.index).catch(() => ({ chars: [], rects: [] })) : Promise.resolve({ chars: [], rects: [] });
     texts.set(key, t);
   }
   return t;
@@ -699,7 +699,7 @@ function charAt(p: AnnotPage, t: PageText, u: Pt): number {
 
 /** Vrai si le point touche du texte (ou si le texte de la page n'est pas encore connu). */
 function overText(p: AnnotPage, u: Pt): boolean {
-  if (p.doc.kind !== "pdf") return false;
+  if (!p.doc.paged) return false;
   const t = loadedTexts.get(`${p.doc.id}/${p.index}`);
   if (!t) return true;
   const { width, height } = sizeOf(p);
@@ -916,7 +916,7 @@ function onPointerDown(p: AnnotPage, e: PointerEvent) {
     case "note": {
       e.preventDefault();
       setTool("select");
-      if (p.doc.kind !== "pdf") return; // une photo n'a pas de notes : rien pour les afficher
+      if (!p.doc.paged) return; // une photo n'a pas de notes : rien pour les afficher
       add(p, { kind: "note", at: { x: u.x - NOTE_SIZE / 2, y: u.y - NOTE_SIZE / 2 }, text: "", color: NOTE_COLOR });
       return openNote(p, p.annots.length - 1);
     }
@@ -1065,7 +1065,7 @@ function snap45(from: Pt, to: Pt): Pt {
 
 function startTextSelection(p: AnnotPage, e: PointerEvent, u: Pt) {
   clearTextSelection();
-  if (p.doc.kind !== "pdf") return;
+  if (!p.doc.paged) return;
   e.preventDefault();
   const key = `${p.doc.id}/${p.index}`;
   let start = -1;

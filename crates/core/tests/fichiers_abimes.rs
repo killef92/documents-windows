@@ -101,11 +101,15 @@ fn resiste(exemples: &[&str], n: usize, graine: u64) {
             let debut = Instant::now();
             let resultat = catch_unwind(AssertUnwindSafe(|| utilise(&mut lib, &path, &dir.join("sortie.pdf"))));
             if resultat.is_err() {
-                let garde = dir.join(format!("plantage-{nom}-{essai}.{extension}"));
+                let garde = dir.join(format!("plantage-{}-{essai}.{extension}", nom.replace('/', "-")));
                 std::fs::write(&garde, &bytes).unwrap();
                 panic!("{nom}, essai {essai} : plantage (fichier gardé : {})", garde.display());
             }
-            assert!(debut.elapsed() < Duration::from_secs(10), "{nom}, essai {essai} : trop long");
+            if debut.elapsed() >= Duration::from_secs(10) {
+                let garde = dir.join(format!("lent-{}-{essai}.{extension}", nom.replace('/', "-")));
+                std::fs::write(&garde, &bytes).unwrap();
+                panic!("{nom}, essai {essai} : trop long (fichier gardé : {})", garde.display());
+            }
         }
     }
 }
@@ -118,6 +122,16 @@ fn les_pdf_abimes_ne_font_pas_planter() {
 #[test]
 fn les_images_abimees_ne_font_pas_planter() {
     resiste(&["photo.png", "photo-pivotee.jpg", "photo.webp", "anime.gif"], 150, 0x5eed_0002);
+}
+
+#[test]
+fn les_autres_formats_abimes_ne_font_pas_planter() {
+    let formats = [
+        "formats/image.bmp", "formats/icone.ico", "formats/image.ppm", "formats/image.tif", "formats/fax.tif",
+        "formats/image.hdr", "formats/image.exr", "formats/image.jp2", "formats/photo.cr2", "formats/photo.dng",
+        "formats/photo.heic",
+    ];
+    resiste(&formats, 80, 0x5eed_0003);
 }
 
 #[test]

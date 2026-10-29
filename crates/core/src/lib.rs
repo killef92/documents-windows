@@ -7,6 +7,7 @@ mod document;
 mod exif;
 pub mod folder;
 pub mod form;
+mod heif;
 mod import;
 pub mod reduce;
 pub mod signature;
@@ -14,10 +15,13 @@ mod kind;
 mod library;
 mod pdf;
 mod picture;
+mod raw;
 mod rearrange;
+mod tiffdir;
 
 pub use document::{DocDetails, DocId, DocInfo, NormRect, PageRef, PageSize, PageText, RenderedImage, Rotation, SearchHit};
-pub use kind::DocumentKind;
+pub use heif::available as heic_available;
+pub use kind::{is_openable_name, is_picture_name, DocumentKind, EXTENSIONS};
 pub use library::Library;
 pub use picture::{CropRect, Retouch};
 
@@ -29,8 +33,10 @@ pub enum Error {
     Io(#[from] std::io::Error),
     #[error("This type of file isn't supported.")]
     UnsupportedFormat,
-    #[error("HEIC photos aren't supported yet.")]
-    HeicNotYetSupported,
+    #[error("HEIC photos can't be opened: the HEIC decoder is missing ({0}).")]
+    HeicUnavailable(String),
+    #[error("This RAW photo has no preview that can be shown.")]
+    RawWithoutPreview,
     #[error("The PDF engine couldn't start: {0}")]
     PdfEngineUnavailable(String),
     #[error("This PDF is password-protected.")]

@@ -9,7 +9,7 @@ Me first (professional use): quotes, invoices, French administrative forms (CERF
 ## What the app must do — in stages
 
 ### Stage 1 — The viewer (the core)
-- Open a PDF or an image (JPG, PNG, HEIC, WebP) by double-click or drag and drop.
+- Open a PDF or an image by double-click or drag and drop: PDF, AI, JPEG, HEIC/HEIF, PNG, WebP, GIF, TIFF (multi-page, FAX), CR2, DNG, BMP, ICO, JPEG 2000, OpenEXR, HDR, PPM/PGM/PBM.
 - Open **several files in a single window** (like my 3 building-site photos: "3 documents, 3 pages in total").
 - **Thumbnail column on the left**, the page or photo shown large on the right.
 - Zoom +/–, actual size, fit to window.

@@ -1,0 +1,51 @@
+# Builds libheif + libde265 (reading HEIC photos) for Windows and keeps them in the "libheif"
+# release. Started by hand only (Actions tab → libheif → Run workflow), once, or when their
+# version must change: the Installers workflow downloads them from there, without rebuilding.
+#
+# License: LGPL-3.0. They ship as separate DLLs next to the app (replaceable), with their
+# license texts; their source code is listed in the release notes and in THIRD-PARTY-LICENSES.txt.
+# Built with vcpkg (ports libheif and libde265, without any encoder).
+name: libheif
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Build libheif and libde265 with vcpkg
+        shell: pwsh
+        run: |
+          $vcpkg = Join-Path $env:VCPKG_INSTALLATION_ROOT "vcpkg.exe"
+          & $vcpkg install "libheif[core,libde265]:x64-windows-documents" --overlay-triplets=scripts/vcpkg --clean-after-build
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $root = Join-Path $env:VCPKG_INSTALLATION_ROOT "installed\x64-windows-documents"
+          New-Item -ItemType Directory -Force heif | Out-Null
+          Copy-Item "$root\bin\*.dll" heif\
+          Copy-Item "$root\share\libheif\copyright" heif\COPYING-libheif.txt
+          Copy-Item "$root\share\libde265\copyright" heif\COPYING-libde265.txt
+          & $vcpkg list | Select-String -Pattern "^(libheif|libde265)" | ForEach-Object { $_.Line } | Out-File -Encoding utf8 heif\VERSIONS.txt
+          Get-ChildItem heif
+          Get-Content heif\VERSIONS.txt
+          if (-not (Test-Path heif\heif.dll) -or -not (Test-Path heif\libde265.dll)) { Write-Error "heif.dll or libde265.dll missing"; exit 1 }
+          Compress-Archive -Path heif\* -DestinationPath heif-win-x64.zip
+
+      - name: Publish in the "libheif" release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: libheif
+          name: libheif (HEIC photos) for Windows
+          prerelease: true
+          make_latest: false
+          body: |
+            libheif and libde265, built for Windows x64 by the "libheif" workflow (vcpkg), used by
+            Documents to open HEIC photos. License: LGPL-3.0 (texts inside the zip).
+            Source code: https://github.com/strukturag/libheif and https://github.com/strukturag/libde265
+            (versions in VERSIONS.txt; vcpkg build recipes: https://github.com/microsoft/vcpkg/tree/master/ports).
+          files: heif-win-x64.zip

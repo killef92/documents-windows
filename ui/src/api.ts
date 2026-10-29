@@ -1,7 +1,8 @@
 // Lien avec le cœur Rust (src-tauri). Tout le travail lourd se fait là-bas, dans un fil à part.
 import { invoke } from "@tauri-apps/api/core";
 
-export type Kind = "pdf" | "jpeg" | "png" | "heic" | "webp" | "gif";
+export type Kind =
+  | "pdf" | "jpeg" | "png" | "heic" | "webp" | "gif" | "bmp" | "ico" | "pnm" | "tiff" | "hdr" | "exr" | "jp2" | "raw" | "ai";
 
 export interface PageSize {
   width: number;
@@ -16,6 +17,10 @@ export interface DocInfo {
   pages: PageSize[];
   /** Photo retouchée en mémoire (recadrée, couleurs…). */
   edited: boolean;
+  /** Se feuillette comme un PDF (PDF, dessin .ai, TIFF de plusieurs pages). */
+  paged: boolean;
+  /** « Enregistrer » peut réécrire le fichier ; sinon une copie est faite à côté. */
+  writable: boolean;
 }
 
 /** Retouche d'une photo : réglages de -1 à 1, recadrage en pixels de la photo redressée. */
@@ -142,6 +147,8 @@ export const pdfAnnotations = (doc: number) => invoke<unknown[][]>("pdf_annotati
 
 export const savePdf = (pages: PageRef[], dest: string, fills: DocFill[] = []) =>
   invoke<void>("save_pdf", { pages, dest, fills });
+/** Où enregistrer une image : son fichier, ou une copie à côté (JPEG ou PNG) si son format ne se réécrit pas. */
+export const savePath = (doc: number) => invoke<string>("save_path", { doc });
 export const savePicture = (doc: number, rotation: number, dest: string) =>
   invoke<void>("save_picture", { doc, rotation, dest });
 /** Les fichiers à ouvrir dans cette fenêtre (au lancement, ou envoyés ensuite par Windows). */

@@ -70,7 +70,17 @@
       "icons/types/png.ico": "types/png.ico",
       "icons/types/webp.ico": "types/webp.ico",
       "icons/types/gif.ico": "types/gif.ico",
-      "icons/types/image.ico": "types/image.ico"
+      "icons/types/image.ico": "types/image.ico",
+      "icons/types/heic.ico": "types/heic.ico",
+      "icons/types/tif.ico": "types/tif.ico",
+      "icons/types/bmp.ico": "types/bmp.ico",
+      "icons/types/raw.ico": "types/raw.ico",
+      "icons/types/ai.ico": "types/ai.ico",
+      "icons/types/jp2.ico": "types/jp2.ico",
+      "icons/types/hdr.ico": "types/hdr.ico",
+      "icons/types/exr.ico": "types/exr.ico",
+      "icons/types/ico.ico": "types/ico.ico",
+      "icons/types/ppm.ico": "types/ppm.ico"
     },
     "copyright": "© 2026 Kilian Lefèvre — MIT. Third-party licenses: THIRD-PARTY-LICENSES.txt",
     "license": "MIT",
@@ -120,6 +130,104 @@
         "description": "Image GIF",
         "role": "Viewer",
         "mimeType": "image/gif"
+      },
+      {
+        "ext": [
+          "heic",
+          "heif"
+        ],
+        "name": "Image HEIC",
+        "description": "Image HEIC",
+        "role": "Viewer",
+        "mimeType": "image/heic"
+      },
+      {
+        "ext": [
+          "tif",
+          "tiff"
+        ],
+        "name": "Image TIFF",
+        "description": "Image TIFF",
+        "role": "Viewer",
+        "mimeType": "image/tiff"
+      },
+      {
+        "ext": [
+          "bmp",
+          "dib"
+        ],
+        "name": "Image BMP",
+        "description": "Image BMP",
+        "role": "Viewer",
+        "mimeType": "image/bmp"
+      },
+      {
+        "ext": [
+          "cr2",
+          "dng"
+        ],
+        "name": "Photo RAW",
+        "description": "Photo RAW",
+        "role": "Viewer"
+      },
+      {
+        "ext": [
+          "ai"
+        ],
+        "name": "Dessin AI",
+        "description": "Dessin vectoriel AI",
+        "role": "Viewer",
+        "mimeType": "application/postscript"
+      },
+      {
+        "ext": [
+          "jp2",
+          "j2k",
+          "j2c",
+          "jpf",
+          "jpx"
+        ],
+        "name": "Image JPEG 2000",
+        "description": "Image JPEG 2000",
+        "role": "Viewer",
+        "mimeType": "image/jp2"
+      },
+      {
+        "ext": [
+          "hdr"
+        ],
+        "name": "Image HDR",
+        "description": "Image HDR",
+        "role": "Viewer"
+      },
+      {
+        "ext": [
+          "exr"
+        ],
+        "name": "Image OpenEXR",
+        "description": "Image OpenEXR",
+        "role": "Viewer"
+      },
+      {
+        "ext": [
+          "ico"
+        ],
+        "name": "Image ICO",
+        "description": "Icone",
+        "role": "Viewer",
+        "mimeType": "image/x-icon"
+      },
+      {
+        "ext": [
+          "ppm",
+          "pgm",
+          "pbm",
+          "pnm",
+          "pam"
+        ],
+        "name": "Image PPM",
+        "description": "Image PPM",
+        "role": "Viewer"
       }
     ],
     "createUpdaterArtifacts": true

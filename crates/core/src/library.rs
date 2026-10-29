@@ -42,7 +42,9 @@ pub struct Library {
 
 impl Library {
     /// `pdfium_dirs` : dossiers où chercher la bibliothèque PDFium (en plus du système).
+    /// Les mêmes dossiers servent pour libheif (photos HEIC).
     pub fn new(pdfium_dirs: Vec<PathBuf>) -> Self {
+        crate::heif::set_dirs(pdfium_dirs.clone());
         Self { pdfium_dirs, docs: BTreeMap::new(), next_id: 1 }
     }
 
@@ -60,10 +62,9 @@ impl Library {
 
     fn open_with(&mut self, path: &Path, import: bool) -> Result<DocInfo> {
         let bytes = std::fs::read(path)?;
-        let kind = DocumentKind::from_bytes(&bytes).ok_or(Error::UnsupportedFormat)?;
+        let kind = DocumentKind::from_bytes(&bytes).ok_or(Error::UnsupportedFormat)?.refine(path, &bytes);
         let (content, pages) = match kind {
-            DocumentKind::Heic => return Err(Error::HeicNotYetSupported),
-            DocumentKind::Pdf => {
+            DocumentKind::Pdf | DocumentKind::Ai => {
                 let pdfium = pdf::engine(&self.pdfium_dirs)?;
                 let mut doc = PdfDoc::open(pdfium, bytes)?;
                 if import {
@@ -72,15 +73,47 @@ impl Library {
                 let pages = doc.page_sizes();
                 (Content::Pdf(doc), pages)
             }
-            _ => {
-                let picture = Picture::open(&bytes)?;
-                let pages = vec![picture.size()];
-                (Content::Picture(picture), pages)
-            }
+            _ => match self.tiff_as_pdf(kind, &bytes)? {
+                // Un TIFF de plusieurs pages (scan, fax) se feuillette comme un PDF.
+                Some(doc) => {
+                    let pages = doc.page_sizes();
+                    (Content::Pdf(doc), pages)
+                }
+                None => {
+                    let picture = Picture::load(kind, &bytes)?;
+                    let pages = vec![picture.size()];
+                    (Content::Picture(picture), pages)
+                }
+            },
         };
         let name = path.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
-        let info = DocInfo { id: 0, name, path: path.to_path_buf(), kind, pages, edited: false };
+        let paged = matches!(content, Content::Pdf(_));
+        let writable = kind.is_writable() && !(paged && kind != DocumentKind::Pdf);
+        let info = DocInfo { id: 0, name, path: path.to_path_buf(), kind, pages, edited: false, paged, writable };
         Ok(self.insert(kind, content, info))
+    }
+
+    /// Les pages d'un TIFF qui en a plusieurs, réunies dans un PDF en mémoire.
+    fn tiff_as_pdf(&self, kind: DocumentKind, bytes: &[u8]) -> Result<Option<PdfDoc>> {
+        if kind != DocumentKind::Tiff {
+            return Ok(None);
+        }
+        let pages = Picture::tiff_pages(bytes)?;
+        if pages.is_empty() {
+            return Ok(None);
+        }
+        let pdfium = pdf::engine(&self.pdfium_dirs)?;
+        let mut sources = Vec::with_capacity(pages.len());
+        for image in pages {
+            // Les photos en JPEG (plus léger) ; les scans en noir et blanc restent nets.
+            sources.push(if image.color().has_alpha() || !image.color().has_color() {
+                Source::Image(image)
+            } else {
+                let (w, h) = (image.width(), image.height());
+                Source::Jpeg(encode_jpeg(image)?.bytes, w, h)
+            });
+        }
+        Ok(Some(PdfDoc::open(pdfium, pdf::compose(pdfium, sources)?)?))
     }
 
     fn insert(&mut self, kind: DocumentKind, content: Content, mut info: DocInfo) -> DocInfo {
@@ -144,7 +177,9 @@ impl Library {
                     return Ok(RenderedImage { bytes, mime: "image/gif", width, height });
                 }
                 let image = picture.render(width, rotation);
-                if picture.has_alpha() || doc.kind == DocumentKind::Png {
+                // Sans perte pour les dessins, icônes et scans ; en JPEG (plus rapide) pour les photos.
+                let lossless = matches!(doc.kind, DocumentKind::Png | DocumentKind::Bmp | DocumentKind::Ico | DocumentKind::Pnm | DocumentKind::Tiff);
+                if picture.has_alpha() || lossless {
                     encode_png(image)
                 } else {
                     encode_jpeg(image)
@@ -336,33 +371,47 @@ impl Library {
         }
     }
 
-    /// Enregistre une photo à partir de son image finale (annotations dessinées dedans par
-    /// l'interface), dans le format du fichier d'origine.
-    pub fn save_picture_pixels(&self, id: DocId, png: &[u8], dest: &Path) -> Result<()> {
+    /// Où « Enregistrer » écrit une image : son propre fichier si on sait le réécrire dans son
+    /// format, sinon une copie à côté (JPEG, ou PNG si l'image a de la transparence), sans
+    /// jamais écraser un fichier existant.
+    pub fn save_path(&self, id: DocId) -> Result<PathBuf> {
         let doc = self.doc(id)?;
-        let image = image::load_from_memory_with_format(png, image::ImageFormat::Png)
-            .map_err(|e| Error::BrokenImage(e.to_string()))?;
-        let bytes = match doc.kind {
-            DocumentKind::Jpeg => encode_jpeg(image)?.bytes,
-            DocumentKind::Webp => {
-                let mut out = Cursor::new(Vec::new());
-                image.write_to(&mut out, image::ImageFormat::WebP).map_err(|e| Error::SaveFailed(e.to_string()))?;
-                out.into_inner()
-            }
-            DocumentKind::Gif => encode_gif(image)?,
-            _ => encode_png(image)?.bytes,
+        if doc.info.writable {
+            return Ok(doc.info.path.clone());
+        }
+        let ext = match &doc.content {
+            Content::Picture(picture) if !picture.has_alpha() => "jpg",
+            _ => "png",
         };
-        write_atomically(dest, &bytes)
+        let path = &doc.info.path;
+        let stem = path.file_stem().map(|s| s.to_string_lossy().into_owned()).unwrap_or_default();
+        let candidate = |n: u32| {
+            let name = if n == 1 { format!("{stem}.{ext}") } else { format!("{stem} ({n}).{ext}") };
+            path.with_file_name(name)
+        };
+        (1..10_000).map(candidate).find(|p| !p.exists()).ok_or_else(|| Error::SaveFailed("no free file name".into()))
     }
 
-    /// Enregistre une photo tournée. Pour un JPEG, sans perte : seule l'orientation change.
+    /// Enregistre une photo à partir de son image finale (annotations dessinées dedans par
+    /// l'interface), dans le format donné par l'extension de `dest`.
+    pub fn save_picture_pixels(&self, id: DocId, png: &[u8], dest: &Path) -> Result<()> {
+        self.doc(id)?;
+        let image = image::load_from_memory_with_format(png, image::ImageFormat::Png)
+            .map_err(|e| Error::BrokenImage(e.to_string()))?;
+        write_atomically(dest, &encode_for(dest, image)?)
+    }
+
+    /// Enregistre une photo tournée. Dans son propre fichier, sans perte quand c'est possible :
+    /// pour un JPEG, seule l'orientation change ; un GIF animé reste animé.
     pub fn save_picture(&self, id: DocId, rotation: i32, dest: &Path) -> Result<()> {
         let doc = self.doc(id)?;
         let Content::Picture(picture) = &doc.content else {
             return Err(Error::UnsupportedFormat);
         };
         let rotation = Rotation::from_degrees(rotation);
-        if doc.kind == DocumentKind::Jpeg && !doc.info.edited {
+        // Même format que l'original : les raccourcis sans perte sont possibles.
+        let in_place = doc.info.writable && !doc.info.edited && DocumentKind::from_extension(dest) == Some(doc.kind);
+        if in_place && doc.kind == DocumentKind::Jpeg {
             if let Some(current) = exif::rotation_of(picture.orientation) {
                 let orientation = exif::orientation_of(current.then(rotation));
                 if let Some(bytes) = exif::with_orientation(&picture.bytes, orientation) {
@@ -370,25 +419,43 @@ impl Library {
                 }
             }
         }
-        if rotation == Rotation::R0 && !doc.info.edited {
+        if in_place && rotation == Rotation::R0 {
             return write_atomically(dest, &picture.bytes);
         }
-        if doc.kind == DocumentKind::Gif && !doc.info.edited {
+        if in_place && doc.kind == DocumentKind::Gif {
             // GIF animé tourné : chaque image est tournée, l'animation est gardée.
             return write_atomically(dest, &rotate_gif(&picture.bytes, rotation)?);
         }
-        let image = picture.full(rotation);
-        let bytes = match doc.kind {
-            DocumentKind::Jpeg => encode_jpeg(image)?.bytes,
-            DocumentKind::Webp => {
-                let mut out = Cursor::new(Vec::new());
-                image.write_to(&mut out, image::ImageFormat::WebP).map_err(|e| Error::SaveFailed(e.to_string()))?;
-                out.into_inner()
-            }
-            DocumentKind::Gif => encode_gif(image)?,
-            _ => encode_png(image)?.bytes,
-        };
-        write_atomically(dest, &bytes)
+        write_atomically(dest, &encode_for(dest, picture.full(rotation))?)
+    }
+}
+
+/// L'image encodée dans le format qu'annonce l'extension du fichier (PNG si elle est inconnue).
+fn encode_for(dest: &Path, image: DynamicImage) -> Result<Vec<u8>> {
+    use image::codecs::pnm::{PnmEncoder, PnmSubtype, SampleEncoding};
+    let ext = dest.extension().map(|e| e.to_string_lossy().to_lowercase()).unwrap_or_default();
+    let failed = |e: image::ImageError| Error::SaveFailed(e.to_string());
+    let write = |image: &DynamicImage, format| {
+        let mut out = Cursor::new(Vec::new());
+        image.write_to(&mut out, format).map_err(failed)?;
+        Ok(out.into_inner())
+    };
+    let pnm = |image: DynamicImage, subtype| {
+        let mut out = Vec::new();
+        image.write_with_encoder(PnmEncoder::new(&mut out).with_subtype(subtype)).map_err(failed)?;
+        Ok(out)
+    };
+    match ext.as_str() {
+        "jpg" | "jpeg" | "jpe" | "jfif" => Ok(encode_jpeg(image)?.bytes),
+        "webp" => write(&DynamicImage::ImageRgba8(image.to_rgba8()), image::ImageFormat::WebP),
+        "gif" => encode_gif(image),
+        "bmp" | "dib" => write(&image, image::ImageFormat::Bmp),
+        "tif" | "tiff" => write(&image, image::ImageFormat::Tiff),
+        "ppm" | "pnm" => pnm(DynamicImage::ImageRgb8(image.into_rgb8()), PnmSubtype::Pixmap(SampleEncoding::Binary)),
+        "pgm" => pnm(DynamicImage::ImageLuma8(image.into_luma8()), PnmSubtype::Graymap(SampleEncoding::Binary)),
+        "pbm" => pnm(DynamicImage::ImageLuma8(image.into_luma8()), PnmSubtype::Bitmap(SampleEncoding::Binary)),
+        "pam" => pnm(DynamicImage::ImageRgba8(image.into_rgba8()), PnmSubtype::ArbitraryMap),
+        _ => Ok(encode_png(image)?.bytes),
     }
 }
 
