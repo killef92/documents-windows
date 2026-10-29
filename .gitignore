@@ -5,3 +5,4 @@ dist/
 Thumbs.db
 src-tauri/gen/
 vendor
+CLAUDE.md

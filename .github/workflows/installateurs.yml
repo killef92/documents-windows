@@ -1,13 +1,13 @@
-# Fabrique l'installateur Windows (setup .exe).
-# Lancé à la main seulement (onglet Actions → Installateurs → Run workflow), pour une
-# version à livrer : les minutes GitHub Actions sont comptées (Windows ×2).
-# Les tests et Clippy se font avant, sur la machine de développement.
-# Les actions sont épinglées sur une version précise (empreinte), pour qu'un changement chez
-# leur auteur ne puisse pas s'inviter dans la construction.
-# Il se télécharge en bas de la page du « run », section « Artifacts ».
-# Lancé sur la branche main, il est aussi publié dans la release « Dernière version »,
-# avec le fichier latest.json qui permet à l'appli de se mettre à jour toute seule.
-name: Installateurs
+# Builds the Windows installer (setup .exe).
+# Started by hand only (Actions tab → Installers → Run workflow), for a version to ship:
+# GitHub Actions minutes are limited (Windows counts ×2).
+# Tests and Clippy run beforehand, on the development machine.
+# Actions are pinned to an exact version (hash), so that a change made by their author
+# can't slip into the build.
+# The setup can be downloaded at the bottom of the run's page, "Artifacts" section.
+# Started on the main branch, it is also published in the "Latest version" release,
+# with the latest.json file that lets the app update itself.
+name: Installers
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 env:
-  # Clé qui signe les mises à jour (Réglages du dépôt → Secrets → Actions).
+  # Key that signs updates (repository Settings → Secrets → Actions).
   TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
   TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
 
@@ -41,52 +41,52 @@ jobs:
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
 
-      - name: Installer les dépendances de l'interface
+      - name: Install the interface dependencies
         run: npm ci
 
-      - name: Télécharger PDFium
+      - name: Download PDFium
         shell: bash
         run: scripts/pdfium.sh win-x64
 
-      - name: Mettre à jour la liste des licences
+      - name: Update the license list
         run: python scripts/licences.py
 
-      - name: Numéro de version
+      - name: Version number
         shell: bash
         run: python scripts/version.py ${{ github.run_number }}
 
-      - name: Construire l'installateur
+      - name: Build the installer
         shell: bash
         run: |
           if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
-            echo "::warning::Pas de clé de signature : la mise à jour automatique ne sera pas publiée."
+            echo "::warning::No signing key: the automatic update will not be published."
             npx tauri build --config '{"bundle":{"createUpdaterArtifacts":false}}'
           else
             npx tauri build
           fi
 
-      - name: Renommer le setup
+      - name: Rename the setup
         shell: bash
         run: |
           mkdir -p sortie maj
           cp target/release/bundle/nsis/*-setup.exe sortie/Documents-setup.exe
           cp target/release/bundle/nsis/*-setup.exe.sig maj/Documents-setup.exe.sig 2>/dev/null || true
 
-      - name: Mettre le setup en téléchargement
+      - name: Make the setup downloadable
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: Documents-setup
           path: sortie/Documents-setup.exe
           if-no-files-found: error
 
-      - name: Garder la signature pour la mise à jour
+      - name: Keep the signature for the update
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: maj-windows
           path: maj/
           if-no-files-found: ignore
 
-  # Branche main seulement : publie les installateurs et la mise à jour automatique.
+  # main branch only: publishes the installers and the automatic update.
   publier:
     if: github.ref == 'refs/heads/main'
     needs: windows
@@ -99,29 +99,29 @@ jobs:
           path: telechargements
           merge-multiple: true
 
-      # Les signatures servent seulement à latest.json : on les met de côté.
-      - name: Mettre les signatures de côté
+      # The signatures are only used for latest.json: set them aside.
+      - name: Set the signatures aside
         run: |
           mkdir -p signatures
           mv telechargements/*.sig signatures/ 2>/dev/null || true
 
-      - name: Publier dans « Dernière version »
+      - name: Publish in "Latest version"
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: derniere-version
-          name: Dernière version
+          name: Latest version
           prerelease: true
           make_latest: false
           body: |
             Version 0.2.${{ github.run_number }}.
-            Windows : télécharger **Documents-setup.exe**.
-            Les versions déjà installées se mettent à jour toutes seules.
+            Windows: download **Documents-setup.exe**.
+            Installed copies update themselves.
           files: telechargements/*
 
-      # latest.json est rangé dans la branche « versions », que l'appli lit. Dépôt privé : il pointe
-      # vers l'API GitHub (fichiers par numéro, lus avec la clé de l'appli) ; public : vers les
-      # liens de téléchargement ordinaires.
-      - name: Publier latest.json dans la branche « versions »
+      # latest.json is kept in the "versions" branch, which the app reads. Private repository: it
+      # points to the GitHub API (files by number, read with the app's key); public: to the
+      # ordinary download links.
+      - name: Publish latest.json in the "versions" branch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

@@ -12,7 +12,7 @@ pub fn from_photo(bytes: &[u8]) -> Result<Vec<u8>> {
     if image.width().max(image.height()) > 1600 {
         image = image.resize(1600, 1600, FilterType::Triangle);
     }
-    let rgba = extract_ink(&image).ok_or_else(|| Error::BrokenImage("aucune signature trouvée sur cette image".into()))?;
+    let rgba = extract_ink(&image).ok_or(Error::NoSignatureFound)?;
     let mut out = Vec::new();
     DynamicImage::ImageRgba8(rgba)
         .write_to(&mut std::io::Cursor::new(&mut out), image::ImageFormat::Png)
@@ -153,6 +153,6 @@ mod tests {
         let img = image::RgbImage::from_pixel(50, 50, image::Rgb([240, 240, 240]));
         let mut bytes = Vec::new();
         img.write_to(&mut std::io::Cursor::new(&mut bytes), image::ImageFormat::Png).unwrap();
-        assert!(from_photo(&bytes).is_err());
+        assert!(matches!(from_photo(&bytes), Err(Error::NoSignatureFound)));
     }
 }

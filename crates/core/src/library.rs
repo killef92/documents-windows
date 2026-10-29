@@ -200,7 +200,7 @@ impl Library {
     /// Renvoie la taille avant et après, en octets.
     pub fn save_pdf_reduced(&self, pages: &[PageRef], fills: &[DocFill], level: reduce::Level, dest: &Path) -> Result<(u64, u64)> {
         let bytes = self.pdf_bytes(pages, fills)?;
-        let smaller = reduce::reduce(&bytes, level).map_err(Error::SaveFailed)?;
+        let smaller = reduce::reduce(&bytes, level)?;
         write_atomically(dest, &smaller)?;
         Ok((bytes.len() as u64, smaller.len() as u64))
     }
@@ -215,7 +215,7 @@ impl Library {
         for f in fills.iter().filter(|f| !f.fields.is_empty()) {
             if let Content::Pdf(pdf) = &self.doc(f.doc)?.content {
                 let bytes = form::fill(&pdf.bytes, &f.fields)
-                    .map_err(|e| Error::SaveFailed(format!("le formulaire n'a pas pu être rempli ({e})")))?;
+                    .map_err(|e| Error::SaveFailed(format!("the form couldn't be filled ({e})")))?;
                 filled.insert(f.doc, bytes);
             }
         }
@@ -349,7 +349,7 @@ impl Library {
 /// Écrit d'abord un fichier temporaire à côté, puis le renomme : si quelque chose se passe mal,
 /// l'ancien fichier reste intact.
 fn write_atomically(dest: &Path, bytes: &[u8]) -> Result<()> {
-    let name = dest.file_name().ok_or_else(|| Error::SaveFailed("nom de fichier invalide".into()))?;
+    let name = dest.file_name().ok_or_else(|| Error::SaveFailed("invalid file name".into()))?;
     let tmp = dest.with_file_name(format!(".{}.documents-tmp", name.to_string_lossy()));
     std::fs::write(&tmp, bytes)?;
     std::fs::rename(&tmp, dest).inspect_err(|_| {

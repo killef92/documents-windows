@@ -35,7 +35,7 @@
       "nsis"
     ],
     "publisher": "Kilian Lefèvre",
-    "shortDescription": "Visionneuse de PDF et d'images",
+    "shortDescription": "PDF and image viewer",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -50,14 +50,21 @@
         "installMode": "both",
         "installerHooks": "windows/hooks.nsh",
         "languages": [
-          "French"
+          "English",
+          "French",
+          "Spanish",
+          "Italian",
+          "Portuguese",
+          "PortugueseBR",
+          "SimpChinese",
+          "Japanese"
         ],
         "displayLanguageSelector": false
       }
     },
     "resources": {
       "../LICENSE": "LICENSE.txt",
-      "../LICENCES-TIERS.txt": "LICENCES-TIERS.txt",
+      "../THIRD-PARTY-LICENSES.txt": "THIRD-PARTY-LICENSES.txt",
       "icons/types/pdf.ico": "types/pdf.ico",
       "icons/types/jpg.ico": "types/jpg.ico",
       "icons/types/png.ico": "types/png.ico",
@@ -65,7 +72,7 @@
       "icons/types/gif.ico": "types/gif.ico",
       "icons/types/image.ico": "types/image.ico"
     },
-    "copyright": "© 2026 Kilian Lefèvre — MIT. Licences tierces : LICENCES-TIERS.txt",
+    "copyright": "© 2026 Kilian Lefèvre — MIT. Third-party licenses: THIRD-PARTY-LICENSES.txt",
     "license": "MIT",
     "fileAssociations": [
       {

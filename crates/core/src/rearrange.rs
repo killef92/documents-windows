@@ -33,7 +33,7 @@ pub(crate) fn inherited(doc: &Document, page: &Dictionary, key: &[u8]) -> Option
 pub(crate) fn rearrange(bytes: &[u8], order: &[(usize, Rotation)]) -> Result<Vec<u8>, String> {
     let mut doc = Document::load_mem(bytes).map_err(|e| e.to_string())?;
     if doc.is_encrypted() {
-        return Err("PDF chiffré".into());
+        return Err("encrypted PDF".into());
     }
     let pages = doc.get_pages();
     let root_pages: ObjectId = doc
@@ -45,7 +45,7 @@ pub(crate) fn rearrange(bytes: &[u8], order: &[(usize, Rotation)]) -> Result<Vec
     let mut kids = Vec::with_capacity(order.len());
     let mut used = HashSet::new();
     for &(index, rotation) in order {
-        let id = *pages.get(&(index as u32 + 1)).ok_or("page introuvable")?;
+        let id = *pages.get(&(index as u32 + 1)).ok_or("page not found")?;
         let mut page = doc.get_dictionary(id).map_err(|e| e.to_string())?.clone();
         for key in INHERITED {
             if !page.has(key) {

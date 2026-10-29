@@ -34,7 +34,7 @@ if not plateformes:
 
 fiche = {
     "version": f"0.2.{numero}",
-    "notes": "Nouvelle version de Documents.",
+    "notes": "New version of Documents.",
     "pub_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     "platforms": plateformes,
 }

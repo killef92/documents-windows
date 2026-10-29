@@ -12,7 +12,7 @@ curl -fsSL "https://github.com/bblanchon/pdfium-binaries/releases/download/chrom
 tar -xzf "$TMP/pdfium.tgz" -C "$TMP"
 cp "$TMP"/bin/pdfium.dll "$DEST/" 2>/dev/null || cp "$TMP"/lib/libpdfium.* "$DEST/"
 cp "$TMP/LICENSE" "$DEST/LICENSE" 2>/dev/null || echo "PDFium : licence BSD-3-Clause / Apache-2.0 — https://pdfium.googlesource.com/pdfium/+/main/LICENSE" > "$DEST/LICENSE"
-# Licences des bibliothèques contenues dans PDFium (reprises dans LICENCES-TIERS.txt).
+# Licences des bibliothèques contenues dans PDFium (reprises dans THIRD-PARTY-LICENSES.txt).
 rm -rf "$DEST/licenses" && cp -r "$TMP/licenses" "$DEST/licenses" 2>/dev/null || true
 rm -rf "$TMP"
 ls -l "$DEST"

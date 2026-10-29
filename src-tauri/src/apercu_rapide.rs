@@ -82,7 +82,7 @@ pub fn set_enabled(on: bool) -> Result<(), String> {
         if !on {
             let _ = RegDeleteKeyValueW(HKEY_CURRENT_USER, RUN_KEY, OLD_RUN_VALUE);
             let r = RegDeleteKeyValueW(HKEY_CURRENT_USER, RUN_KEY, RUN_VALUE);
-            return if r.is_ok() || !is_enabled() { Ok(()) } else { Err(format!("registre : {r:?}")) };
+            return if r.is_ok() || !is_enabled() { Ok(()) } else { Err(format!("registry: {r:?}")) };
         }
         let exe = std::env::current_exe().map_err(|e| e.to_string())?;
         let command = format!("\"{}\" --apercu-rapide", exe.display());

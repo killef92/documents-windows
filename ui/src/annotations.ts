@@ -9,6 +9,7 @@ import * as api from "./api";
 import type { DocInfo, PageText } from "./api";
 import { closeMenu, showMenu, showPanel } from "./menu";
 import { canPan, startPan } from "./pan";
+import { t as tr } from "./i18n";
 
 export type Color = string;
 export interface Pt {
@@ -91,15 +92,15 @@ export type Signature =
   | { id: string; kind: "image"; png: string; aspect: number };
 
 export const PALETTE: [string, Color][] = [
-  ["Noir", "#000000"], ["Gris", "#8e8e93"], ["Blanc", "#ffffff"], ["Rouge", "#ff3b30"],
-  ["Orange", "#ff9500"], ["Jaune", "#ffcc00"], ["Vert", "#34c759"], ["Turquoise", "#30b0c7"],
-  ["Bleu", "#007aff"], ["Indigo", "#5856d6"], ["Violet", "#af52de"], ["Rose", "#ff2d55"],
+  [tr("colorBlack"), "#000000"], [tr("colorGray"), "#8e8e93"], [tr("colorWhite"), "#ffffff"], [tr("colorRed"), "#ff3b30"],
+  [tr("colorOrange"), "#ff9500"], [tr("colorYellow"), "#ffcc00"], [tr("colorGreen"), "#34c759"], [tr("colorTeal"), "#30b0c7"],
+  [tr("colorBlue"), "#007aff"], [tr("colorIndigo"), "#5856d6"], [tr("colorPurple"), "#af52de"], [tr("colorPink"), "#ff2d55"],
 ];
 export const HIGHLIGHTS: [string, Color][] = [
-  ["Jaune", "#ffe14d"], ["Vert", "#a6f08c"], ["Bleu", "#8fd3ff"], ["Rose", "#ffa3c8"], ["Violet", "#d4b0ff"],
+  [tr("colorYellow"), "#ffe14d"], [tr("colorGreen"), "#a6f08c"], [tr("colorBlue"), "#8fd3ff"], [tr("colorPink"), "#ffa3c8"], [tr("colorPurple"), "#d4b0ff"],
 ];
 const NOTE_COLOR = "#ffd60a";
-const WIDTHS: [string, number][] = [["Fin", 1], ["Moyen", 2], ["Épais", 4], ["Très épais", 8]];
+const WIDTHS: [string, number][] = [[tr("widthThin"), 1], [tr("widthMedium"), 2], [tr("widthThick"), 4], [tr("widthExtraThick"), 8]];
 
 export const style = {
   stroke: "#ff3b30" as Color,
@@ -1402,7 +1403,7 @@ function openNote(p: AnnotPage, i: number) {
   const box = document.createElement("div");
   box.className = "note-box";
   const area = document.createElement("textarea");
-  area.placeholder = "Écrire une note…";
+  area.placeholder = tr("notePlaceholder");
   area.value = a.text;
   box.append(area);
   document.body.append(box);
@@ -1543,15 +1544,15 @@ function palette(colors: [string, Color][], currentColor: Color | null, none: st
   if (!few) {
     const grid = row("palette-grid");
     grid.append(none ? swatch(null, none, "palette-color palette-none") : document.createElement("span"));
-    GRAYS.forEach((c, i) => grid.append(swatch(c, i === 0 ? "Blanc" : i === 10 ? "Noir" : "Gris")));
-    for (const l of LIGHTS) for (const h of HUES) grid.append(swatch(hsl(h, 0.75, l), "Nuance"));
+    GRAYS.forEach((c, i) => grid.append(swatch(c, tr(i === 0 ? "colorWhite" : i === 10 ? "colorBlack" : "colorGray"))));
+    for (const l of LIGHTS) for (const h of HUES) grid.append(swatch(hsl(h, 0.75, l), tr("colorShade")));
     if (recent.length) {
       const r = row("palette");
-      for (const c of recent) r.append(swatch(c, "Couleur récente"));
+      for (const c of recent) r.append(swatch(c, tr("colorRecent")));
     }
     const more = document.createElement("button");
     more.className = "palette-more";
-    more.textContent = "Autres couleurs…";
+    more.textContent = tr("moreColors");
     // Le sélecteur de Windows s'ouvre par-dessus : le champ reste dans la page même si le
     // panneau se ferme pendant ce temps.
     more.addEventListener("click", () => {
@@ -1596,7 +1597,7 @@ function textPanel(): HTMLElement {
   font.addEventListener("change", () => setText({ font: font.value as Font }));
   const swatch = document.createElement("button");
   swatch.className = "text-color";
-  swatch.title = "Couleur du texte";
+  swatch.title = tr("textColor");
   swatch.style.background = color;
   swatch.addEventListener("click", () => {
     const r = swatch.getBoundingClientRect();
@@ -1614,7 +1615,7 @@ function textPanel(): HTMLElement {
   size.min = "4";
   size.max = "200";
   size.value = String(Math.round(now.size * 10) / 10);
-  size.title = "Taille (points)";
+  size.title = tr("textSize");
   size.addEventListener("change", () => {
     const v = Number(size.value);
     if (v >= 4 && v <= 200) setText({ size: v });
@@ -1625,7 +1626,8 @@ function textPanel(): HTMLElement {
 
   const toggles = document.createElement("div");
   toggles.className = "segmented";
-  for (const [key, label, title] of [["bold", "G", "Gras"], ["italic", "I", "Italique"], ["underline", "S", "Souligné"]] as const) {
+  for (const key of ["bold", "italic", "underline"] as const) {
+    const [label, title] = [tr(`${key}Letter`), tr(key)];
     const b = document.createElement("button");
     b.className = `seg seg-${key}` + (now[key] ? " on" : "");
     b.textContent = label;
@@ -1641,13 +1643,13 @@ function textPanel(): HTMLElement {
   const aligns = document.createElement("div");
   aligns.className = "segmented wide";
   for (const [value, icon, title] of [
-    ["left", "M4 6h16M4 10h10M4 14h16M4 18h10", "Aligner à gauche"],
-    ["center", "M4 6h16M7 10h10M4 14h16M7 18h10", "Centrer"],
-    ["right", "M4 6h16M10 10h10M4 14h16M10 18h10", "Aligner à droite"],
+    ["left", "M4 6h16M4 10h10M4 14h16M4 18h10", "alignLeft"],
+    ["center", "M4 6h16M7 10h10M4 14h16M7 18h10", "alignCenter"],
+    ["right", "M4 6h16M10 10h10M4 14h16M10 18h10", "alignRight"],
   ] as const) {
     const b = document.createElement("button");
     b.className = "seg" + ((now.align ?? "left") === value ? " on" : "");
-    b.title = title;
+    b.title = tr(title);
     const i = svg("svg", { viewBox: "0 0 24 24", width: 16, height: 16, fill: "none", stroke: "currentColor", "stroke-width": 1.8, "stroke-linecap": "round" });
     i.append(svg("path", { d: icon }));
     b.append(i);
@@ -1669,8 +1671,8 @@ function textPanel(): HTMLElement {
 }
 
 const SHAPE_NAMES: Record<ShapeTool, string> = {
-  line: "Ligne", arrow: "Flèche", rect: "Rectangle", rounded: "Rectangle arrondi",
-  ellipse: "Ovale", bubble: "Bulle", star: "Étoile", hexagon: "Hexagone",
+  line: tr("annotLine"), arrow: tr("annotArrow"), rect: tr("annotRect"), rounded: tr("annotRounded"),
+  ellipse: tr("annotEllipse"), bubble: tr("annotBubble"), star: tr("annotStar"), hexagon: tr("annotHexagon"),
 };
 
 /** Petit dessin d'une forme pour le menu (tracé ici, au trait comme les autres icônes). */
@@ -1755,7 +1757,7 @@ function initToolbar() {
     const [x, y] = below("style-stroke");
     const a = current();
     const shape = !a || a.kind === "rect" || a.kind === "ellipse";
-    showPanel(x, y, palette(PALETTE, strokeOf(a), shape ? "Aucune" : null, (c) => {
+    showPanel(x, y, palette(PALETTE, strokeOf(a), shape ? tr("strokeNone") : null, (c) => {
       const sel = current();
       if (!sel) {
         if (c) style.stroke = c;
@@ -1781,7 +1783,7 @@ function initToolbar() {
   });
   $("style-fill").addEventListener("click", () => {
     const [x, y] = below("style-fill");
-    showPanel(x, y, palette(PALETTE, fillOf(current()), "Aucun", (c) => {
+    showPanel(x, y, palette(PALETTE, fillOf(current()), tr("fillNone"), (c) => {
       if (!current()) style.fill = c;
       restyle((a) => (a.kind === "rect" || a.kind === "ellipse" ? { ...a, fill: c } : a.kind === "text" ? withText(a, { fill: c }) : null));
       updateSwatches();
@@ -1888,7 +1890,7 @@ export async function flatten(p: AnnotPage): Promise<Uint8Array> {
   ctx.globalCompositeOperation = "source-over";
   ctx.drawImage(await svgImage(standalone(p, "main")), 0, 0, W, H);
   const blob = await new Promise<Blob>((resolve, reject) =>
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("image trop grande"))), "image/png"),
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("image too large"))), "image/png"),
   );
   return new Uint8Array(await blob.arrayBuffer());
 }

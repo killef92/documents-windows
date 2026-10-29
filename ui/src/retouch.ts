@@ -4,6 +4,7 @@
 // demande au cœur la vraie image retouchée (picture.rs, mêmes formules que les filtres CSS).
 
 import type { Retouch } from "./api";
+import { t, type Key } from "./i18n";
 
 export interface RetouchPage {
   el: HTMLElement;
@@ -12,11 +13,11 @@ export interface RetouchPage {
 
 type Setting = "brightness" | "contrast" | "saturation";
 
-const SETTINGS: [Setting, string, number][] = [
+const SETTINGS: [Setting, Key, number][] = [
   // Nom, libellé, réglage maximal (le curseur va de -max à +max).
-  ["brightness", "Luminosité", 0.6],
-  ["contrast", "Contraste", 0.6],
-  ["saturation", "Saturation", 1],
+  ["brightness", "brightness", 0.6],
+  ["contrast", "contrast", 0.6],
+  ["saturation", "saturation", 1],
 ];
 
 /** Le filtre CSS qui montre le même résultat que le cœur. */
@@ -47,14 +48,14 @@ export function open(button: HTMLElement, p: RetouchPage, apply: (r: Retouch) =>
   box.className = "menu panel retouch-panel";
   const title = document.createElement("div");
   title.className = "retouch-title";
-  title.textContent = "Ajuster la couleur";
+  title.textContent = t("adjustColorTitle");
   box.append(title);
   const sliders: HTMLInputElement[] = [];
   for (const [key, label, max] of SETTINGS) {
     const row = document.createElement("label");
     row.className = "retouch-row";
     const name = document.createElement("span");
-    name.textContent = label;
+    name.textContent = t(label);
     const input = document.createElement("input");
     input.type = "range";
     input.min = "-100";
@@ -77,15 +78,15 @@ export function open(button: HTMLElement, p: RetouchPage, apply: (r: Retouch) =>
   buttons.className = "modal-buttons";
   const reset = document.createElement("button");
   reset.className = "modal-button";
-  reset.textContent = "Réinitialiser";
+  reset.textContent = t("reset");
   const spacer = document.createElement("span");
   spacer.style.flex = "1";
   const cancel = document.createElement("button");
   cancel.className = "modal-button";
-  cancel.textContent = "Annuler";
+  cancel.textContent = t("cancel");
   const ok = document.createElement("button");
   ok.className = "modal-button primary";
-  ok.textContent = "Appliquer";
+  ok.textContent = t("apply");
   buttons.append(reset, spacer, cancel, ok);
   box.append(buttons);
 

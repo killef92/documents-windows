@@ -18,7 +18,9 @@ import * as pan from "./pan";
 import type { Annotation } from "./annotations";
 import { ask, closeMenu, showMenu, type MenuItem } from "./menu";
 import { checkForUpdate } from "./update";
+import { locale, num, t, tn, translatePage, type Key } from "./i18n";
 
+translatePage();
 drawIcons();
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -266,7 +268,7 @@ function makePage(doc: DocInfo, index: number): Page {
   const label = document.createElement("div");
   label.className = "thumb-label";
   thumb.append(thumbBox, label);
-  thumb.title = doc.kind === "pdf" ? `${doc.name} — page ${index + 1}` : doc.name;
+  thumb.title = doc.kind === "pdf" ? t("thumbTitle", { name: doc.name, n: index + 1 }) : doc.name;
 
   const { hlSvg, annotSvg } = annot.createLayers();
   const p: Page = {
@@ -377,10 +379,9 @@ async function copyFiles(add: boolean) {
   if (!paths.length) return;
   try {
     const n = await api.copyFiles(paths, add);
-    const word = paths.every(isImageName) ? "image" : "fichier";
-    toast(n === 1 ? `1 ${word} dans le presse-papier` : `${n} ${word}s dans le presse-papier`, 3000);
+    toast(tn(paths.every(isImageName) ? "copiedImages" : "copiedFiles", n), 3000);
   } catch (e) {
-    toast(`Impossible de copier : ${e}`);
+    toast(t("copyFailed", { error: String(e) }));
   }
 }
 
@@ -425,7 +426,7 @@ function buildSheet() {
       const head = document.createElement("button");
       head.className = "sheet-head";
       head.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg><span></span>`;
-      head.querySelector("span")!.textContent = p.doc.kind === "pdf" ? p.doc.name : "Images";
+      head.querySelector("span")!.textContent = p.doc.kind === "pdf" ? p.doc.name : t("imagesGroup");
       grid = document.createElement("div");
       grid.className = "sheet-grid";
       const g = grid;
@@ -473,17 +474,17 @@ function viewMenu() {
   const hidden = document.body.classList.contains("no-sidebar");
   showMenu(r.left - 34, r.bottom + 6, [
     {
-      label: "Miniatures",
+      label: t("viewThumbs"),
       checked: !sheet && !hidden,
       action: () => {
         document.body.classList.remove("no-sidebar");
         if (sheet) setSheet(false);
       },
     },
-    { label: "Planche contact", checked: sheet, disabled: !state.pages.length, action: () => setSheet(!sheet) },
+    { label: t("viewSheet"), checked: sheet, disabled: !state.pages.length, action: () => setSheet(!sheet) },
     "-",
     {
-      label: "Masquer la barre latérale",
+      label: t("hideSidebar"),
       checked: !sheet && hidden,
       action: () => {
         document.body.classList.add("no-sidebar");
@@ -589,15 +590,15 @@ function updateTitle() {
   const docsShown = new Set(state.pages.map((x) => x.doc)).size;
   let text: string;
   if (docsShown > 1) {
-    text = `${docsShown} documents, ${total} pages au total`;
+    text = t("titleDocs", { docs: docsShown, pages: total });
   } else if (p.doc.kind === "pdf") {
-    text = `Page ${state.current + 1} sur ${total}`;
+    text = t("titlePage", { n: state.current + 1, total });
   } else {
     const s = baseSize(p);
-    text = `${Math.round(s.w)} × ${Math.round(s.h)} pixels`;
+    text = t("titlePixels", { w: Math.round(s.w), h: Math.round(s.h) });
   }
   const modified = isModified();
-  sub.textContent = modified ? `${text} — Modifié` : text;
+  sub.textContent = modified ? `${text} — ${t("modified")}` : text;
   scheduleInspector();
   if (api.inTauri) getCurrentWindow().setTitle(`${modified ? "• " : ""}${p.doc.name} — Documents`);
 }
@@ -785,11 +786,11 @@ async function openFiles(paths: string[], insertAt?: number, asOpened = false) {
   document.body.classList.add("busy");
   try {
     const result = await api.openPaths(paths);
-    for (const e of result.errors) toast(`« ${e.name} » : ${e.message}`);
+    for (const e of result.errors) toast(t("openError", { name: e.name, message: e.message }));
     if (!result.docs.length) return;
     // Les formulaires d'abord : leurs pages s'affichent sans les champs, remplis ici.
     const withForms = await Promise.all(result.docs.map(forms.load));
-    if (withForms.some(Boolean)) toast("Ce document contient un formulaire : cliquez dans les champs pour le remplir.");
+    if (withForms.some(Boolean)) toast(t("hasForm"));
     const fresh = result.docs.flatMap((doc) => doc.pages.map((_, i) => makePage(doc, i)));
     if (insertAt === undefined || !state.pages.length) {
       if (state.docs.length) {
@@ -840,7 +841,7 @@ async function chooseFiles(insertAt?: number) {
   if (!api.inTauri) return;
   const picked = await openDialog({
     multiple: true,
-    filters: [{ name: "PDF et images", extensions: FILE_TYPES }],
+    filters: [{ name: t("filterPdfImages"), extensions: FILE_TYPES }],
   });
   if (picked) openFiles(Array.isArray(picked) ? picked : [picked], insertAt);
 }
@@ -864,7 +865,7 @@ async function askPdfPath(defaultName: string): Promise<string | null> {
   const sep = first.includes("\\") ? "\\" : "/";
   return saveDialog({
     defaultPath: dir ? `${dir}${sep}${defaultName}` : defaultName,
-    filters: [{ name: "Document PDF", extensions: ["pdf"] }],
+    filters: [{ name: t("filterPdf"), extensions: ["pdf"] }],
   });
 }
 
@@ -873,7 +874,7 @@ async function withBusy(work: () => Promise<void>) {
   try {
     await work();
   } catch (e) {
-    toast(`L'enregistrement a échoué : ${e}`);
+    toast(t("saveFailed", { error: String(e) }));
     throw e;
   } finally {
     document.body.classList.remove("busy");
@@ -897,13 +898,13 @@ async function save(): Promise<boolean> {
       }
     });
     markSaved();
-    toast("Photos enregistrées.");
+    toast(t("photosSaved"));
     return true;
   }
   if (!target) return saveAs();
   await withBusy(() => api.savePdf(pageRefs(state.pages), target, forms.fills()));
   markSaved();
-  toast(`« ${target.split(/[\\/]/).pop()} » enregistré.`);
+  toast(t("savedName", { name: target.split(/[\\/]/).pop()! }));
   return true;
 }
 
@@ -914,7 +915,7 @@ async function saveAs(): Promise<boolean> {
   await withBusy(() => api.savePdf(pageRefs(state.pages), dest, forms.fills()));
   state.saveTarget = dest;
   markSaved();
-  toast(`« ${dest.split(/[\\/]/).pop()} » enregistré.`);
+  toast(t("savedName", { name: dest.split(/[\\/]/).pop()! }));
   return true;
 }
 
@@ -925,42 +926,42 @@ async function exportSelection() {
   const first = pages[0];
   const name =
     pages.length === 1 && first.doc.kind === "pdf"
-      ? `${stem(first.doc.name)} - page ${state.pages.indexOf(first) + 1}.pdf`
+      ? t("fileNamePage", { name: stem(first.doc.name), n: state.pages.indexOf(first) + 1 })
       : `${stem(first.doc.name)}.pdf`;
   const dest = await askPdfPath(name);
   if (!dest) return;
   await withBusy(() => api.savePdf(pageRefs(pages), dest, forms.fills()));
-  toast(`« ${dest.split(/[\\/]/).pop()} » créé.`);
+  toast(t("createdName", { name: dest.split(/[\\/]/).pop()! }));
 }
 
 const sizeText = (bytes: number) =>
   bytes >= 1024 * 1024
-    ? `${(bytes / 1024 / 1024).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo`
-    : `${Math.max(1, Math.round(bytes / 1024))} Ko`;
+    ? t("sizeMB", { n: num(bytes / 1024 / 1024, { maximumFractionDigits: 1 }) })
+    : t("sizeKB", { n: Math.max(1, Math.round(bytes / 1024)) });
 
 /** Un PDF plus léger pour l'envoyer par mail : les photos sont allégées, le texte reste net. */
 async function exportReduced() {
   if (!state.pages.length) return;
   const choice = await ask(
-    "Réduire la taille du PDF",
-    "Les photos et images scannées sont allégées ; le texte reste net. Le document ouvert ne change pas.",
-    ["Taille minimale", "Bonne qualité", "Annuler"],
+    t("reduceTitle"),
+    t("reduceText"),
+    [t("reduceSmallest"), t("reduceGood"), t("cancel")],
     1,
   );
   if (choice < 0 || choice === 2) return;
   const level: api.ReduceLevel = choice === 0 ? "forte" : "moyenne";
-  const dest = await askPdfPath(`${stem(state.pages[0].doc.name)} (réduit).pdf`);
+  const dest = await askPdfPath(t("fileNameReduced", { name: stem(state.pages[0].doc.name) }));
   if (!dest) return;
   let sizes: [number, number] = [0, 0];
   await withBusy(async () => {
     sizes = await api.savePdfReduced(pageRefs(state.pages), dest, level, forms.fills());
   });
   const [before, after] = sizes;
-  const name = dest.split(/[\\/]/).pop();
+  const name = dest.split(/[\\/]/).pop()!;
   toast(
     after < before * 0.95
-      ? `« ${name} » créé : ${sizeText(before)} → ${sizeText(after)}.`
-      : `« ${name} » créé (${sizeText(after)}) : ce document était déjà léger.`,
+      ? t("reducedDone", { name, before: sizeText(before), after: sizeText(after) })
+      : t("reducedAlready", { name, size: sizeText(after) }),
   );
 }
 
@@ -969,9 +970,9 @@ async function confirmDiscard(): Promise<boolean> {
   if (!isModified()) return true;
   const name = state.pages[0]?.doc.name ?? "";
   const choice = await ask(
-    `Souhaitez-vous enregistrer les modifications apportées au document « ${name} » ?`,
-    "Si vous n'enregistrez pas, vos modifications seront perdues.",
-    ["Enregistrer", "Ne pas enregistrer", "Annuler"],
+    t("saveChangesQuestion", { name }),
+    t("saveChangesText"),
+    [t("save"), t("dontSave"), t("cancel")],
   );
   if (choice === 0) return save().catch(() => false);
   return choice === 1;
@@ -1043,7 +1044,7 @@ function showResults(query: string) {
   const n = state.hits.length;
   const pages = groups.length;
   $("find-count").textContent =
-    n === 0 ? "Aucun résultat" : pages === 1 ? `Trouvé sur 1 page` : `Trouvé sur ${pages} pages`;
+    n === 0 ? t("noResults") : tn("foundOn", pages);
   $("find-bar").hidden = false;
   const several = new Set(state.pages.map((p) => p.doc)).size > 1;
   const items: HTMLElement[] = groups.map(([pi, hits]) => {
@@ -1051,14 +1052,14 @@ function showResults(query: string) {
     const b = document.createElement("button");
     b.className = "result";
     b.dataset.hits = hits.join(",");
-    const where = several ? `${shortName(p.doc.name, 16)} · p. ${pi + 1}` : `Page ${pi + 1}`;
-    const count = hits.length === 1 ? "1 résultat" : `${hits.length} résultats`;
+    const where = several ? t("resultWhere", { name: shortName(p.doc.name, 16), n: pi + 1 }) : t("resultPage", { n: pi + 1 });
+    const count = tn("resultCount", hits.length);
     b.innerHTML = `<div class="result-thumb"><img alt="" draggable="false" /></div>
       <div class="result-main"><div class="result-head"><span class="result-page"></span><span class="result-count"></span></div>
       <div class="result-text">${highlightIn(state.hits[hits[0]].context, query)}</div></div>`;
     b.querySelector(".result-page")!.textContent = where;
     b.querySelector(".result-count")!.textContent = String(hits.length);
-    b.title = `${where} : ${count}`;
+    b.title = t("resultTitle", { where, count });
     const img = b.querySelector("img")!;
     img.src = api.pageUrl(p.doc.id, p.index, bucket(48 * devicePixelRatio), p.rotation);
     b.addEventListener("click", () => goToHit(hits[0]));
@@ -1067,7 +1068,7 @@ function showResults(query: string) {
   if (!items.length) {
     const none = document.createElement("div");
     none.className = "results-head";
-    none.textContent = "Aucun résultat";
+    none.textContent = t("noResults");
     items.push(none);
   }
   resultsEl.replaceChildren(...items);
@@ -1160,18 +1161,19 @@ searchInput.addEventListener("keydown", (e) => {
 
 // ---------- Inspecteur : informations du document, liste des annotations ----------
 
-const kindNames: Record<string, string> = {
-  pdf: "Document PDF",
-  jpeg: "Image JPEG",
-  png: "Image PNG",
-  webp: "Image WebP",
-  gif: "Image GIF",
-  heic: "Image HEIC",
+const kindNames: Record<string, Key> = {
+  pdf: "kindPdf",
+  jpeg: "kindJpeg",
+  png: "kindPng",
+  webp: "kindWebp",
+  gif: "kindGif",
+  heic: "kindHeic",
 };
 
-const ANNOT_NAMES: Record<string, string> = {
-  highlight: "Surlignage", rect: "Rectangle", ellipse: "Ovale", ink: "Dessin", text: "Texte",
-  note: "Note", image: "Signature", rounded: "Rectangle arrondi", bubble: "Bulle", star: "Étoile", hexagon: "Hexagone",
+const ANNOT_NAMES: Record<string, Key> = {
+  highlight: "annotHighlight", rect: "annotRect", ellipse: "annotEllipse", ink: "annotInk", text: "annotText",
+  note: "annotNote", image: "annotImage", rounded: "annotRounded", bubble: "annotBubble", star: "annotStar",
+  hexagon: "annotHexagon", line: "annotLine", arrow: "annotArrow",
 };
 
 let inspectorTab: "infos" | "annots" = "infos";
@@ -1196,9 +1198,9 @@ function setInspectorTab(tab: typeof inspectorTab) {
 const dateText = (d: Date) =>
   isNaN(d.getTime())
     ? ""
-    : d.toLocaleString("fr-FR", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }).replace(",", " à");
+    : d.toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" });
 
-const cm = (px: number) => ((px * 2.54) / 96).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const cm = (px: number) => num((px * 2.54) / 96, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 let inspectorSeq = 0;
 async function renderInspector() {
@@ -1217,21 +1219,21 @@ async function renderInspector() {
   if (seq !== inspectorSeq) return;
   const s = p.doc.pages[p.index];
   const groups: [string, string | null | undefined][][] = [
-    [["Nom du fichier", p.doc.name], ["Type de document", kindNames[p.doc.kind] ?? p.doc.kind]],
+    [[t("infoFileName"), p.doc.name], [t("infoKind"), kindNames[p.doc.kind] ? t(kindNames[p.doc.kind]) : p.doc.kind]],
     p.doc.kind === "pdf"
-      ? [["Version PDF", info?.version], ["Nombre de pages", String(p.doc.pages.length)], ["Format de papier", `${cm(s.width)} × ${cm(s.height)} cm`]]
-      : [["Dimensions", `${Math.round(s.width)} × ${Math.round(s.height)} pixels`]],
+      ? [[t("infoPdfVersion"), info?.version], [t("infoPageCount"), num(p.doc.pages.length)], [t("infoPaper"), `${cm(s.width)} × ${cm(s.height)} cm`]]
+      : [[t("infoDimensions"), t("titlePixels", { w: Math.round(s.width), h: Math.round(s.height) })]],
     [
-      ["Taille", info ? sizeText(info.file_size) : null],
-      ["Emplacement", p.doc.path],
-      ["Date de création", info?.file_created ? dateText(new Date(info.file_created)) : null],
-      ["Date de modification", info?.file_modified ? dateText(new Date(info.file_modified)) : null],
+      [t("infoSize"), info ? sizeText(info.file_size) : null],
+      [t("infoLocation"), p.doc.path],
+      [t("infoFileCreated"), info?.file_created ? dateText(new Date(info.file_created)) : null],
+      [t("infoFileModified"), info?.file_modified ? dateText(new Date(info.file_modified)) : null],
     ],
     [
-      ["Titre", info?.title], ["Auteur", info?.author], ["Objet", info?.subject], ["Mots-clés", info?.keywords],
-      ["Créé avec", info?.creator], ["Produit par", info?.producer],
-      ["Créé le", info?.created ? dateText(new Date(info.created)) : null],
-      ["Modifié le", info?.modified ? dateText(new Date(info.modified)) : null],
+      [t("infoTitle"), info?.title], [t("infoAuthor"), info?.author], [t("infoSubject"), info?.subject], [t("infoKeywords"), info?.keywords],
+      [t("infoCreator"), info?.creator], [t("infoProducer"), info?.producer],
+      [t("infoCreated"), info?.created ? dateText(new Date(info.created)) : null],
+      [t("infoModified"), info?.modified ? dateText(new Date(info.modified)) : null],
     ],
   ];
   body.replaceChildren(
@@ -1258,19 +1260,20 @@ async function renderInspector() {
 function renderAnnotList(body: HTMLElement) {
   const head = document.createElement("div");
   head.className = "annot-row annot-head";
-  head.innerHTML = "<span>Page</span><span>Type</span><span>Contenu</span>";
+  head.innerHTML = "<span></span><span></span><span></span>";
+  (["annotsPage", "annotsType", "annotsContent"] as const).forEach((k, i) => (head.children[i].textContent = t(k)));
   const rows: HTMLElement[] = [];
   state.pages.forEach((p, pi) =>
     p.annots.forEach((a, i) => {
       const row = document.createElement("button");
       row.className = "annot-row";
       const color = "color" in a ? a.color : "stroke" in a ? (a.stroke ?? a.fill) : null;
-      const kind = a.kind === "rect" && a.shape ? a.shape : a.kind === "line" ? (a.arrow ? "Flèche" : "Ligne") : a.kind;
+      const kind = a.kind === "rect" && a.shape ? a.shape : a.kind === "line" ? (a.arrow ? "arrow" : "line") : a.kind;
       const content = a.kind === "text" || a.kind === "note" ? a.text.replace(/\s+/g, " ") : "";
       row.innerHTML = `<span></span><span class="annot-type"><i class="annot-color"></i><span></span></span><span class="annot-content"></span>`;
       row.children[0].textContent = String(pi + 1);
       (row.querySelector(".annot-color") as HTMLElement).style.background = color ?? "transparent";
-      row.querySelector(".annot-type span")!.textContent = ANNOT_NAMES[kind] ?? kind;
+      row.querySelector(".annot-type span")!.textContent = ANNOT_NAMES[kind] ? t(ANNOT_NAMES[kind]) : kind;
       row.children[2].textContent = content;
       row.addEventListener("click", () => {
         goTo(pi);
@@ -1282,7 +1285,7 @@ function renderAnnotList(body: HTMLElement) {
   if (!rows.length) {
     const empty = document.createElement("div");
     empty.className = "inspector-empty";
-    empty.textContent = "Aucune annotation";
+    empty.textContent = t("noAnnots");
     rows.push(empty);
   }
   body.replaceChildren(head, ...rows);
@@ -1301,29 +1304,29 @@ function toast(message: string, duration = 5000) {
 
 /** Message qui reste affiché, avec un bouton (ex. « Mettre à jour »). */
 function banner(message: string, action: string, run: () => Promise<void>) {
-  const t = document.createElement("div");
-  t.className = "toast banner";
+  const box = document.createElement("div");
+  box.className = "toast banner";
   const text = document.createElement("span");
   text.textContent = message;
   const later = document.createElement("button");
   later.className = "toast-button";
-  later.textContent = "Plus tard";
-  later.addEventListener("click", () => t.remove());
+  later.textContent = t("later");
+  later.addEventListener("click", () => box.remove());
   const go = document.createElement("button");
   go.className = "toast-button primary";
   go.textContent = action;
   go.addEventListener("click", async () => {
     go.disabled = later.disabled = true;
-    text.textContent = "Téléchargement de la mise à jour…";
+    text.textContent = t("downloadingUpdate");
     try {
       await run();
     } catch (e) {
-      text.textContent = `La mise à jour a échoué : ${e}`;
+      text.textContent = t("updateFailed", { error: String(e) });
       later.disabled = false;
     }
   });
-  t.append(text, later, go);
-  $("toasts").append(t);
+  box.append(text, later, go);
+  $("toasts").append(box);
 }
 
 // ---------- Aperçu rapide (Windows : Espace dans l'Explorateur) ----------
@@ -1338,13 +1341,9 @@ async function toggleApercuRapide() {
   try {
     await api.setApercuRapide(on);
     apercuRapideOption = on;
-    toast(
-      on
-        ? "Aperçu rapide activé : dans l'Explorateur, sélectionnez un PDF ou une image et appuyez sur Espace."
-        : "Aperçu rapide désactivé.",
-    );
+    toast(t(on ? "quickOn" : "quickOff"));
   } catch (e) {
-    toast(`Impossible de changer l'option : ${e}`);
+    toast(t("optionFailed", { error: String(e) }));
   }
 }
 
@@ -1376,7 +1375,7 @@ function startApercuRapide(path: string) {
 async function chooseDefaultApp() {
   try {
     await api.chooseDefaultApp();
-    toast("Dans les réglages de Windows, choisissez Documents pour les fichiers .pdf, .jpg, .png, .webp et .gif.", 9000);
+    toast(t("defaultAppHint"), 9000);
   } catch (e) {
     toast(String(e));
   }
@@ -1389,34 +1388,34 @@ function fileMenuItems(): MenuItem[] {
   const n = selectedPages().length;
   const picture = !!state.pages[state.current] && state.pages[state.current].doc.kind !== "pdf";
   const items: MenuItem[] = [
-    { label: "Ouvrir…", shortcut: "Ctrl+O", action: () => chooseFiles() },
-    { label: "Insérer un fichier…", disabled: none, action: () => chooseFiles(state.current + 1) },
+    { label: t("open"), shortcut: "Ctrl+O", action: () => chooseFiles() },
+    { label: t("insertFile"), disabled: none, action: () => chooseFiles(state.current + 1) },
     "-",
-    { label: "Enregistrer", shortcut: "Ctrl+S", disabled: none, action: () => save() },
-    { label: "Enregistrer sous…", shortcut: "Ctrl+Maj+S", disabled: none, action: () => saveAs() },
+    { label: t("save"), shortcut: "Ctrl+S", disabled: none, action: () => save() },
+    { label: t("saveAs"), shortcut: `Ctrl+${t("kShift")}+S`, disabled: none, action: () => saveAs() },
     {
-      label: n > 1 ? `Exporter les ${n} pages en PDF…` : "Exporter la page en PDF…",
+      label: tn("exportPages", Math.max(1, n)),
       shortcut: "Ctrl+E",
       disabled: none,
       action: () => exportSelection(),
     },
-    { label: "Exporter en taille réduite…", disabled: none, action: () => exportReduced() },
-    { label: "Imprimer…", shortcut: "Ctrl+P", disabled: none, action: () => printDoc() },
+    { label: t("exportReduced"), disabled: none, action: () => exportReduced() },
+    { label: t("print"), shortcut: "Ctrl+P", disabled: none, action: () => printDoc() },
     "-",
     ...(onlyPdf()
       ? []
       : ([
-          { label: "Réglage de la couleur…", disabled: !picture, action: () => adjustColor() },
-          { label: "Ajuster la taille…", disabled: !picture, action: () => resizePicture() },
-          { label: "Retourner horizontalement", disabled: !picture, action: () => flip(true) },
-          { label: "Retourner verticalement", disabled: !picture, action: () => flip(false) },
+          { label: t("adjustColor"), disabled: !picture, action: () => adjustColor() },
+          { label: t("adjustSize"), disabled: !picture, action: () => resizePicture() },
+          { label: t("flipH"), disabled: !picture, action: () => flip(true) },
+          { label: t("flipV"), disabled: !picture, action: () => flip(false) },
         ] as MenuItem[])),
     ...(apercuRapideOption === null
       ? []
       : ([
           "-",
-          { label: "Aperçu rapide avec Espace (Explorateur)", checked: apercuRapideOption, action: () => toggleApercuRapide() },
-          { label: "Utiliser Documents par défaut…", action: () => chooseDefaultApp() },
+          { label: t("quickOption"), checked: apercuRapideOption, action: () => toggleApercuRapide() },
+          { label: t("useDefault"), action: () => chooseDefaultApp() },
         ] as MenuItem[])),
     "-",
     ...(appVersion ? [{ label: `Documents ${appVersion}`, disabled: true, action: () => {} }] : []),
@@ -1432,15 +1431,14 @@ function thumbMenu(p: Page, e: MouseEvent) {
     goTo(state.pages.indexOf(p), false);
   }
   const n = selectedPages().length;
-  const pages = n > 1 ? `les ${n} pages` : "la page";
   showMenu(e.clientX, e.clientY, [
-    { label: "Pivoter à gauche", shortcut: "Ctrl+L", action: () => rotate(-90) },
-    { label: "Pivoter à droite", shortcut: "Ctrl+R", action: () => rotate(90) },
+    { label: t("rotateLeft"), shortcut: "Ctrl+L", action: () => rotate(-90) },
+    { label: t("rotateRight"), shortcut: "Ctrl+R", action: () => rotate(90) },
     "-",
-    { label: `Exporter ${pages} en PDF…`, shortcut: "Ctrl+E", action: () => exportSelection() },
-    { label: "Insérer un fichier après…", action: () => chooseFiles(state.pages.indexOf(p) + 1) },
+    { label: tn("exportPages", Math.max(1, n)), shortcut: "Ctrl+E", action: () => exportSelection() },
+    { label: t("insertAfter"), action: () => chooseFiles(state.pages.indexOf(p) + 1) },
     "-",
-    { label: `Supprimer ${pages}`, shortcut: "Suppr", action: () => deleteSelected() },
+    { label: tn("deletePages", Math.max(1, n)), shortcut: t("kDelete"), action: () => deleteSelected() },
   ]);
 }
 
@@ -1452,7 +1450,7 @@ async function retouchPage(p: Page, r: api.Retouch) {
   try {
     doc = await api.retouchPicture(p.doc.id, r);
   } catch (e) {
-    return toast(`La retouche a échoué : ${e}`);
+    return toast(t("retouchFailed", { error: String(e) }));
   }
   state.docs.push(doc);
   const fresh = makePage(doc, 0);
@@ -1477,7 +1475,7 @@ function cropCurrent() {
     const p = sel.page as Page;
     if (p.doc.kind === "pdf") {
       annot.clearCrop();
-      return toast("Le recadrage marche sur les photos.");
+      return toast(t("cropPhotosOnly"));
     }
     const r = sel.rect;
     annot.clearCrop();
@@ -1485,7 +1483,7 @@ function cropCurrent() {
     return retouchPage(p, { crop: { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.w), h: Math.round(r.h) } });
   }
   const p = state.pages[state.current];
-  if (!p || p.doc.kind === "pdf") return toast("Le recadrage marche sur les photos : ouvrez une image.");
+  if (!p || p.doc.kind === "pdf") return toast(t("cropOpenImage"));
   annot.startCropFrame(p);
 }
 
@@ -1501,11 +1499,11 @@ function showCropBar() {
 function plainPicture(): Page | null {
   const p = state.pages[state.current];
   if (!p || p.doc.kind === "pdf") {
-    toast("Cet outil marche sur les photos : ouvrez une image.");
+    toast(t("toolPhotosOnly"));
     return null;
   }
   if (p.annots.length) {
-    toast("Enregistrez d'abord les annotations de cette photo (Ctrl+S), puis recommencez.");
+    toast(t("saveAnnotsFirst"));
     return null;
   }
   return p;
@@ -1527,14 +1525,16 @@ function resizePicture() {
   const box = document.createElement("div");
   box.className = "resize-form";
   box.innerHTML = `
-    <label class="resize-row"><span>Ajuster à :</span><select id="rs-preset">
-      <option value="">Personnalisée</option><option value="640">640 × 480</option><option value="800">800 × 600</option>
+    <label class="resize-row"><span data-i18n="resizeFitTo"></span><select id="rs-preset">
+      <option value="" data-i18n="resizeCustom"></option><option value="640">640 × 480</option><option value="800">800 × 600</option>
       <option value="1024">1024 × 768</option><option value="1280">1280 × 1024</option><option value="1920">1920 × 1080</option>
-      <option value="50%">50 %</option><option value="25%">25 %</option></select></label>
-    <label class="resize-row"><span>Largeur :</span><input id="rs-w" type="number" min="1" max="30000" /><em>pixels</em></label>
-    <label class="resize-row"><span>Hauteur :</span><input id="rs-h" type="number" min="1" max="30000" /><em>pixels</em></label>
-    <label class="resize-check"><input id="rs-lock" type="checkbox" checked /> Échelle proportionnelle</label>
+      <option value="50%"></option><option value="25%"></option></select></label>
+    <label class="resize-row"><span data-i18n="resizeWidth"></span><input id="rs-w" type="number" min="1" max="30000" /><em data-i18n="pixels"></em></label>
+    <label class="resize-row"><span data-i18n="resizeHeight"></span><input id="rs-h" type="number" min="1" max="30000" /><em data-i18n="pixels"></em></label>
+    <label class="resize-check"><input id="rs-lock" type="checkbox" checked /> <span data-i18n="resizeLock"></span></label>
     <div class="resize-result" id="rs-result"></div>`;
+  translatePage(box);
+  for (const o of box.querySelectorAll<HTMLOptionElement>('option[value$="%"]')) o.textContent = t("percent", { n: parseInt(o.value) });
   const q = <T extends HTMLElement>(id: string) => box.querySelector<T>(`#${id}`)!;
   const wIn = q<HTMLInputElement>("rs-w");
   const hIn = q<HTMLInputElement>("rs-h");
@@ -1544,7 +1544,7 @@ function resizePicture() {
   hIn.value = String(H);
   const show = () => {
     const pct = Math.round((Number(wIn.value) / W) * 100);
-    q("rs-result").textContent = `Taille produite : ${pct} % de l'original (${W} × ${H} pixels).`;
+    q("rs-result").textContent = t("resizeResult", { pct: t("percent", { n: pct }), w: W, h: H });
   };
   wIn.addEventListener("input", () => {
     preset.value = "";
@@ -1568,7 +1568,7 @@ function resizePicture() {
     show();
   });
   show();
-  ask("Dimensions de l'image", "", ["Annuler", "OK"], 1, box).then((choice) => {
+  ask(t("resizeTitle"), "", [t("cancel"), t("ok")], 1, box).then((choice) => {
     const w = Math.round(Number(wIn.value));
     const h = Math.round(Number(hIn.value));
     if (choice !== 1 || !(w >= 1 && h >= 1) || (w === W && h === H)) return;
@@ -1622,7 +1622,7 @@ async function printDoc() {
 
 function adjustColor() {
   const p = state.pages[state.current];
-  if (!p || p.doc.kind === "pdf") return toast("Les réglages de couleur marchent sur les photos : ouvrez une image.");
+  if (!p || p.doc.kind === "pdf") return toast(t("colorPhotosOnly"));
   retouch.open($("tool-adjust"), p, (r) => retouchPage(p, r));
 }
 
@@ -1648,13 +1648,13 @@ $("more-tools").addEventListener("click", () => {
   const none = !state.pages.length;
   const markup = document.body.classList.contains("markup-open");
   showMenu(r.left, r.bottom + 6, [
-    { label: "Annoter", checked: markup, action: () => $("toggle-markup").click() },
+    { label: t("annotate"), checked: markup, action: () => $("toggle-markup").click() },
     "-",
-    { label: "Pivoter à gauche", shortcut: "Ctrl+L", disabled: none, action: () => rotate(-90) },
-    { label: "Pivoter à droite", shortcut: "Ctrl+R", disabled: none, action: () => rotate(90) },
-    ...(onlyPictures() ? [] : [{ label: "Remplir le formulaire", disabled: none, action: () => $("form-fill").click() }]),
+    { label: t("rotateLeft"), shortcut: "Ctrl+L", disabled: none, action: () => rotate(-90) },
+    { label: t("rotateRight"), shortcut: "Ctrl+R", disabled: none, action: () => rotate(90) },
+    ...(onlyPictures() ? [] : [{ label: t("fillForm"), disabled: none, action: () => $("form-fill").click() }]),
     "-",
-    { label: "Inspecteur", shortcut: "Ctrl+I", checked: inspectorOpen(), disabled: none, action: () => toggleInfo() },
+    { label: t("inspector"), shortcut: "Ctrl+I", checked: inspectorOpen(), disabled: none, action: () => toggleInfo() },
   ]);
 });
 // Loupe (petite fenêtre) : un clic ouvre le champ de recherche.
@@ -1899,7 +1899,7 @@ window.addEventListener("blur", closeMenu);
 forms.init(updateTitle);
 document.getElementById("form-fill")!.addEventListener("click", () => {
   const field = document.querySelector<HTMLElement>(".form-layer .field:not(.read-only)");
-  if (!field) return toast("Ce document n'a pas de champs à remplir.");
+  if (!field) return toast(t("noFields"));
   field.scrollIntoView({ block: "center", behavior: "smooth" });
   field.focus({ preventScroll: true });
 });

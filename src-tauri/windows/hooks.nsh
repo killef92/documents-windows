@@ -56,6 +56,9 @@
 ; qui il tourne déjà. La tâche n'a pas de déclencheur : elle reste inerte jusqu'à la prochaine
 ; mise à jour.
 !macro NSIS_HOOK_POSTINSTALL
+  ; Ancien nom du fichier des licences tierces (avant le passage en anglais).
+  Delete "$INSTDIR\LICENCES-TIERS.txt"
+
   nsExec::Exec `powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$$a = New-ScheduledTaskAction -Execute '$INSTDIR\${MAINBINARYNAME}.exe' -Argument '--apercu-rapide'; $$p = New-ScheduledTaskPrincipal -GroupId 'S-1-5-32-545' -RunLevel Limited; $$s = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances Parallel; Register-ScheduledTask -TaskName '${APERCU_RAPIDE_TASK}' -Action $$a -Principal $$p -Settings $$s -Force | Out-Null; Start-ScheduledTask -TaskName '${APERCU_RAPIDE_TASK}'"`
   Pop $0
 

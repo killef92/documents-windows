@@ -489,7 +489,7 @@ fn pdf_text(s: &str) -> Object {
 pub(crate) fn fill(bytes: &[u8], fills: &[FieldFill]) -> Result<Vec<u8>, String> {
     let mut doc = Document::load_mem(bytes).map_err(|e| e.to_string())?;
     if doc.is_encrypted() {
-        return Err("PDF chiffré".into());
+        return Err("encrypted PDF".into());
     }
     for f in fills {
         let Some(field_id) = parse_id(&f.id) else { continue };

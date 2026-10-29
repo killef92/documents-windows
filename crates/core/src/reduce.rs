@@ -34,10 +34,10 @@ impl Level {
 const MAX_IMAGE_BYTES: usize = 300 * 1024 * 1024;
 
 /// Renvoie le PDF réduit ; s'il n'est pas plus petit, renvoie l'original.
-pub fn reduce(bytes: &[u8], level: Level) -> Result<Vec<u8>, String> {
-    let mut doc = Document::load_mem(bytes).map_err(|e| e.to_string())?;
+pub fn reduce(bytes: &[u8], level: Level) -> crate::Result<Vec<u8>> {
+    let mut doc = Document::load_mem(bytes).map_err(|e| crate::Error::BrokenPdf(e.to_string()))?;
     if doc.is_encrypted() {
-        return Err("ce PDF est protégé par un mot de passe".into());
+        return Err(crate::Error::PasswordProtected);
     }
     let (max_side, quality) = level.params();
     // Les masques de transparence restent tels quels (ils vont avec leur image).
@@ -65,7 +65,7 @@ pub fn reduce(bytes: &[u8], level: Level) -> Result<Vec<u8>, String> {
     doc.prune_objects();
     doc.compress();
     let mut out = Vec::new();
-    doc.save_modern(&mut out).map_err(|e| e.to_string())?;
+    doc.save_modern(&mut out).map_err(|e| crate::Error::SaveFailed(e.to_string()))?;
     Ok(if out.len() < bytes.len() { out } else { bytes.to_vec() })
 }
 
@@ -236,5 +236,10 @@ mod tests {
         let out = reduce(&original, Level::Forte).unwrap();
         assert!(out.len() <= original.len());
         assert_eq!(image_of(&out).get(b"Width").unwrap().as_i64().unwrap(), 40);
+    }
+
+    #[test]
+    fn refuse_ce_qui_n_est_pas_un_pdf() {
+        assert!(matches!(reduce(b"pas un pdf", Level::Forte), Err(crate::Error::BrokenPdf(_))));
     }
 }

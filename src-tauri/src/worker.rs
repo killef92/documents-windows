@@ -13,6 +13,8 @@ use documents_core::reduce::Level;
 use documents_core::{DocDetails, DocId, DocInfo, Library, PageRef, PageText, RenderedImage, Retouch, Rotation, SearchHit};
 use serde::Serialize;
 
+use crate::i18n;
+
 #[derive(Debug, Clone, Serialize)]
 pub struct OpenError {
     pub name: String,
@@ -158,7 +160,7 @@ fn run(mut library: Library, rx: Receiver<Job>) {
                         Ok(info) => result.docs.push(info),
                         Err(e) => result.errors.push(OpenError {
                             name: path.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default(),
-                            message: e.to_string(),
+                            message: i18n::error(&e),
                         }),
                     }
                 }
@@ -169,30 +171,30 @@ fn run(mut library: Library, rx: Receiver<Job>) {
                 let _ = reply.send(library.search(&query));
             }
             Job::SavePdfReduced(pages, fills, level, dest, reply) => {
-                let _ = reply.send(library.save_pdf_reduced(&pages, &fills, level, &dest).map_err(|e| e.to_string()));
+                let _ = reply.send(library.save_pdf_reduced(&pages, &fills, level, &dest).map_err(|e| i18n::error(&e)));
             }
             Job::SavePdf(pages, fills, dest, reply) => {
-                let _ = reply.send(library.save_pdf_filled(&pages, &fills, &dest).map_err(|e| e.to_string()));
+                let _ = reply.send(library.save_pdf_filled(&pages, &fills, &dest).map_err(|e| i18n::error(&e)));
             }
             Job::Retouch(doc, retouch, reply) => {
-                let _ = reply.send(library.retouch_picture(doc, &retouch).map_err(|e| e.to_string()));
+                let _ = reply.send(library.retouch_picture(doc, &retouch).map_err(|e| i18n::error(&e)));
             }
             Job::FormFields(doc, reply) => {
-                let _ = reply.send(library.form_fields(doc).map_err(|e| e.to_string()));
+                let _ = reply.send(library.form_fields(doc).map_err(|e| i18n::error(&e)));
             }
             Job::SavePicture(doc, rotation, dest, reply) => {
-                let _ = reply.send(library.save_picture(doc, rotation, &dest).map_err(|e| e.to_string()));
+                let _ = reply.send(library.save_picture(doc, rotation, &dest).map_err(|e| i18n::error(&e)));
             }
             Job::SavePicturePixels(doc, png, dest, reply) => {
-                let _ = reply.send(library.save_picture_pixels(doc, &png, &dest).map_err(|e| e.to_string()));
+                let _ = reply.send(library.save_picture_pixels(doc, &png, &dest).map_err(|e| i18n::error(&e)));
             }
             Job::Details(doc, reply) => {
-                let _ = reply.send(library.details(doc).map_err(|e| e.to_string()));
+                let _ = reply.send(library.details(doc).map_err(|e| i18n::error(&e)));
             }
             Job::PageText(doc, page, reply) => {
-                let _ = reply.send(library.page_text(doc, page).map_err(|e| e.to_string()));
+                let _ = reply.send(library.page_text(doc, page).map_err(|e| i18n::error(&e)));
             }
-            Job::Render(r, reply) => reply(library.render_with(r.doc, r.page, r.width, r.rotation, r.forms).map_err(|e| e.to_string())),
+            Job::Render(r, reply) => reply(library.render_with(r.doc, r.page, r.width, r.rotation, r.forms).map_err(|e| i18n::error(&e))),
         }
     }
 }

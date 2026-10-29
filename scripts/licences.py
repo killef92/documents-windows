@@ -1,4 +1,4 @@
-"""Génère LICENCES-TIERS.txt : le texte de licence de chaque bibliothèque livrée dans l'appli.
+"""Génère THIRD-PARTY-LICENSES.txt : le texte de licence de chaque bibliothèque livrée dans l'appli.
 
 Usage : python3 scripts/licences.py  (après `npm ci` et `cargo fetch`)
 """
@@ -32,7 +32,7 @@ for chemin, p in lock["packages"].items():
         nom = chemin.split("node_modules/")[-1]
         paquets[(nom, p["version"])] = (p.get("license"), os.path.join(RACINE, chemin))
 
-sortie = ["Documents — licences des bibliothèques tierces", "=" * 60, ""]
+sortie = ["Documents — third-party library licenses", "=" * 60, ""]
 sans_texte = []
 deja_vus = {}  # texte identique -> paquet où il est écrit en entier (évite des centaines de copies)
 for (nom, version), (licence, dossier) in sorted(paquets.items()):
@@ -40,10 +40,10 @@ for (nom, version), (licence, dossier) in sorted(paquets.items()):
     t = textes(dossier)
     if not t:
         sans_texte.append(nom)
-        sortie.append(f"Pas de fichier de licence fourni : texte standard de « {licence} » en fin de document.")
+        sortie.append(f"No license file provided: standard text of \"{licence}\" at the end of this document.")
     for _, contenu in t:
         if contenu in deja_vus:
-            sortie.append(f"(Texte identique à celui de {deja_vus[contenu]}, ci-dessus.)")
+            sortie.append(f"(Same text as {deja_vus[contenu]}, above.)")
         else:
             deja_vus[contenu] = f"{nom} {version}"
             sortie += [contenu, ""]
@@ -55,13 +55,13 @@ for f in sorted(glob.glob(os.path.join(RACINE, "vendor", "pdfium", "*", "LICENSE
     sortie += ["-" * 60, f"PDFium ({os.path.basename(os.path.dirname(f))}) — BSD-3-Clause / Apache-2.0", "-" * 60,
                open(f, encoding="utf-8", errors="replace").read().strip(), ""]
     for g in sorted(glob.glob(os.path.join(os.path.dirname(f), "licenses", "*"))):
-        sortie += ["-" * 60, f"Contenu dans PDFium : {os.path.basename(g)}", "-" * 60,
+        sortie += ["-" * 60, f"Included in PDFium: {os.path.basename(g)}", "-" * 60,
                    open(g, encoding="utf-8", errors="replace").read().strip(), ""]
     break
 
-sortie += ["=" * 60, "Textes standard", "=" * 60, ""]
+sortie += ["=" * 60, "Standard texts", "=" * 60, ""]
 for f in sorted(glob.glob(os.path.join(RACINE, "scripts", "licences-standard", "*.txt"))):
     sortie += ["-" * 60, os.path.basename(f)[:-4], "-" * 60, open(f, encoding="utf-8").read().strip(), ""]
 
-open(os.path.join(RACINE, "LICENCES-TIERS.txt"), "w", encoding="utf-8").write("\n".join(sortie))
+open(os.path.join(RACINE, "THIRD-PARTY-LICENSES.txt"), "w", encoding="utf-8").write("\n".join(sortie))
 print(f"{len(paquets)} bibliothèques, {len(sans_texte)} sans fichier de licence : {', '.join(sans_texte)}")

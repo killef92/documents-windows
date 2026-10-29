@@ -86,7 +86,7 @@ impl Thumbs {
         drop(state);
         ready.notify_one();
         for r in dropped {
-            r(Err("abandonnée".into()));
+            r(Err("cancelled".into()));
         }
     }
 }

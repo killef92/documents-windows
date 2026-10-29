@@ -1,4 +1,4 @@
-Documents — licences des bibliothèques tierces
+Documents — third-party library licenses
 ============================================================
 
 ------------------------------------------------------------
@@ -102,7 +102,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 ------------------------------------------------------------
 @fontsource-variable/geist-mono 5.2.7 — OFL-1.1
 ------------------------------------------------------------
-(Texte identique à celui de @fontsource-variable/geist 5.2.8, ci-dessus.)
+(Same text as @fontsource-variable/geist 5.2.8, above.)
 
 ------------------------------------------------------------
 @tauri-apps/api 2.12.4 — Apache-2.0 OR MIT
@@ -356,12 +356,12 @@ Creator: Person: Daniel Thompson-Yvetot
 ------------------------------------------------------------
 @tauri-apps/plugin-process 2.4.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
 
 ------------------------------------------------------------
 @tauri-apps/plugin-updater 2.14.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
 
 ------------------------------------------------------------
 adler2 2.0.1 — 0BSD OR MIT OR Apache-2.0
@@ -1172,17 +1172,17 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ------------------------------------------------------------
 alloc-no-stdlib 3.0.0 — BSD-3-Clause
 ------------------------------------------------------------
-(Texte identique à celui de alloc-no-stdlib 2.0.4, ci-dessus.)
+(Same text as alloc-no-stdlib 2.0.4, above.)
 
 ------------------------------------------------------------
 alloc-stdlib 0.2.4 — BSD-3-Clause
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « BSD-3-Clause » en fin de document.
+No license file provided: standard text of "BSD-3-Clause" at the end of this document.
 
 ------------------------------------------------------------
 alloc-stdlib 0.3.0 — BSD-3-Clause
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « BSD-3-Clause » en fin de document.
+No license file provided: standard text of "BSD-3-Clause" at the end of this document.
 
 ------------------------------------------------------------
 anyhow 1.0.104 — MIT OR Apache-2.0
@@ -1364,7 +1364,7 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
 END OF TERMS AND CONDITIONS
 
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 arg_enum_proc_macro 0.3.4 — MIT
@@ -1395,7 +1395,7 @@ SOFTWARE.
 ------------------------------------------------------------
 arrayvec 0.7.8 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) Ulrik Sverdrup "bluss" 2015-2023
 
 Permission is hereby granted, free of charge, to any
@@ -1426,7 +1426,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 as-slice 0.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2018 Jorge Aparicio
 
 Permission is hereby granted, free of charge, to any
@@ -1457,8 +1457,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 atomic-waker 1.1.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as adler2 2.0.1, above.)
 ===============================================================================
 
 Copyright (c) 2016 Alex Crichton
@@ -1509,7 +1509,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 autocfg 1.5.1 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2018 Josh Stone
 
 Permission is hereby granted, free of charge, to any
@@ -1630,7 +1630,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------
 base64 0.23.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 The MIT License (MIT)
 
 Copyright (c) 2025 Alice Maz, Marshall Pierce
@@ -1889,8 +1889,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 bit-vec 0.8.0 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de bit-set 0.8.0, ci-dessus.)
-(Texte identique à celui de bit-set 0.8.0, ci-dessus.)
+(Same text as bit-set 0.8.0, above.)
+(Same text as bit-set 0.8.0, above.)
 
 ------------------------------------------------------------
 bit_field 0.10.3 — Apache-2.0/MIT
@@ -2123,7 +2123,7 @@ SOFTWARE.
 ------------------------------------------------------------
 bitflags 1.3.2 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2014 The Rust Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -2154,13 +2154,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 bitflags 2.13.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 bitstream-io 4.10.0 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2017 Brian Langenberger
 
 Permission is hereby granted, free of charge, to any
@@ -2191,7 +2191,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 block-buffer 0.10.4 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2018-2019 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -2222,7 +2222,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 block-buffer 0.12.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2018-2025 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -2253,13 +2253,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 block-padding 0.4.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
-(Texte identique à celui de block-buffer 0.12.1, ci-dessus.)
+(Same text as aes 0.9.3, above.)
+(Same text as block-buffer 0.12.1, above.)
 
 ------------------------------------------------------------
 brotli 9.1.1 — BSD-3-Clause AND MIT
 ------------------------------------------------------------
-(Texte identique à celui de alloc-no-stdlib 2.0.4, ci-dessus.)
+(Same text as alloc-no-stdlib 2.0.4, above.)
 Copyright (c) 2009, 2010, 2013-2016 by the Brotli Authors.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2284,17 +2284,17 @@ THE SOFTWARE.
 ------------------------------------------------------------
 brotli-decompressor 5.0.3 — BSD-3-Clause/MIT
 ------------------------------------------------------------
-(Texte identique à celui de alloc-no-stdlib 2.0.4, ci-dessus.)
+(Same text as alloc-no-stdlib 2.0.4, above.)
 
 ------------------------------------------------------------
 brotli-decompressor 6.2.0 — BSD-3-Clause/MIT
 ------------------------------------------------------------
-(Texte identique à celui de alloc-no-stdlib 2.0.4, ci-dessus.)
+(Same text as alloc-no-stdlib 2.0.4, above.)
 
 ------------------------------------------------------------
 bs58 0.5.1 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 MIT License
 Copyright (c) 2016 The roaring-rs developers.
 
@@ -2346,7 +2346,7 @@ SOFTWARE.
 ------------------------------------------------------------
 bumpalo 3.20.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2019 Nick Fitzgerald
 
 Permission is hereby granted, free of charge, to any
@@ -2465,15 +2465,15 @@ Permission is granted to anyone to use this software for any purpose, including 
 ------------------------------------------------------------
 byteorder 1.5.0 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 byteorder-lite 0.1.0 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 bytes 1.12.1 — MIT
@@ -2508,19 +2508,19 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 camino 1.2.6 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 cargo-platform 0.1.9 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as adler2 2.0.1, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 cargo_metadata 0.19.2 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 cargo_toml 1.0.1 — Apache-2.0 OR MIT
@@ -2732,7 +2732,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 cbc 0.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2018-2022 RustCrypto Developers
 Copyright (c) 2018 Artyom Pavlov
 
@@ -2764,7 +2764,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 cc 1.10.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2014 Alex Crichton
 
 Permission is hereby granted, free of charge, to any
@@ -2821,13 +2821,13 @@ SOFTWARE.
 ------------------------------------------------------------
 cfg-if 1.0.5 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 chacha20 0.10.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2019-2026 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -3102,7 +3102,7 @@ limitations under the License.
 ------------------------------------------------------------
 cipher 0.5.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2016-2025 RustCrypto Developers
 
 Permission is hereby granted, free of charge, to any
@@ -3159,7 +3159,7 @@ SOFTWARE.
 ------------------------------------------------------------
 const-oid 0.10.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2020-2026 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -3424,7 +3424,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 core_detect 1.0.0 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2017-2020 The Rust Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -3455,7 +3455,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 cpubits 0.1.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2023-2026 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -3486,7 +3486,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 cpufeatures 0.2.17 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2020-2025 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -3517,13 +3517,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 cpufeatures 0.3.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
-(Texte identique à celui de const-oid 0.10.2, ci-dessus.)
+(Same text as aes 0.9.3, above.)
+(Same text as const-oid 0.10.2, above.)
 
 ------------------------------------------------------------
 crc32fast 1.5.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 MIT License
 
 Copyright (c) 2018 Sam Rijs, Alex Crichton and contributors
@@ -3550,7 +3550,7 @@ SOFTWARE.
 ------------------------------------------------------------
 crossbeam-channel 0.5.17 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 The MIT License (MIT)
 
 Copyright (c) 2019 The Crossbeam Project Developers
@@ -4177,25 +4177,25 @@ limitations under the License.
 ------------------------------------------------------------
 crossbeam-deque 0.8.8 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de crossbeam-channel 0.5.17, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as crossbeam-channel 0.5.17, above.)
 
 ------------------------------------------------------------
 crossbeam-epoch 0.9.21 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de crossbeam-channel 0.5.17, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as crossbeam-channel 0.5.17, above.)
 
 ------------------------------------------------------------
 crossbeam-utils 0.8.23 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de crossbeam-channel 0.5.17, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as crossbeam-channel 0.5.17, above.)
 
 ------------------------------------------------------------
 crypto-common 0.1.7 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2021 RustCrypto Developers
 
 Permission is hereby granted, free of charge, to any
@@ -4226,7 +4226,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 crypto-common 0.2.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2021-2026 RustCrypto Developers
 
 Permission is hereby granted, free of charge, to any
@@ -4635,12 +4635,12 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 ------------------------------------------------------------
 cssparser-macros 0.7.1 — MPL-2.0
 ------------------------------------------------------------
-(Texte identique à celui de cssparser 0.37.0, ci-dessus.)
+(Same text as cssparser 0.37.0, above.)
 
 ------------------------------------------------------------
 ctor 1.0.13 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -4677,17 +4677,17 @@ SOFTWARE.
 ------------------------------------------------------------
 darling_core 0.24.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de darling 0.24.1, ci-dessus.)
+(Same text as darling 0.24.1, above.)
 
 ------------------------------------------------------------
 darling_macro 0.24.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de darling 0.24.1, ci-dessus.)
+(Same text as darling 0.24.1, above.)
 
 ------------------------------------------------------------
 defmt 1.2.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit-set 0.8.0, ci-dessus.)
+(Same text as bit-set 0.8.0, above.)
 Copyright (c) Ferrous Systems
 
 Permission is hereby granted, free of charge, to any
@@ -4718,14 +4718,14 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 defmt-macros 1.2.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit-set 0.8.0, ci-dessus.)
-(Texte identique à celui de defmt 1.2.0, ci-dessus.)
+(Same text as bit-set 0.8.0, above.)
+(Same text as defmt 1.2.0, above.)
 
 ------------------------------------------------------------
 defmt-parser 1.1.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit-set 0.8.0, ci-dessus.)
-(Texte identique à celui de defmt 1.2.0, ci-dessus.)
+(Same text as bit-set 0.8.0, above.)
+(Same text as defmt 1.2.0, above.)
 
 ------------------------------------------------------------
 deranged 0.5.9 — MIT OR Apache-2.0
@@ -4982,12 +4982,12 @@ SOFTWARE.
 ------------------------------------------------------------
 derive_more-impl 2.1.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de derive_more 2.1.1, ci-dessus.)
+(Same text as derive_more 2.1.1, above.)
 
 ------------------------------------------------------------
 digest 0.10.7 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2017 Artyom Pavlov
 
 Permission is hereby granted, free of charge, to any
@@ -5018,7 +5018,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 digest 0.11.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2017-2025 RustCrypto Developers
 Copyright (c) 2017 Artyom Pavlov
 
@@ -5249,14 +5249,14 @@ SOFTWARE.
 ------------------------------------------------------------
 dirs-sys 0.5.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de dirs 7.0.0, ci-dessus.)
-(Texte identique à celui de dirs 7.0.0, ci-dessus.)
+(Same text as dirs 7.0.0, above.)
+(Same text as dirs 7.0.0, above.)
 
 ------------------------------------------------------------
 displaydoc 0.2.7 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 dom_query 0.28.0 — MIT
@@ -5293,7 +5293,7 @@ developed by Chen Jiaju, licensed under the MIT License and the Apache License 2
 ------------------------------------------------------------
 dpi 0.1.2 — Apache-2.0 AND MIT
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 rust-lang/libm as a whole is available for use under the MIT license:
 
 ------------------------------------------------------------------------------
@@ -5350,8 +5350,8 @@ have been licensed under extremely permissive terms.
 ------------------------------------------------------------
 dtoa 1.0.11 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 dtoa-short 0.3.5 — MPL-2.0
@@ -5860,13 +5860,13 @@ express Statement of Purpose.
 ------------------------------------------------------------
 dyn-clone 1.0.20 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 ecb 0.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2026 RustCrypto Developers
 
 Permission is hereby granted, free of charge, to any
@@ -5897,7 +5897,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 either 1.19.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2015
 
 Permission is hereby granted, free of charge, to any
@@ -6239,12 +6239,12 @@ SOFTWARE.
 ------------------------------------------------------------
 equator-macro 0.4.2 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de equator 0.4.2, ci-dessus.)
+(Same text as equator 0.4.2, above.)
 
 ------------------------------------------------------------
 equivalent 1.0.3 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2016--2023
 
 Permission is hereby granted, free of charge, to any
@@ -6275,8 +6275,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 erased-serde 0.4.11 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 exr 1.74.2 — BSD-3-Clause
@@ -6319,13 +6319,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ------------------------------------------------------------
 fastrand 2.5.0 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 fdeflate 0.3.7 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 MIT License
 
 Permission is hereby granted, free of charge, to any
@@ -6356,13 +6356,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 find-msvc-tools 0.1.15 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 flate2 1.1.10 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2014-2026 Alex Crichton
 
 Permission is hereby granted, free of charge, to any
@@ -6393,7 +6393,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 fnv 1.0.7 — Apache-2.0 / MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2017 Contributors
 
 Permission is hereby granted, free of charge, to any
@@ -6448,7 +6448,7 @@ the following restrictions:
 ------------------------------------------------------------
 form_urlencoded 1.2.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2013-2016 The rust-url developers
 
 Permission is hereby granted, free of charge, to any
@@ -6713,38 +6713,38 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 futures-core 0.3.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
+(Same text as futures-channel 0.3.34, above.)
+(Same text as futures-channel 0.3.34, above.)
 
 ------------------------------------------------------------
 futures-io 0.3.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
+(Same text as futures-channel 0.3.34, above.)
+(Same text as futures-channel 0.3.34, above.)
 
 ------------------------------------------------------------
 futures-macro 0.3.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
+(Same text as futures-channel 0.3.34, above.)
+(Same text as futures-channel 0.3.34, above.)
 
 ------------------------------------------------------------
 futures-sink 0.3.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
+(Same text as futures-channel 0.3.34, above.)
+(Same text as futures-channel 0.3.34, above.)
 
 ------------------------------------------------------------
 futures-task 0.3.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
+(Same text as futures-channel 0.3.34, above.)
+(Same text as futures-channel 0.3.34, above.)
 
 ------------------------------------------------------------
 futures-util 0.3.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
-(Texte identique à celui de futures-channel 0.3.34, ci-dessus.)
+(Same text as futures-channel 0.3.34, above.)
+(Same text as futures-channel 0.3.34, above.)
 
 ------------------------------------------------------------
 generic-array 0.14.7 — MIT
@@ -7008,7 +7008,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 getrandom 0.3.4 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de getrandom 0.2.17, ci-dessus.)
+(Same text as getrandom 0.2.17, above.)
 Copyright (c) 2018-2025 The rust-random Project Developers
 Copyright (c) 2014 The Rust Project Developers
 
@@ -7040,7 +7040,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 getrandom 0.4.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de getrandom 0.2.17, ci-dessus.)
+(Same text as getrandom 0.2.17, above.)
 Copyright (c) 2018-2026 The rust-random Project Developers
 Copyright (c) 2014 The Rust Project Developers
 
@@ -7072,7 +7072,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 gif 0.14.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 The MIT License (MIT)
 
 Copyright (c) 2015 nwin
@@ -7099,13 +7099,13 @@ SOFTWARE.
 ------------------------------------------------------------
 glob 0.3.4 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 half 2.7.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -7130,7 +7130,7 @@ SOFTWARE.
 ------------------------------------------------------------
 hashbrown 0.12.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2016 Amanieu d'Antras
 
 Permission is hereby granted, free of charge, to any
@@ -7161,13 +7161,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 hashbrown 0.17.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de hashbrown 0.12.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as hashbrown 0.12.3, above.)
 
 ------------------------------------------------------------
 heck 0.5.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2015 The Rust Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -7198,7 +7198,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 hex 0.4.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 Copyright (c) 2013-2014 The Rust Project Developers.
 Copyright (c) 2015-2020 The rust-hex Developers
 
@@ -7224,7 +7224,7 @@ SOFTWARE.
 ------------------------------------------------------------
 html5ever 0.39.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2014 The html5ever Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -7517,12 +7517,12 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 http-body-util 0.1.5 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de http-body 1.1.0, ci-dessus.)
+(Same text as http-body 1.1.0, above.)
 
 ------------------------------------------------------------
 httparse 1.10.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2015-2025 Sean McArthur
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -7547,7 +7547,7 @@ THE SOFTWARE.
 ------------------------------------------------------------
 hybrid-array 0.4.15 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2022-2026 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -7602,7 +7602,7 @@ THE SOFTWARE.
 ------------------------------------------------------------
 hyper-rustls 0.27.10 — Apache-2.0 OR ISC OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 ISC License (ISC)
 Copyright (c) 2016, Joseph Birr-Pixton <jpixton@gmail.com>
 
@@ -7750,42 +7750,42 @@ ICU 1.8.1 to ICU 57.1 © 1995-2016 International Business Machines Corporation a
 ------------------------------------------------------------
 icu_locale_core 2.4.0 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 icu_normalizer 2.4.0 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 icu_normalizer_data 2.4.0 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 icu_properties 2.4.0 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 icu_properties_data 2.4.0 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 icu_provider 2.4.0 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 ident_case 1.0.1 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de half 2.7.1, ci-dessus.)
+(Same text as half 2.7.1, above.)
 
 ------------------------------------------------------------
 idna 1.1.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2013-2025 The rust-url developers
 
 Permission is hereby granted, free of charge, to any
@@ -7816,7 +7816,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 idna_adapter 1.2.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) The rust-url developers
 
 Permission is hereby granted, free of charge, to any
@@ -7847,25 +7847,25 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 image 0.25.10 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de fdeflate 0.3.7, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as fdeflate 0.3.7, above.)
 
 ------------------------------------------------------------
 image-webp 0.2.4 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de fdeflate 0.3.7, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as fdeflate 0.3.7, above.)
 
 ------------------------------------------------------------
 imgref 1.12.3 — CC0-1.0 OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
-(Texte identique à celui de dunce 1.0.5, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
+(Same text as dunce 1.0.5, above.)
 
 ------------------------------------------------------------
 indexmap 1.9.3 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2016--2017
 
 Permission is hereby granted, free of charge, to any
@@ -7896,8 +7896,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 indexmap 2.14.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de indexmap 1.9.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as indexmap 1.9.3, above.)
 
 ------------------------------------------------------------
 infer 0.22.0 — MIT
@@ -7928,7 +7928,7 @@ SOFTWARE.
 ------------------------------------------------------------
 inout 0.2.5 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2022-2025 The RustCrypto Project Developers
 Copyright (c) 2022 Artyom Pavlov
 
@@ -8174,59 +8174,59 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ------------------------------------------------------------
 itertools 0.14.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de either 1.19.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as either 1.19.0, above.)
 
 ------------------------------------------------------------
 itertools 0.15.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de either 1.19.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as either 1.19.0, above.)
 
 ------------------------------------------------------------
 itoa 1.0.18 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 jiff 0.2.38 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 jiff-core 0.1.1 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 jiff-tzdb 0.1.9 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 jiff-tzdb-platform 0.1.3 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 jobserver 0.1.35 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 json-patch 4.2.0 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 MIT License
 
 Copyright (c) 2017 Ivan Dubrov
@@ -8481,7 +8481,7 @@ SOFTWARE.
 ------------------------------------------------------------
 keyboard-types 0.8.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2017 Pyfisch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -8537,7 +8537,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------
 libc 0.2.191 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
 Copyright (c) The Rust Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -8848,12 +8848,12 @@ Copyright notices are retained in src/* files where relevant.
 ------------------------------------------------------------
 litemap 0.8.3 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 lock_api 0.4.14 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2016 The Rust Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -8884,8 +8884,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 log 0.4.34 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 loop9 0.1.5 — MIT
@@ -8976,8 +8976,8 @@ SOFTWARE.
 ------------------------------------------------------------
 markup5ever 0.39.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de html5ever 0.39.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as html5ever 0.39.0, above.)
 
 ------------------------------------------------------------
 maybe-owned 0.3.4 — MIT OR Apache-2.0
@@ -9240,7 +9240,7 @@ SOFTWARE.
 ------------------------------------------------------------
 md-5 0.11.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2016-2026 The RustCrypto Project Developers
 Copyright (c) 2016 Artyom Pavlov
 Copyright (c) 2009-2013 Mozilla Foundation
@@ -9274,14 +9274,14 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 memchr 2.8.3 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 mime 0.3.17 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2014 Sean McArthur
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9396,7 +9396,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 MIT License
 
 Copyright 2013-2014 RAD Game Tools and Valve Software
@@ -9441,10 +9441,10 @@ Permission is granted to anyone to use this software for any purpose, including 
 ------------------------------------------------------------
 miniz_oxide 0.9.1 — MIT OR Zlib OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de miniz_oxide 0.8.9, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de miniz_oxide 0.8.9, ci-dessus.)
-(Texte identique à celui de miniz_oxide 0.8.9, ci-dessus.)
+(Same text as miniz_oxide 0.8.9, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as miniz_oxide 0.8.9, above.)
+(Same text as miniz_oxide 0.8.9, above.)
 
 ------------------------------------------------------------
 mio 1.2.4 — MIT
@@ -9706,7 +9706,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------
 muda 0.20.0 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 MIT License
 
 Copyright (c) 2022-2022 Tauri Programme within The Commons Conservancy
@@ -9753,8 +9753,8 @@ Creator: Person: Daniel Thompson-Yvetot
 ------------------------------------------------------------
 multiversion_no_op 1.0.0 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
+(Same text as encoding_rs 0.8.42, above.)
 
 ------------------------------------------------------------
 new_debug_unreachable 1.0.6 — MIT
@@ -9789,7 +9789,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 no_std_io2 0.9.4 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 Copyright (c) 2020-2021  Brendan Molloy <brendan@bbqsrc.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9865,19 +9865,19 @@ SOFTWARE.
 ------------------------------------------------------------
 num-bigint 0.4.8 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 num-complex 0.4.6 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 num-conv 0.2.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 Copyright (c) Jacob Pratt
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9902,32 +9902,32 @@ SOFTWARE.
 ------------------------------------------------------------
 num-derive 0.4.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 num-integer 0.1.47 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 num-rational 0.4.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 num-traits 0.2.19 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 once_cell 1.21.4 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 option-ext 0.2.0 — MPL-2.0
@@ -10310,26 +10310,26 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 ------------------------------------------------------------
 parking_lot 0.12.5 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de lock_api 0.4.14, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as lock_api 0.4.14, above.)
 
 ------------------------------------------------------------
 parking_lot_core 0.9.12 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de lock_api 0.4.14, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as lock_api 0.4.14, above.)
 
 ------------------------------------------------------------
 paste 1.0.15 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 pastey 0.1.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 pdfium-render 0.9.4 — MIT OR Apache-2.0
@@ -10345,8 +10345,8 @@ at your option.
 ------------------------------------------------------------
 percent-encoding 2.3.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de idna 1.1.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as idna 1.1.0, above.)
 
 ------------------------------------------------------------
 phf 0.13.1 — MIT
@@ -10376,28 +10376,28 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 phf_codegen 0.13.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de phf 0.13.1, ci-dessus.)
+(Same text as phf 0.13.1, above.)
 
 ------------------------------------------------------------
 phf_generator 0.13.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de phf 0.13.1, ci-dessus.)
+(Same text as phf 0.13.1, above.)
 
 ------------------------------------------------------------
 phf_macros 0.13.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de phf 0.13.1, ci-dessus.)
+(Same text as phf 0.13.1, above.)
 
 ------------------------------------------------------------
 phf_shared 0.13.1 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de phf 0.13.1, ci-dessus.)
+(Same text as phf 0.13.1, above.)
 
 ------------------------------------------------------------
 pin-project-lite 0.2.17 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 piston-float 1.0.1 — MIT
@@ -10452,7 +10452,7 @@ SOFTWARE.
 ------------------------------------------------------------
 png 0.18.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2015 nwin
 
 Permission is hereby granted, free of charge, to any
@@ -10483,7 +10483,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 potential_utf 0.1.6 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 powerfmt 0.2.1 — MIT OR Apache-2.0
@@ -10740,18 +10740,18 @@ SOFTWARE.
 ------------------------------------------------------------
 proc-macro2 1.0.107 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 profiling 1.0.18 — MIT OR Apache-2.0
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT OR Apache-2.0 » en fin de document.
+No license file provided: standard text of "MIT OR Apache-2.0" at the end of this document.
 
 ------------------------------------------------------------
 profiling-procmacros 1.0.18 — MIT OR Apache-2.0
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT OR Apache-2.0 » en fin de document.
+No license file provided: standard text of "MIT OR Apache-2.0" at the end of this document.
 
 ------------------------------------------------------------
 pulp 0.22.3 — MIT
@@ -10782,18 +10782,18 @@ SOFTWARE.
 ------------------------------------------------------------
 pulp-wasm-simd-flag 0.1.1 — MIT
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT » en fin de document.
+No license file provided: standard text of "MIT" at the end of this document.
 
 ------------------------------------------------------------
 pxfm 0.1.30 — BSD-3-Clause OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de moxcms 0.8.1, ci-dessus.)
-(Texte identique à celui de moxcms 0.8.1, ci-dessus.)
+(Same text as moxcms 0.8.1, above.)
+(Same text as moxcms 0.8.1, above.)
 
 ------------------------------------------------------------
 quick-error 2.0.1 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 Copyright (c) 2015 The quick-error Developers
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -10846,8 +10846,8 @@ THE SOFTWARE.
 ------------------------------------------------------------
 quote 1.0.47 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 rand 0.10.3 — MIT OR Apache-2.0
@@ -11571,7 +11571,7 @@ THE SOFTWARE.
 ------------------------------------------------------------
 raw-window-handle 0.6.2 — MIT OR Apache-2.0 OR Zlib
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 MIT License
 
 Copyright (c) 2019 Osspial
@@ -11610,7 +11610,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 ------------------------------------------------------------
 rayon 1.12.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2010 The Rust Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -11641,43 +11641,43 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 rayon-core 1.13.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de rayon 1.12.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as rayon 1.12.0, above.)
 
 ------------------------------------------------------------
 reborrow 0.5.5 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned-vec 0.6.4, ci-dessus.)
+(Same text as aligned-vec 0.6.4, above.)
 
 ------------------------------------------------------------
 ref-cast 1.0.27 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 ref-cast-impl 1.0.27 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 regex 1.13.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 regex-automata 0.4.18 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 regex-syntax 0.8.11 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de bitflags 1.3.2, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as bitflags 1.3.2, above.)
 
 ------------------------------------------------------------
 reqwest 0.13.5 — MIT OR Apache-2.0
@@ -12260,21 +12260,21 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ------------------------------------------------------------
 rustc-hash 2.1.3 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 rustc_version 0.4.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de lock_api 0.4.14, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as lock_api 0.4.14, above.)
 
 ------------------------------------------------------------
 rustls 0.23.46 — Apache-2.0 OR ISC OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de hyper-rustls 0.27.10, ci-dessus.)
-(Texte identique à celui de hyper-rustls 0.27.10, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as hyper-rustls 0.27.10, above.)
+(Same text as hyper-rustls 0.27.10, above.)
 
 ------------------------------------------------------------
 rustls-pki-types 1.15.1 — MIT OR Apache-2.0
@@ -12511,7 +12511,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 rustls-platform-verifier 0.7.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
 MIT License
 
 Copyright (c) 2022 1Password
@@ -12562,13 +12562,13 @@ third-party/chromium/LICENSE.
 ------------------------------------------------------------
 rustversion 1.0.23 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 same-file 1.0.6 — Unlicense/MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
 The MIT License (MIT)
 
 Copyright (c) 2017 Andrew Gallant
@@ -12591,7 +12591,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 schemars 0.8.22 — MIT
@@ -12622,22 +12622,22 @@ SOFTWARE.
 ------------------------------------------------------------
 schemars 0.9.0 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de schemars 0.8.22, ci-dessus.)
+(Same text as schemars 0.8.22, above.)
 
 ------------------------------------------------------------
 schemars 1.2.3 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de schemars 0.8.22, ci-dessus.)
+(Same text as schemars 0.8.22, above.)
 
 ------------------------------------------------------------
 schemars_derive 0.8.22 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de schemars 0.8.22, ci-dessus.)
+(Same text as schemars 0.8.22, above.)
 
 ------------------------------------------------------------
 scopeguard 1.2.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2016-2019 Ulrik Sverdrup "bluss" and scopeguard developers
 
 Permission is hereby granted, free of charge, to any
@@ -12668,55 +12668,55 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 selectors 0.38.0 — MPL-2.0
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MPL-2.0 » en fin de document.
+No license file provided: standard text of "MPL-2.0" at the end of this document.
 
 ------------------------------------------------------------
 semver 1.0.28 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde 1.0.229 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde-untagged 0.1.9 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde_core 1.0.229 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde_derive 1.0.229 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde_derive_internals 0.29.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde_json 1.0.154 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde_repr 0.1.21 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 serde_spanned 1.1.2 — MIT OR Apache-2.0
@@ -12947,19 +12947,19 @@ SOFTWARE.
 ------------------------------------------------------------
 serde_with 3.24.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de either 1.19.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as either 1.19.0, above.)
 
 ------------------------------------------------------------
 serde_with_macros 3.24.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de either 1.19.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as either 1.19.0, above.)
 
 ------------------------------------------------------------
 serialize-to-javascript 0.1.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
 MIT License
 
 Copyright (c) 2021 Chip Reed
@@ -12986,19 +12986,19 @@ SOFTWARE.
 ------------------------------------------------------------
 serialize-to-javascript-impl 0.1.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
-(Texte identique à celui de serialize-to-javascript 0.1.2, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
+(Same text as serialize-to-javascript 0.1.2, above.)
 
 ------------------------------------------------------------
 servo_arc 0.4.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 sha2 0.10.9 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
+(Same text as aes 0.9.3, above.)
 Copyright (c) 2006-2009 Graydon Hoare
 Copyright (c) 2009-2013 Mozilla Foundation
 Copyright (c) 2016 Artyom Pavlov
@@ -13031,8 +13031,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 sha2 0.11.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aes 0.9.3, ci-dessus.)
-(Texte identique à celui de md-5 0.11.0, ci-dessus.)
+(Same text as aes 0.9.3, above.)
+(Same text as md-5 0.11.0, above.)
 
 ------------------------------------------------------------
 shlex 2.0.1 — MIT OR Apache-2.0
@@ -13103,13 +13103,13 @@ SOFTWARE.
 ------------------------------------------------------------
 simd_helpers 0.1.0 — MIT
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT » en fin de document.
+No license file provided: standard text of "MIT" at the end of this document.
 
 ------------------------------------------------------------
 simdutf8 0.1.5 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de half 2.7.1, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as half 2.7.1, above.)
 
 ------------------------------------------------------------
 siphasher 1.0.4 — MIT OR Apache-2.0
@@ -13122,7 +13122,7 @@ http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
 <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 option.
 
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -13175,7 +13175,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 smallvec 1.16.4 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2018 The Servo Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -13206,8 +13206,8 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 socket2 0.6.5 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 softbuffer 0.4.8 — MIT OR Apache-2.0
@@ -13438,7 +13438,7 @@ SOFTWARE.
 ------------------------------------------------------------
 stable_deref_trait 1.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2017 Robert Grosse
 
 Permission is hereby granted, free of charge, to any
@@ -13471,7 +13471,7 @@ static_vcruntime 3.0.0 — MIT OR Apache-2.0 OR Zlib
 ------------------------------------------------------------
 MIT OR Apache-2.0 OR Zlib
 
-(Texte identique à celui de bytemuck 1.25.2, ci-dessus.)
+(Same text as bytemuck 1.25.2, above.)
 MIT License
 
 Copyright (c) 2021 Chris Denton.
@@ -13498,7 +13498,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 ------------------------------------------------------------
 string_cache 0.9.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2012-2013 Mozilla Foundation
 
 Permission is hereby granted, free of charge, to any
@@ -13529,13 +13529,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 string_cache_codegen 0.6.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de string_cache 0.9.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as string_cache 0.9.0, above.)
 
 ------------------------------------------------------------
 stringprep 0.1.5 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 Copyright (c) 2017 The rust-stringprep Developers
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -13622,19 +13622,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------
 syn 2.0.119 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 syn 3.0.9 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 sync_wrapper 1.0.2 — Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 synstructure 0.14.0 — MIT
@@ -13651,7 +13651,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ------------------------------------------------------------
 tao 0.37.2 — Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 PackageName: tao
@@ -13675,58 +13675,58 @@ Creator: Person: Daniel Thompson-Yvetot
 ------------------------------------------------------------
 tauri 2.12.5 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-build 2.7.4 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-codegen 2.7.4 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-macros 2.7.4 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-plugin 2.7.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « Apache-2.0 OR MIT » en fin de document.
+No license file provided: standard text of "Apache-2.0 OR MIT" at the end of this document.
 
 ------------------------------------------------------------
 tauri-plugin-dialog 2.8.3 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-plugin-fs 2.7.1 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-plugin-process 2.4.0 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-plugin-single-instance 2.5.4 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 MIT License
 
 Copyright (c) 2017 - Present The Tauri Programme in the Commons Conservancy
@@ -13753,27 +13753,27 @@ SOFTWARE.
 ------------------------------------------------------------
 tauri-plugin-updater 2.14.1 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/plugin-dialog 2.8.3, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/plugin-dialog 2.8.3, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-runtime 2.12.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-runtime-wry 2.12.3 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-utils 2.10.2 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 
 ------------------------------------------------------------
 tauri-winres 0.3.7 — MIT
@@ -13811,7 +13811,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 tempfile 3.27.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2015 Steven Allen
 
 Permission is hereby granted, free of charge, to any
@@ -13842,7 +13842,7 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 tendril 0.5.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2015 Keegan McAllister
 
 Permission is hereby granted, free of charge, to any
@@ -13873,19 +13873,19 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 thiserror 2.0.21 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 thiserror-impl 2.0.21 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 time 0.3.55 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
 Copyright (c) Jacob Pratt et al.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -13910,26 +13910,26 @@ SOFTWARE.
 ------------------------------------------------------------
 time-core 0.1.9 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de time 0.3.55, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as time 0.3.55, above.)
 
 ------------------------------------------------------------
 time-macros 0.2.32 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de @tauri-apps/api 2.12.4, ci-dessus.)
-(Texte identique à celui de time 0.3.55, ci-dessus.)
+(Same text as @tauri-apps/api 2.12.4, above.)
+(Same text as time 0.3.55, above.)
 
 ------------------------------------------------------------
 tinystr 0.8.5 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 tinyvec 1.13.3 — Zlib OR Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
-(Texte identique à celui de ctor 1.0.13, ci-dessus.)
-(Texte identique à celui de bytemuck 1.25.2, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
+(Same text as ctor 1.0.13, above.)
+(Same text as bytemuck 1.25.2, above.)
 
 ------------------------------------------------------------
 tokio 1.54.1 — MIT
@@ -14192,31 +14192,31 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 tokio-util 0.7.20 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de tokio 1.54.1, ci-dessus.)
+(Same text as tokio 1.54.1, above.)
 
 ------------------------------------------------------------
 toml 1.1.8+spec-1.1.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
+(Same text as serde_spanned 1.1.2, above.)
+(Same text as serde_spanned 1.1.2, above.)
 
 ------------------------------------------------------------
 toml_datetime 1.1.2+spec-1.1.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
+(Same text as serde_spanned 1.1.2, above.)
+(Same text as serde_spanned 1.1.2, above.)
 
 ------------------------------------------------------------
 toml_parser 1.1.5+spec-1.1.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
+(Same text as serde_spanned 1.1.2, above.)
+(Same text as serde_spanned 1.1.2, above.)
 
 ------------------------------------------------------------
 toml_writer 1.1.3+spec-1.1.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
-(Texte identique à celui de serde_spanned 1.1.2, ci-dessus.)
+(Same text as serde_spanned 1.1.2, above.)
+(Same text as serde_spanned 1.1.2, above.)
 
 ------------------------------------------------------------
 tower 0.5.3 — MIT
@@ -14281,12 +14281,12 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 tower-layer 0.3.3 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de tower 0.5.3, ci-dessus.)
+(Same text as tower 0.5.3, above.)
 
 ------------------------------------------------------------
 tower-service 0.3.3 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de tower 0.5.3, ci-dessus.)
+(Same text as tower 0.5.3, above.)
 
 ------------------------------------------------------------
 tracing 0.1.44 — MIT
@@ -14321,18 +14321,18 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 tracing-attributes 0.1.31 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de tracing 0.1.44, ci-dessus.)
+(Same text as tracing 0.1.44, above.)
 
 ------------------------------------------------------------
 tracing-core 0.1.36 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de tracing 0.1.44, ci-dessus.)
+(Same text as tracing 0.1.44, above.)
 
 ------------------------------------------------------------
 tray-icon 0.25.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de muda 0.20.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as muda 0.20.0, above.)
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 PackageName: tray-icon
@@ -14382,14 +14382,14 @@ THE SOFTWARE.
 ------------------------------------------------------------
 typed-path 0.13.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 typeid 1.0.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 typenum 1.20.1 — MIT OR Apache-2.0
@@ -14624,14 +14624,14 @@ SOFTWARE.
 ------------------------------------------------------------
 unicode-bidi 0.3.18 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de heck 0.5.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as heck 0.5.0, above.)
 
 ------------------------------------------------------------
 unicode-ident 1.0.27 — (MIT OR Apache-2.0) AND Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de anyhow 1.0.104, ci-dessus.)
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as anyhow 1.0.104, above.)
+(Same text as adler2 2.0.1, above.)
 UNICODE LICENSE V3
 
 COPYRIGHT AND PERMISSION NOTICE
@@ -14676,21 +14676,21 @@ authorization of the copyright holder.
 ------------------------------------------------------------
 unicode-normalization 0.1.26 — (MIT OR Apache-2.0) AND Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de heck 0.5.0, ci-dessus.)
-(Texte identique à celui de unicode-ident 1.0.27, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as heck 0.5.0, above.)
+(Same text as unicode-ident 1.0.27, above.)
 
 ------------------------------------------------------------
 unicode-properties 0.1.4 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de heck 0.5.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as heck 0.5.0, above.)
 
 ------------------------------------------------------------
 unicode-segmentation 1.13.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de heck 0.5.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as heck 0.5.0, above.)
 
 ------------------------------------------------------------
 untrusted 0.9.0 — ISC
@@ -14713,8 +14713,8 @@ untrusted 0.9.0 — ISC
 ------------------------------------------------------------
 url 2.5.8 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de idna 1.1.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as idna 1.1.0, above.)
 
 ------------------------------------------------------------
 urlpattern 0.6.0 — MIT
@@ -14745,7 +14745,7 @@ SOFTWARE.
 ------------------------------------------------------------
 utf16string 0.2.0 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 MIT License
 
 Copyright (c) 2020 Armin Ronacher
@@ -14779,13 +14779,13 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 utf8_iter 1.0.4 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
+(Same text as encoding_rs 0.8.42, above.)
 
 ------------------------------------------------------------
 uuid 1.29.0 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 Copyright (c) 2014 The Rust Project Developers
 Copyright (c) 2018 Ashley Mannix, Christopher Armstrong, Dylan DPC, Hunar Roop Kahlon
 
@@ -14873,7 +14873,7 @@ SOFTWARE.
 ------------------------------------------------------------
 version_check 0.9.5 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 The MIT License (MIT)
 Copyright (c) 2017-2018 Sergio Benitez
 
@@ -14924,14 +14924,14 @@ SOFTWARE.
 ------------------------------------------------------------
 vswhom-sys 0.1.3 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de vswhom 0.1.0, ci-dessus.)
+(Same text as vswhom 0.1.0, above.)
 
 ------------------------------------------------------------
 walkdir 2.5.0 — Unlicense/MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 want 0.3.2 — MIT
@@ -14960,26 +14960,26 @@ THE SOFTWARE.
 ------------------------------------------------------------
 wasm-bindgen 0.2.129 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 wasm-bindgen-macro 0.2.129 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 wasm-bindgen-macro-support 0.2.129 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 wasm-bindgen-shared 0.2.129 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de cc 1.10.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as cc 1.10.0, above.)
 
 ------------------------------------------------------------
 web-time 1.1.0 — MIT OR Apache-2.0
@@ -15212,28 +15212,28 @@ SOFTWARE.
 ------------------------------------------------------------
 web_atoms 0.2.6 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de html5ever 0.39.0, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as html5ever 0.39.0, above.)
 
 ------------------------------------------------------------
 webview2-com 0.39.1 — MIT
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT » en fin de document.
+No license file provided: standard text of "MIT" at the end of this document.
 
 ------------------------------------------------------------
 webview2-com-macros 0.8.1 — MIT
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT » en fin de document.
+No license file provided: standard text of "MIT" at the end of this document.
 
 ------------------------------------------------------------
 webview2-com-sys 0.39.1 — MIT
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT » en fin de document.
+No license file provided: standard text of "MIT" at the end of this document.
 
 ------------------------------------------------------------
 weezl 0.1.12 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 The MIT License (MIT)
 
 Copyright (c) HeroicKatora 2020
@@ -15260,13 +15260,13 @@ SOFTWARE.
 ------------------------------------------------------------
 weezl 0.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
-(Texte identique à celui de weezl 0.1.12, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
+(Same text as weezl 0.1.12, above.)
 
 ------------------------------------------------------------
 winapi 0.3.9 — MIT/Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de bit_field 0.10.3, ci-dessus.)
+(Same text as bit_field 0.10.3, above.)
 Copyright (c) 2015-2018 The winapi-rs Developers
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -15291,14 +15291,14 @@ SOFTWARE.
 ------------------------------------------------------------
 winapi-util 0.1.11 — Unlicense OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
-(Texte identique à celui de same-file 1.0.6, ci-dessus.)
-(Texte identique à celui de aho-corasick 1.1.5, ci-dessus.)
+(Same text as aho-corasick 1.1.5, above.)
+(Same text as same-file 1.0.6, above.)
+(Same text as aho-corasick 1.1.5, above.)
 
 ------------------------------------------------------------
 window-vibrancy 0.8.1 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 MIT License
 
 Copyright (c) 2020-2022 Tauri Programme within The Commons Conservancy
@@ -15573,98 +15573,98 @@ MIT License
 ------------------------------------------------------------
 windows-collections 0.3.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-core 0.62.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-future 0.3.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-implement 0.60.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-interface 0.59.3 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-link 0.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-numerics 0.3.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-registry 0.6.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-result 0.4.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-strings 0.5.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-sys 0.60.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-sys 0.61.2 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-targets 0.53.5 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-threading 0.2.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows-version 0.1.7 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 windows_x86_64_msvc 0.53.1 — MIT OR Apache-2.0
 ------------------------------------------------------------
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
-(Texte identique à celui de windows 0.62.2, ci-dessus.)
+(Same text as windows 0.62.2, above.)
+(Same text as windows 0.62.2, above.)
 
 ------------------------------------------------------------
 winnow 1.0.4 — MIT
@@ -15716,12 +15716,12 @@ THE SOFTWARE.
 ------------------------------------------------------------
 writeable 0.6.4 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 wry 0.57.1 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de aligned 0.4.3, ci-dessus.)
+(Same text as aligned 0.4.3, above.)
 MIT License
 
 Copyright (c) 2020-2023 Ngo Iok Ui & Tauri Programme within The Commons Conservancy
@@ -15796,12 +15796,12 @@ SOFTWARE.
 ------------------------------------------------------------
 yoke 0.8.4 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 yoke-derive 0.8.4 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 zerocopy 0.8.63 — BSD-2-Clause OR Apache-2.0 OR MIT
@@ -16063,24 +16063,24 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 zerocopy-derive 0.8.63 — BSD-2-Clause OR Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de zerocopy 0.8.63, ci-dessus.)
-(Texte identique à celui de zerocopy 0.8.63, ci-dessus.)
-(Texte identique à celui de zerocopy 0.8.63, ci-dessus.)
+(Same text as zerocopy 0.8.63, above.)
+(Same text as zerocopy 0.8.63, above.)
+(Same text as zerocopy 0.8.63, above.)
 
 ------------------------------------------------------------
 zerofrom 0.1.8 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 zerofrom-derive 0.1.8 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 zeroize 1.9.1 — Apache-2.0 OR MIT
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
 Copyright (c) 2018-2026 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
@@ -16111,17 +16111,17 @@ DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------
 zerotrie 0.2.5 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 zerovec 0.11.9 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 zerovec-derive 0.11.7 — Unicode-3.0
 ------------------------------------------------------------
-(Texte identique à celui de icu_collections 2.4.0, ci-dessus.)
+(Same text as icu_collections 2.4.0, above.)
 
 ------------------------------------------------------------
 zip 9.1.3 — MIT
@@ -16176,12 +16176,12 @@ freely, subject to the following restrictions:
 ------------------------------------------------------------
 zmij 1.0.23 — MIT
 ------------------------------------------------------------
-(Texte identique à celui de adler2 2.0.1, ci-dessus.)
+(Same text as adler2 2.0.1, above.)
 
 ------------------------------------------------------------
 zune-core 0.5.3 — MIT OR Apache-2.0 OR Zlib
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
 MIT License
 
 Copyright (c) zune-image developers
@@ -16228,14 +16228,14 @@ freely, subject to the following restrictions:
 ------------------------------------------------------------
 zune-inflate 0.2.54 — MIT OR Apache-2.0 OR Zlib
 ------------------------------------------------------------
-Pas de fichier de licence fourni : texte standard de « MIT OR Apache-2.0 OR Zlib » en fin de document.
+No license file provided: standard text of "MIT OR Apache-2.0 OR Zlib" at the end of this document.
 
 ------------------------------------------------------------
 zune-jpeg 0.5.15 — MIT OR Apache-2.0 OR Zlib
 ------------------------------------------------------------
-(Texte identique à celui de encoding_rs 0.8.42, ci-dessus.)
-(Texte identique à celui de zune-core 0.5.3, ci-dessus.)
-(Texte identique à celui de zune-core 0.5.3, ci-dessus.)
+(Same text as encoding_rs 0.8.42, above.)
+(Same text as zune-core 0.5.3, above.)
+(Same text as zune-core 0.5.3, above.)
 
 ------------------------------------------------------------
 PDFium (linux-x64) — BSD-3-Clause / Apache-2.0
@@ -16251,7 +16251,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 This package also includes third-party software. See the licenses/ directory for their respective licenses.
 
 ------------------------------------------------------------
-Contenu dans PDFium : abseil.txt
+Included in PDFium: abseil.txt
 ------------------------------------------------------------
 Apache License
                            Version 2.0, January 2004
@@ -16456,7 +16456,7 @@ Apache License
    limitations under the License.
 
 ------------------------------------------------------------
-Contenu dans PDFium : agg23.txt
+Included in PDFium: agg23.txt
 ------------------------------------------------------------
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.3
@@ -16474,7 +16474,7 @@ Contenu dans PDFium : agg23.txt
 //----------------------------------------------------------------------------
 
 ------------------------------------------------------------
-Contenu dans PDFium : dragonbox-Apache2-LLVM.txt
+Included in PDFium: dragonbox-Apache2-LLVM.txt
 ------------------------------------------------------------
 Apache License
                            Version 2.0, January 2004
@@ -16696,7 +16696,7 @@ the License, but only in their entirety and only with respect to the Combined
 Software.
 
 ------------------------------------------------------------
-Contenu dans PDFium : dragonbox-Boost.txt
+Included in PDFium: dragonbox-Boost.txt
 ------------------------------------------------------------
 Boost Software License - Version 1.0 - August 17th, 2003
 
@@ -16723,7 +16723,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 ------------------------------------------------------------
-Contenu dans PDFium : fast_float.txt
+Included in PDFium: fast_float.txt
 ------------------------------------------------------------
 MIT License
 
@@ -16754,7 +16754,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 ------------------------------------------------------------
-Contenu dans PDFium : freetype.txt
+Included in PDFium: freetype.txt
 ------------------------------------------------------------
 The FreeType Project LICENSE
                     ----------------------------
@@ -16927,7 +16927,7 @@ Legal Terms
 --- end of FTL.TXT ---
 
 ------------------------------------------------------------
-Contenu dans PDFium : harfbuzz.txt
+Included in PDFium: harfbuzz.txt
 ------------------------------------------------------------
 HarfBuzz is licensed under the so-called "Old MIT" license.  Details follow.
 For parts of HarfBuzz that are licensed under different licenses see individual
@@ -16973,7 +16973,7 @@ ON AN "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO
 PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 ------------------------------------------------------------
-Contenu dans PDFium : highway.txt
+Included in PDFium: highway.txt
 ------------------------------------------------------------
 Apache License
                            Version 2.0, January 2004
@@ -17178,7 +17178,7 @@ Apache License
    limitations under the License.
 
 ------------------------------------------------------------
-Contenu dans PDFium : icu.txt
+Included in PDFium: icu.txt
 ------------------------------------------------------------
 UNICODE LICENSE V3
 
@@ -17750,7 +17750,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ------------------------------------------------------------
-Contenu dans PDFium : lcms.txt
+Included in PDFium: lcms.txt
 ------------------------------------------------------------
 //---------------------------------------------------------------------------------
 //
@@ -17781,7 +17781,7 @@ Contenu dans PDFium : lcms.txt
 //
 
 ------------------------------------------------------------
-Contenu dans PDFium : libjpeg_turbo.ijg
+Included in PDFium: libjpeg_turbo.ijg
 ------------------------------------------------------------
 libjpeg-turbo note:  This file has been modified by The libjpeg-turbo Project
 to include only information relevant to libjpeg-turbo, to wordsmith certain
@@ -18045,7 +18045,7 @@ TO DO
 Please send bug reports, offers of help, etc. to jpeg-info@jpegclub.org.
 
 ------------------------------------------------------------
-Contenu dans PDFium : libjpeg_turbo.md
+Included in PDFium: libjpeg_turbo.md
 ------------------------------------------------------------
 libjpeg-turbo Licenses
 ======================
@@ -18184,7 +18184,7 @@ desirable to choose a license that granted us the same protections for new code
 that were granted to the IJG for code derived from their software.
 
 ------------------------------------------------------------
-Contenu dans PDFium : libopenjpeg.txt
+Included in PDFium: libopenjpeg.txt
 ------------------------------------------------------------
 /*
  * The copyright in this software is being made available under the 2-clauses
@@ -18220,7 +18220,7 @@ Contenu dans PDFium : libopenjpeg.txt
  */
 
 ------------------------------------------------------------
-Contenu dans PDFium : libpng.txt
+Included in PDFium: libpng.txt
 ------------------------------------------------------------
 COPYRIGHT NOTICE, DISCLAIMER, and LICENSE
 =========================================
@@ -18358,7 +18358,7 @@ this source code in a product, acknowledgment is not required but would
 be appreciated.
 
 ------------------------------------------------------------
-Contenu dans PDFium : llvm-libc.txt
+Included in PDFium: llvm-libc.txt
 ------------------------------------------------------------
 ==============================================================================
 The LLVM Project is under the Apache License v2.0 with LLVM Exceptions:
@@ -18640,7 +18640,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE
 SOFTWARE.
 
 ------------------------------------------------------------
-Contenu dans PDFium : pdfium.txt
+Included in PDFium: pdfium.txt
 ------------------------------------------------------------
 Copyright 2014 The PDFium Authors
 
@@ -18874,7 +18874,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    limitations under the License.
 
 ------------------------------------------------------------
-Contenu dans PDFium : simdutf.txt
+Included in PDFium: simdutf.txt
 ------------------------------------------------------------
 Copyright 2021 The simdutf authors
 
@@ -18896,7 +18896,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ------------------------------------------------------------
-Contenu dans PDFium : zlib.txt
+Included in PDFium: zlib.txt
 ------------------------------------------------------------
 /* zlib.h -- interface of the 'zlib' general purpose compression library
   version 1.3.2.1, February xxth, 2026
@@ -18929,7 +18929,7 @@ Contenu dans PDFium : zlib.txt
 */
 
 ============================================================
-Textes standard
+Standard texts
 ============================================================
 
 ------------------------------------------------------------

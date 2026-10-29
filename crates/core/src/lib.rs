@@ -20,30 +20,33 @@ pub use kind::DocumentKind;
 pub use library::Library;
 pub use picture::{CropRect, Retouch};
 
-/// Ce qui peut mal se passer, avec un message lisible par l'utilisateur.
+/// Ce qui peut mal se passer, avec un message lisible par l'utilisateur (en anglais ; l'appli
+/// le traduit, voir src-tauri/src/i18n.rs).
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("Impossible de lire le fichier : {0}")]
+    #[error("Couldn't read the file: {0}")]
     Io(#[from] std::io::Error),
-    #[error("Ce type de fichier n'est pas pris en charge.")]
+    #[error("This type of file isn't supported.")]
     UnsupportedFormat,
-    #[error("Les photos HEIC ne sont pas encore prises en charge.")]
+    #[error("HEIC photos aren't supported yet.")]
     HeicNotYetSupported,
-    #[error("Le moteur PDF n'a pas pu démarrer : {0}")]
+    #[error("The PDF engine couldn't start: {0}")]
     PdfEngineUnavailable(String),
-    #[error("Ce PDF est protégé par un mot de passe.")]
+    #[error("This PDF is password-protected.")]
     PasswordProtected,
-    #[error("Ce PDF est illisible ou abîmé : {0}")]
+    #[error("This PDF is unreadable or damaged: {0}")]
     BrokenPdf(String),
-    #[error("Cette image est illisible ou abîmée : {0}")]
+    #[error("This image is unreadable or damaged: {0}")]
     BrokenImage(String),
-    #[error("Ce document n'est plus ouvert.")]
+    #[error("No signature was found in this image.")]
+    NoSignatureFound,
+    #[error("This document is no longer open.")]
     UnknownDocument,
-    #[error("Cette page n'existe pas.")]
+    #[error("This page doesn't exist.")]
     UnknownPage,
-    #[error("Il n'y a aucune page à enregistrer.")]
+    #[error("There are no pages to save.")]
     NothingToSave,
-    #[error("Impossible d'enregistrer : {0}")]
+    #[error("Couldn't save: {0}")]
     SaveFailed(String),
 }
 

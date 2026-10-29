@@ -1,21 +1,22 @@
-# Signaler une faille de sécurité
+# Reporting a security issue
 
-Merci de prendre le temps de signaler un problème de sécurité.
+Thank you for taking the time to report a security problem.
 
-**Ne publiez pas la faille dans un ticket public.** Utilisez le signalement privé de GitHub :
-onglet **Security** du dépôt → **Report a vulnerability**. Seul le responsable du projet voit
-votre message.
+**Please don't disclose the issue in a public ticket.** Use GitHub's private reporting:
+the repository's **Security** tab → **Report a vulnerability**. Only the project maintainer sees
+your message.
 
-Indiquez si possible :
-- la version de Documents (Paramètres Windows → Applications → Documents) ;
-- comment reproduire le problème (un fichier d'exemple aide beaucoup : un PDF ou une image
-  qui fait planter ou mal réagir l'appli) ;
-- ce qui pourrait arriver à un utilisateur.
+If possible, include:
+- the version of Documents (Windows Settings → Apps → Documents, or the bottom of the menu under
+  the document name);
+- how to reproduce the problem (a sample file helps a lot: a PDF or an image
+  that crashes the app or makes it misbehave);
+- what could happen to a user.
 
-Vous recevrez une première réponse dans les 7 jours. Une fois la faille corrigée, la correction
-est publiée dans une nouvelle version, proposée automatiquement à toutes les installations.
+You will get a first reply within 7 days. Once the issue is fixed, the fix is published in a new
+version, offered automatically to every installation.
 
-## Versions suivies
+## Supported versions
 
-Seule la dernière version reçoit des corrections. Les mises à jour sont signées : l'appli refuse
-toute mise à jour qui ne porte pas la signature du projet.
+Only the latest version receives fixes. Updates are signed: the app refuses any update
+that doesn't carry the project's signature.

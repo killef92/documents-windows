@@ -5,6 +5,7 @@ import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import * as api from "./api";
 import { placeSignature, type Signature } from "./annotations";
 import { closeMenu, showPanel } from "./menu";
+import { t as tr, translatePage } from "./i18n";
 
 const KEY = "apercu.signatures";
 type Pt = { x: number; y: number };
@@ -55,7 +56,7 @@ function showSignMenu(button: HTMLElement) {
   if (!signatures.length) {
     const empty = document.createElement("div");
     empty.className = "sign-empty";
-    empty.textContent = "Aucune signature pour l'instant.";
+    empty.textContent = tr("noSignatures");
     box.append(empty);
   }
   for (const sig of signatures) {
@@ -63,7 +64,7 @@ function showSignMenu(button: HTMLElement) {
     row.className = "sign-row";
     const pick = document.createElement("button");
     pick.className = "sign-pick";
-    pick.title = "Cliquer, puis cliquer sur la page pour poser la signature";
+    pick.title = tr("signPickTitle");
     pick.append(preview(sig));
     pick.addEventListener("click", () => {
       closeMenu();
@@ -71,7 +72,7 @@ function showSignMenu(button: HTMLElement) {
     });
     const del = document.createElement("button");
     del.className = "sign-delete";
-    del.title = "Supprimer cette signature";
+    del.title = tr("deleteSignature");
     del.textContent = "×";
     del.addEventListener("click", () => {
       signatures = signatures.filter((s) => s.id !== sig.id);
@@ -83,7 +84,7 @@ function showSignMenu(button: HTMLElement) {
   }
   const create = document.createElement("button");
   create.className = "menu-item sign-create";
-  create.textContent = "Créer une signature…";
+  create.textContent = tr("createSignature");
   create.addEventListener("click", () => {
     closeMenu();
     createDialog();
@@ -126,25 +127,26 @@ function createDialog() {
   const box = document.createElement("div");
   box.className = "modal sign-dialog";
   box.innerHTML = `
-    <div class="modal-title">Créer une signature</div>
+    <div class="modal-title" data-i18n="createSignatureTitle"></div>
     <div class="sign-tabs" role="tablist">
-      <button class="sign-tab active" data-tab="draw">Dessiner</button>
-      <button class="sign-tab" data-tab="photo">À partir d'une photo</button>
+      <button class="sign-tab active" data-tab="draw" data-i18n="signDraw"></button>
+      <button class="sign-tab" data-tab="photo" data-i18n="signPhoto"></button>
     </div>
     <div class="sign-pane" data-pane="draw">
       <canvas class="sign-canvas"></canvas>
-      <div class="sign-hint">Signez dans le cadre avec la souris ou le pavé tactile.</div>
+      <div class="sign-hint" data-i18n="signHint"></div>
     </div>
     <div class="sign-pane" data-pane="photo" hidden>
-      <div class="sign-photo"><span>Prenez en photo votre signature sur une feuille blanche, puis choisissez l'image.</span></div>
+      <div class="sign-photo"><span data-i18n="signPhotoHint"></span></div>
       <div class="sign-hint sign-error"></div>
     </div>
     <div class="modal-buttons">
-      <button class="modal-button" data-act="clear">Effacer</button>
+      <button class="modal-button" data-act="clear" data-i18n="clear"></button>
       <span class="sign-spacer"></span>
-      <button class="modal-button" data-act="cancel">Annuler</button>
-      <button class="modal-button primary" data-act="ok" disabled>Enregistrer</button>
+      <button class="modal-button" data-act="cancel" data-i18n="cancel"></button>
+      <button class="modal-button primary" data-act="ok" data-i18n="save" disabled></button>
     </div>`;
+  translatePage(box);
   veil.append(box);
   document.body.append(veil);
 
@@ -208,7 +210,7 @@ function createDialog() {
     tab = t;
     for (const b of box.querySelectorAll<HTMLElement>(".sign-tab")) b.classList.toggle("active", b.dataset.tab === t);
     for (const p of box.querySelectorAll<HTMLElement>(".sign-pane")) p.hidden = p.dataset.pane !== t;
-    clear.textContent = t === "draw" ? "Effacer" : "Choisir une image…";
+    clear.textContent = tr(t === "draw" ? "clear" : "chooseImage");
     ready();
   };
   for (const b of box.querySelectorAll<HTMLElement>(".sign-tab")) {
@@ -220,19 +222,19 @@ function createDialog() {
 
   async function choosePhoto() {
     if (!api.inTauri) return;
-    const path = await openDialog({ filters: [{ name: "Images", extensions: ["jpg", "jpeg", "png", "bmp", "gif", "tif", "tiff", "webp"] }] });
+    const path = await openDialog({ filters: [{ name: tr("filterImages"), extensions: ["jpg", "jpeg", "png", "bmp", "gif", "tif", "tiff", "webp"] }] });
     if (!path || Array.isArray(path)) return;
-    error.textContent = "Lecture de la signature…";
+    error.textContent = tr("readingSignature");
     try {
       photo = await api.signatureFromPhoto(path);
       const img = document.createElement("img");
       img.src = photo;
       img.alt = "";
       photoBox.replaceChildren(img);
-      error.textContent = "Le papier a été rendu transparent : seule l'encre sera posée.";
+      error.textContent = tr("paperTransparent");
     } catch (e) {
       photo = null;
-      error.textContent = `Impossible d'utiliser cette image : ${e}`;
+      error.textContent = tr("imageUnusable", { error: String(e) });
     }
     ready();
   }

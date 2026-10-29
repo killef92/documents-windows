@@ -46,9 +46,9 @@ impl TryFrom<String> for Color {
     type Error = String;
     fn try_from(s: String) -> Result<Self, String> {
         let hex = s.trim_start_matches('#');
-        let v = u32::from_str_radix(hex, 16).map_err(|_| format!("couleur invalide : {s}"))?;
+        let v = u32::from_str_radix(hex, 16).map_err(|_| format!("invalid color: {s}"))?;
         if hex.len() != 6 {
-            return Err(format!("couleur invalide : {s}"));
+            return Err(format!("invalid color: {s}"));
         }
         Ok(Color((v >> 16) as u8, (v >> 8) as u8, v as u8))
     }
@@ -829,7 +829,7 @@ pub(crate) fn apply(bytes: Vec<u8>, pages: &[PageAnnotations]) -> Result<Vec<u8>
         if p.annotations.is_empty() {
             continue;
         }
-        let page_id: ObjectId = *ids.get(&(index as u32 + 1)).ok_or("page introuvable")?;
+        let page_id: ObjectId = *ids.get(&(index as u32 + 1)).ok_or("page not found")?;
         let page = doc.get_dictionary(page_id).map_err(|e| e.to_string())?.clone();
         let bbox = page_box(&doc, &page).unwrap_or([0.0, 0.0, 612.0, 792.0]);
         let rotate = page_rotation(&doc, &page);

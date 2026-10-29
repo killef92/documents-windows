@@ -2,6 +2,7 @@
 import { check, type Update } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { invoke } from "@tauri-apps/api/core";
+import { t } from "./i18n";
 
 export async function checkForUpdate(show: (message: string, action: string, run: () => Promise<void>) => void) {
   try {
@@ -17,7 +18,7 @@ export async function checkForUpdate(show: (message: string, action: string, run
     }
     if (!update) return;
     const found = update;
-    show(`Une nouvelle version de Documents est disponible (${found.version}).`, "Mettre à jour", async () => {
+    show(t("updateAvailable", { version: found.version }), t("updateNow"), async () => {
       await found.downloadAndInstall(undefined, { headers });
       await relaunch();
     });

@@ -5,7 +5,8 @@ use std::path::PathBuf;
 
 use tauri::Manager;
 
-use crate::{apercu_rapide, shell};
+use crate::i18n::{tr, Text};
+use crate::{apercu_rapide, i18n, shell};
 use crate::ApercuRapideFiles;
 
 /// Ouvre (ou remplace) la fenêtre d'aperçu rapide pour ce fichier.
@@ -29,6 +30,7 @@ fn show_apercu_rapide(app: &tauri::AppHandle, path: PathBuf) {
         .shadow(true)
         .center()
         .focused(true)
+        .initialization_script(i18n::script())
         .initialization_script("window.__APERCU_RAPIDE__ = true;")
         .build();
     if let Ok(window) = window {
@@ -54,11 +56,11 @@ pub fn start(app: &tauri::App) -> tauri::Result<()> {
     if let Some(window) = app.get_webview_window("main") {
         window.destroy()?;
     }
-    let info = MenuItem::with_id(app, "info", "Aperçu rapide : Espace dans l'Explorateur", false, None::<&str>)?;
-    let off = MenuItem::with_id(app, "off", "Désactiver l'aperçu rapide", true, None::<&str>)?;
-    let quit = MenuItem::with_id(app, "quit", "Quitter", true, None::<&str>)?;
+    let info = MenuItem::with_id(app, "info", tr(Text::QuickInfo), false, None::<&str>)?;
+    let off = MenuItem::with_id(app, "off", tr(Text::QuickOff), true, None::<&str>)?;
+    let quit = MenuItem::with_id(app, "quit", tr(Text::Quit), true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&info, &off, &quit])?;
-    let mut tray = TrayIconBuilder::with_id("apercu-rapide").tooltip("Documents : aperçu rapide").menu(&menu).on_menu_event(
+    let mut tray = TrayIconBuilder::with_id("apercu-rapide").tooltip(tr(Text::QuickTooltip)).menu(&menu).on_menu_event(
         |app, event| match event.id.as_ref() {
             "off" => {
                 let _ = apercu_rapide::set_enabled(false);

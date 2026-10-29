@@ -5,6 +5,8 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 
 use windows::core::{w, HSTRING, PCWSTR};
+
+use crate::i18n::{tr, Text};
 use windows::Win32::Foundation::{GlobalFree, HANDLE, HGLOBAL, HWND};
 use windows::Win32::System::DataExchange::{
     CloseClipboard, EmptyClipboard, GetClipboardSequenceNumber, OpenClipboard, RegisterClipboardFormatW, SetClipboardData,
@@ -51,12 +53,12 @@ pub fn register_app() {
     // Windows a retenu l'appli par défaut choisie par l'utilisateur.
     // « Apercu.Image » : l'ancien type commun aux images, gardé pour qui l'a déjà choisi.
     let types = [
-        ("Apercu.PDF", "Document PDF", "pdf.ico"),
-        ("Apercu.JPEG", "Image JPEG", "jpg.ico"),
-        ("Apercu.PNG", "Image PNG", "png.ico"),
-        ("Apercu.WEBP", "Image WebP", "webp.ico"),
-        ("Apercu.GIF", "Image GIF", "gif.ico"),
-        ("Apercu.Image", "Image", "image.ico"),
+        ("Apercu.PDF", tr(Text::KindPdf), "pdf.ico"),
+        ("Apercu.JPEG", tr(Text::KindJpeg), "jpg.ico"),
+        ("Apercu.PNG", tr(Text::KindPng), "png.ico"),
+        ("Apercu.WEBP", tr(Text::KindWebp), "webp.ico"),
+        ("Apercu.GIF", tr(Text::KindGif), "gif.ico"),
+        ("Apercu.Image", tr(Text::KindImage), "image.ico"),
     ];
     let mut ok = true;
     for (prog_id, label, icon) in types {
@@ -68,7 +70,7 @@ pub fn register_app() {
         ok &= set(&format!(r"{base}\shell\open\command"), None, &open).is_ok();
     }
     ok &= set(CAPABILITIES, Some("ApplicationName"), APP_NAME).is_ok();
-    ok &= set(CAPABILITIES, Some("ApplicationDescription"), "Visionneuse de PDF et d'images").is_ok();
+    ok &= set(CAPABILITIES, Some("ApplicationDescription"), tr(Text::AppDescription)).is_ok();
     for (ext, prog_id) in [(".pdf", "Apercu.PDF"), (".jpg", "Apercu.JPEG"), (".jpeg", "Apercu.JPEG"), (".png", "Apercu.PNG"), (".webp", "Apercu.WEBP"), (".gif", "Apercu.GIF")] {
         ok &= set(&format!(r"{CAPABILITIES}\FileAssociations"), Some(ext), prog_id).is_ok();
         ok &= set(&format!(r"Software\Classes\{ext}\OpenWithProgids"), Some(prog_id), "").is_ok();
@@ -130,7 +132,7 @@ pub fn open_default_apps() -> Result<(), String> {
     let target = format!("ms-settings:defaultapps?registeredAppUser={APP_NAME}");
     let r = unsafe { ShellExecuteW(None, w!("open"), &HSTRING::from(target), None, None, SW_SHOWNORMAL) };
     // ShellExecute renvoie une valeur > 32 quand tout va bien.
-    if r.0 as isize > 32 { Ok(()) } else { Err("impossible d'ouvrir les réglages de Windows".into()) }
+    if r.0 as isize > 32 { Ok(()) } else { Err(tr(Text::SettingsFailed).into()) }
 }
 
 /// Les fichiers copiés par l'appli, et le numéro du presse-papier juste après (s'il a changé,
@@ -198,7 +200,7 @@ unsafe fn global(size: usize, fill: impl FnOnce(*mut u8)) -> Result<HGLOBAL, Str
         let ptr = GlobalLock(mem).cast::<u8>();
         if ptr.is_null() {
             let _ = GlobalFree(Some(mem));
-            return Err("mémoire indisponible".into());
+            return Err("out of memory".into());
         }
         std::ptr::write_bytes(ptr, 0, size);
         fill(ptr);

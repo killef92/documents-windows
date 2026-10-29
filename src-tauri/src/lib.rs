@@ -2,6 +2,7 @@
 mod background;
 #[cfg(windows)]
 mod apercu_rapide;
+mod i18n;
 #[cfg(windows)]
 mod shell;
 mod thumbs;
@@ -76,7 +77,7 @@ fn set_apercu_rapide(enabled: bool) -> Result<(), String> {
     #[cfg(not(windows))]
     {
         let _ = enabled;
-        Err("l'aperçu rapide n'existe que sur Windows".into())
+        Err("quick preview only exists on Windows".into())
     }
 }
 
@@ -165,11 +166,11 @@ async fn save_picture(worker: tauri::State<'_, Worker>, doc: DocId, rotation: i3
 #[tauri::command]
 async fn save_picture_pixels(worker: tauri::State<'_, Worker>, request: tauri::ipc::Request<'_>) -> Result<(), String> {
     let tauri::ipc::InvokeBody::Raw(png) = request.body() else {
-        return Err("image manquante".into());
+        return Err("missing image".into());
     };
     let header = |name: &str| request.headers().get(name).and_then(|v| v.to_str().ok()).map(String::from);
-    let doc: DocId = header("x-doc").and_then(|v| v.parse().ok()).ok_or("document manquant")?;
-    let dest = header("x-dest").map(|v| percent_decode(&v)).ok_or("chemin manquant")?;
+    let doc: DocId = header("x-doc").and_then(|v| v.parse().ok()).ok_or("missing document")?;
+    let dest = header("x-dest").map(|v| percent_decode(&v)).ok_or("missing path")?;
     wait(worker.save_picture_pixels(doc, png.clone(), PathBuf::from(dest))).await
 }
 
@@ -187,10 +188,10 @@ async fn doc_details(worker: tauri::State<'_, Worker>, doc: DocId) -> Result<doc
 #[tauri::command]
 async fn signature_from_photo(path: PathBuf) -> Result<String, String> {
     tauri::async_runtime::spawn_blocking(move || {
-        let bytes = std::fs::read(&path).map_err(|e| e.to_string())?;
+        let bytes = std::fs::read(&path).map_err(|e| i18n::error(&documents_core::Error::from(e)))?;
         documents_core::signature::from_photo(&bytes)
             .map(|png| documents_core::signature::to_data_url(&png))
-            .map_err(|e| e.to_string())
+            .map_err(|e| i18n::error(&e))
     })
     .await
     .map_err(|e| e.to_string())?
@@ -234,8 +235,8 @@ fn take_paths(window: tauri::WebviewWindow, files: tauri::State<'_, PendingFiles
 #[tauri::command]
 async fn folder_images(path: PathBuf) -> Result<Vec<PathBuf>, String> {
     tauri::async_runtime::spawn_blocking(move || {
-        let dir = path.parent().ok_or("pas de dossier")?;
-        documents_core::folder::images_in(dir).map_err(|e| e.to_string())
+        let dir = path.parent().ok_or("no folder")?;
+        documents_core::folder::images_in(dir).map_err(|e| i18n::error(&e))
     })
     .await
     .map_err(|e| e.to_string())?
@@ -251,7 +252,7 @@ fn copy_files(window: tauri::WebviewWindow, paths: Vec<PathBuf>, add: bool) -> R
     #[cfg(not(windows))]
     {
         let _ = (window, paths, add);
-        Err("la copie de fichiers n'existe que sur Windows".into())
+        Err("copying files only exists on Windows".into())
     }
 }
 
@@ -261,7 +262,7 @@ fn choose_default_app() -> Result<(), String> {
     #[cfg(windows)]
     return shell::open_default_apps();
     #[cfg(not(windows))]
-    Err("seulement sur Windows".into())
+    Err("only on Windows".into())
 }
 
 fn paths_from_args(args: impl IntoIterator<Item = impl Into<std::ffi::OsString>>) -> Vec<PathBuf> {
@@ -293,6 +294,7 @@ fn genre_script(paths: &[PathBuf]) -> String {
 /// Une nouvelle fenêtre de documents, comme la première.
 fn new_window(app: &tauri::AppHandle, label: &str, genre: String) {
     let _ = tauri::WebviewWindowBuilder::new(app, label, tauri::WebviewUrl::App("index.html".into()))
+        .initialization_script(i18n::script())
         .initialization_script(genre)
         .title("Documents")
         .inner_size(1280.0, 860.0)
@@ -478,6 +480,7 @@ pub fn run() {
             if !background {
                 if let Some(config) = app.config().app.windows.iter().find(|w| w.label == "main") {
                     tauri::WebviewWindowBuilder::from_config(app.handle(), config)?
+                        .initialization_script(i18n::script())
                         .initialization_script(genre_script(&startup_genre))
                         .build()?;
                 }
